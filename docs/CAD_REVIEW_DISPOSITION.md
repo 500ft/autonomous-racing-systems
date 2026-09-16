@@ -89,3 +89,31 @@ The shared CAD-ledger validator is consolidated into `cad/ledger_validator.py` (
 semantic rule including cycle detection and the old negative controls, plus the review's cycle between
 two done tasks; `historical` = the SPRINT_TASKS.csv byte comparison as a report). The weaker
 `test_cad_ledger_rules.py` from the first repair is removed; `test_ledger_validator.py` replaces it.
+
+## 2026-09-16 — RR-S11 follow-up closed: PR #16 tap-test generator not carried (Day-4 A1)
+
+Owner decision (Day-4 plan O1): **`closed`**. `experiments/tap_test_prereg.py`,
+`docs/specs/mast-modal-tap-test/preregistration.md` and `cad/roboracer/modal-inputs.csv` from PR #16
+stay out of `main`. The reviewed draft procedure `docs/specs/mast-physical-validation/modal-preregistration.md`,
+the freeze schema `modal-freeze.json` and `cad/modal_freeze.py` remain the single source; nothing in them,
+in the sprint ledger row RR-S11 (done) or in RR-S12/RR-S13 (blocked) changes. Reopen only with a concrete
+use for deterministic regeneration, as a new sprint row.
+
+## 2026-09-16 — Proposed staging amendment for RR-CAD-06 / RR-CAD-07 (for review, not applied)
+
+The Day-4 plan flags that RR-CAD-06 mixes two events: preparing the geometry-to-FEA and inspection handoff
+(nominal exports, boundary map, inspection sheet) and the later post-inspection as-built reference freeze.
+RR-CAD-07 depends on RR-CAD-06, so read literally the fabrication pack cannot be released until a specimen
+has been built and inspected from it.
+
+Proposal, to be applied as one reviewed ledger edit before either row activates:
+
+| row | keeps | moves out |
+|---|---|---|
+| RR-CAD-06 | nominal STEP + boundary map + inspection sheet; datum/material/ideal-vs-detailed record; `reference_commit` and `source_commit` fields defined but unfilled | the "after fabrication/inspection, commit AS-BUILT prediction before any load" clause |
+| RR-CAD-07 | fabrication pack release from a reviewed RR-CAD-06 handoff; second-reviewer reproduction | nothing; still blocked on RR-CAD-04/05/06 |
+| RR-S02 (existing, Owner) | gains the moved clause as an explicit prerequisite: axis-specific as-built prediction and inspection-linked reference committed and pushed before campaign loads, `test_started_at` after both commits | — |
+
+Freeze-before-loading is preserved word for word, only its home changes. No threshold, tolerance or
+evidence criterion changes. Not applied here: the ledger validator would accept the edit, but the plan
+requires Owner review of the amendment first.
