@@ -1,0 +1,28 @@
+{
+  "geometry_source": "geometry.json",
+  "density_kg_m3": 2700.0,
+  "parts": {
+    "mast_tube_stock": {
+      "volume_mm3": 11333.29549782518,
+      "mass_kg": 0.030599897844127987,
+      "bbox_mm": [
+        20.0,
+        20.0,
+        130.0
+      ],
+      "n_solids": 1,
+      "stock_length_mm": 130.0
+    },
+    "root_clamp": {
+      "volume_mm3": 60180.41723804946,
+      "mass_kg": 0.16248712654273353,
+      "bbox_mm": [
+        44.0,
+        56.0,
+        30.0
+      ],
+      "n_solids": 1,
+      "slot_bottom_mm": 22.0
+    }
+  }
+}

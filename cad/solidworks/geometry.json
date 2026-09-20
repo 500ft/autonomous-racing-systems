@@ -1,0 +1,39 @@
+{
+  "_comment": "Single source of geometry for both the CadQuery oracle and the SOLIDWORKS authoring scripts. Values tagged provisional_design are designer choices under design_then_inspect and must not reach cad/roboracer/parameters.csv.",
+  "mast_tube_stock": {
+    "outer_diameter": {"value": 20.0, "unit": "mm", "evidence_state": "design_choice"},
+    "wall_thickness": {"value": 1.5, "unit": "mm", "evidence_state": "design_choice"},
+    "free_length": {"value": 100.0, "unit": "mm", "evidence_state": "design_choice"},
+    "clamp_engagement": {"value": 30.0, "unit": "mm", "evidence_state": "provisional_design",
+                         "basis": "1.5 x OD; above the rejected 0.75 x OD collar, below the 1.65 x OD catalogue width"}
+  },
+  "root_clamp": {
+    "block_width": {"value": 44.0, "unit": "mm", "evidence_state": "provisional_design"},
+    "block_height": {"value": 56.0, "unit": "mm", "evidence_state": "provisional_design"},
+    "block_depth": {"value": 30.0, "unit": "mm", "evidence_state": "provisional_design",
+                    "basis": "equals clamp_engagement"},
+    "bore_diameter": {"value": 20.0, "unit": "mm", "evidence_state": "design_choice",
+                      "basis": "slip fit on tube OD before clamping"},
+    "bore_center_x": {"value": 22.0, "unit": "mm", "evidence_state": "provisional_design"},
+    "bore_center_y": {"value": 22.0, "unit": "mm", "evidence_state": "provisional_design"},
+    "slot_width": {"value": 2.0, "unit": "mm", "evidence_state": "provisional_design",
+                   "basis": "split gap allowing the clamp to close on the tube"},
+    "slot_bottom_y": {"value": 22.0, "unit": "mm", "evidence_state": "provisional_design",
+                      "basis": "runs to the bore centreline so the slot intersects the bore rather than meeting it tangentially; a tangent slot is degenerate and SOLIDWORKS auto-relations perturb the tangent corner"},
+    "clamp_bolt_diameter": {"value": 6.6, "unit": "mm", "evidence_state": "design_choice",
+                            "basis": "M6 clearance, DIN 912 / ISO 4762 per spec Part 2"},
+    "clamp_bolt_y": {"value": 44.0, "unit": "mm", "evidence_state": "provisional_design"},
+    "clamp_bolt_z": {"value": [8.0, 22.0], "unit": "mm", "evidence_state": "provisional_design",
+                     "basis": "two bolts distributed along the 30 mm engagement"}
+  },
+  "material": {
+    "density": {"value": 2700.0, "unit": "kg/m^3", "evidence_state": "model_assumption"}
+  },
+  "blocked_not_modelled": {
+    "clamp_bolt_pitch": "measurement - deck bolt pattern omitted from the clamp block",
+    "lidar_bracket_bolt_pitch": "vendor_drawing - Part 3 not modelled",
+    "optical_center_offset": "measurement - Part 3 not modelled",
+    "actual_load_height": "measurement - Part 4 load feature not modelled",
+    "root_rotation_station_spacing": "design_then_inspect, chosen 40.0 mm, but Part 4 not modelled this pass"
+  }
+}
