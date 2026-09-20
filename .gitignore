@@ -46,6 +46,8 @@ runs/*
 # regenerable by `python experiments/mast_fea.py` once gmsh+ccx are set up).
 !runs/mast_fea/
 !runs/mast_fea/**
+!runs/nominal_package_inventory/
+!runs/nominal_package_inventory/inventory.json
 runs/mast_fea/*.inp
 runs/mast_fea/*.frd
 runs/mast_fea/*.12d

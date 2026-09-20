@@ -54,6 +54,20 @@ class FinalReportTests(unittest.TestCase):
                     self.assertIn(value, source)
                     self.assertIn(value, report)
 
+    def test_selected_design_and_rejected_baseline_stay_distinct(self) -> None:
+        # W1.1 (2026-09-19): the hand-calc summary is the REJECTED baseline and must say so;
+        # the selected 0.175 kg run is the RECOMMEND sweep row + the committed FEA summary.
+        self.assertIn("REJECTED BASELINE", read("runs/mast_hand_calc/summary.txt"))
+        self.assertRegex(read("runs/mast_hand_calc/design_sweep.txt"), r"RECOMMEND\s+6061-T6\s+100\s+20\s+1\.5\s+330\.1 PASS")
+        fea = read("runs/mast_fea/fea_summary.txt")
+        for value in ("F=128.8 N", "285.5", "0.176", "17.4"):
+            self.assertIn(value, fea)
+        design = read("docs/design/16_mechanical_design_analysis.md")
+        self.assertIn("12.88 N·m", design)  # 128.76 N × 0.100 m for the selected geometry
+        self.assertNotIn("15.45 N·m** | F × h_arm", design)  # the baseline moment must not sit in the selected table
+        fea_setup = read("docs/design/FEA_SETUP.md")
+        self.assertLess(fea_setup.index("Current result (0.175 kg"), fea_setup.index("SUPERSEDED"))
+
     def test_simulation_headlines_trace_to_committed_artifacts(self) -> None:
         report = REPORT.read_text(encoding="utf-8")
         literal_sources = {

@@ -87,11 +87,12 @@ and regenerable).
 2. **Mesh:** quadratic tetrahedra (C3D10), element size ≈ 1.2 mm
    (≈ OD/16, resolves the 1.5 mm wall). ~58 k nodes / ~29 k elements.
 3. **Static deck (`mast_static.inp`):** root `*BOUNDARY NROOT,1,3` (ENCASTRE);
-   `*STATIC`; `*CLOAD` of the crash design force F = 50 g × 0.20 kg × SF 1.5 =
-   147.2 N distributed over the tip-ring node set. Requests `*EL FILE S` /
-   `*NODE FILE U`. → max von Mises (gauge + global) and tip deflection.
+   `*STATIC`; `*CLOAD` of the crash design force F = 50 g × m_tip × SF 1.5
+   distributed over the tip-ring node set (128.76 N at the firmed 0.175 kg tip;
+   the first 2026-06-25 run used the 0.20 kg placeholder → 147.2 N). Requests
+   `*EL FILE S` / `*NODE FILE U`. → max von Mises (gauge + global) and tip deflection.
 4. **Modal deck (`mast_modal.inp`):** root ENCASTRE + a CalculiX `*ELEMENT,
-   TYPE=MASS` carrying the 0.20 kg LiDAR tip mass at the tip-center node;
+   TYPE=MASS` carrying the LiDAR tip mass (m_tip) at the tip-center node;
    `*FREQUENCY` step extracting 6 modes → first natural frequency.
 5. **Compare:** parse `.dat` (eigenfreqs, tip displacement) and `.frd` (nodal
    stress → von Mises). Acceptance: FEA within **±15 %** of the hand calc on
@@ -99,7 +100,17 @@ and regenerable).
 
 ---
 
-## Result of the validated run (2026-06-25)
+## Current result (0.175 kg firmed tip) — SIMULATION OUTPUT
+
+The committed run is `runs/mast_fea/fea_summary.txt` (crash load 128.76 N, same
+mesh and gauge band): f1 **285.5 Hz** (hand 330.1, −13.5 %), tip deflection
+**0.176 mm** (hand 0.166, +5.9 %), gauge stress **17.4 MPa** (hand 17.1, +1.3 %);
+first modes 285.5 / 301.3 / 1009.3 / 3660.4 / 4238.3 / 8008.1 Hz; global peak
+41.9 MPa at the root corner (singularity, not an acceptance metric). Mesh
+convergence in `runs/mast_fea/mesh_convergence.txt`. The table below is the
+earlier run and is kept as history only.
+
+## First validated run (2026-06-25, 0.20 kg placeholder tip) — SUPERSEDED
 
 Recommended mast (L=100 mm, OD=20 mm, t=1.5 mm, 6061-T6); mesh 58 232 nodes /
 28 985 C3D10; crash load 147.2 N distributed over 474 tip-ring nodes:

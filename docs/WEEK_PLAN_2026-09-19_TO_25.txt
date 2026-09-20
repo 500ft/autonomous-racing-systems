@@ -1,0 +1,535 @@
+AUTONOMOUS RACING SYSTEMS
+CLAUDE BUILD HANDOFF: SEPTEMBER 19–25, 2026
+Planning-only source document
+
+Purpose
+=======
+
+Use this file as the implementation brief for Claude. Build only the tasks that
+are marked ready. Do not invent owner measurements, calibration records, CAD
+drawings, reviewer approvals, or physical-test results. Every nominal result
+must carry the label NOMINAL DESIGN, MODEL ASSUMPTION, SIMULATION OUTPUT, or
+SOFTWARE CHECK. Nothing in this plan authorizes purchase, fabrication, powered
+hardware, tapping, loading, outreach, or publication.
+
+Planning assumption for this week
+----------------------------------
+
+No confirmed specimen, calibrated instruments, fixture, bench, or physical test
+access is available. Prioritize software and nominal analysis. If hardware
+records arrive during the week, do not silently switch modes: run the
+hardware-input intake gate described under Adaptive triggers, update the
+evidence state, and open a separate reviewable implementation change.
+
+Repository baseline
+-------------------
+
+Repository: 500ft/autonomous-racing-systems
+Current main observed: 17c69c1 (PR #23 merged)
+Active follow-up: PR #24, task/a1-nominal-work-order-20260916, head 85c12f4
+PR #24 contains the A1 decision that the old tap-test generator stays closed
+and the nominal CAD/FEA package work order. Do not duplicate or re-open A1.
+
+Authoritative status sources:
+  docs/CAD_TASKS.csv
+  docs/SPRINT_TASKS.csv
+  docs/CAD_DEPENDENCIES.json
+  docs/REVIEW_READY.md
+
+Current status to preserve:
+  Done: RR-CAD-01, RR-CAD-08, RR-CAD-09, RR-CAD-10, RR-S01, RR-S03,
+        RR-S04, RR-S05, RR-S06, RR-S07, RR-S08, RR-S10, RR-D03, RR-S11.
+  Blocked: RR-CAD-02, RR-CAD-04, RR-CAD-05, RR-CAD-06, RR-CAD-07,
+           RR-S02, RR-S09, RR-S12, RR-S13.
+  Deferred: RR-CAD-03.
+
+Important existing evidence:
+  - The plain mast tube generator, STEP round-trip tests, and CAD CI exist.
+  - The selected nominal tube is 100 mm length, 20 mm OD, 1.5 mm wall.
+  - Nominal hand/FEA results are 330.1 Hz / 285.5 Hz first mode, 0.166 /
+    0.176 mm tip deflection, and 17.1 / 17.4 MPa reportable stress.
+  - The rejected baseline is 174.7 Hz and must remain visibly rejected.
+  - Six interface rows in cad/roboracer/parameters.csv remain pending.
+  - fixture-contract.json is draft-blocked; --release must continue to refuse.
+  - modal-freeze.json is draft-blocked; strict modal checking must continue to
+    refuse until a real inspection-linked reference and reviewed uncertainty
+    budget exist.
+  - The physical compliance evaluator is software-tested but has no physical
+    campaign data. Synthetic agreement is never physical validation.
+
+Week outcome
+------------
+
+By September 25, deliver a reproducible nominal engineering package and a
+simulation credibility package. The package should let a reviewer inspect the
+current design, see every nominal assumption, regenerate geometry and figures,
+challenge the vehicle controller against a changed plant, and understand exactly
+what would be needed to move from nominal work to physical readiness.
+
+The week succeeds when:
+
+  1. The nominal package is internally consistent and source-linked.
+  2. The package never changes the six pending physical interface rows into
+     measurements or closes RR-CAD-02/04/05/06/07.
+  3. A changed-plant simulation produces reproducible controller comparisons,
+     including failure or degradation cases, without claiming vehicle results.
+  4. Every generated artifact has a command, input identity, evidence label,
+     and validation check.
+  5. The final handoff names the three highest-value owner inputs for next week.
+
+Non-goals
+---------
+
+Do not build a physical fixture, release a fabrication drawing as approved,
+populate the physical fixture contract from guesses, freeze a modal band, run a
+tap test, run a static load test, claim as-built FEA, transfer simulator tire or
+mass parameters to a car, or delete code before a caller/evidence audit.
+
+Workstream 0: clean starting gate
+==================================
+
+W0.1 — Rebase and inspect current state
+Files: none.
+Do:
+  - Start from a fresh branch based on current main after PR #24 is merged. If
+    PR #24 is not merged, read its files and treat them as a dependency; do not
+    fork a second nominal-package design.
+  - Record the exact main SHA, Claude branch SHA, and PR dependency in the final
+    handoff.
+  - Run the status commands below before any change.
+Done when:
+  - The worktree is clean.
+  - Both ledgers and the pending-input sheet match current main.
+  - No task status is changed by this week's package work.
+Commands:
+  git status --short --branch
+  git log -1 --format='%H %s'
+  python3 cad/ledger_validator.py live
+  python3 cad/input_requests.py --check
+  python3 cad/fixture_contract.py --check
+
+W0.2 — Freeze the evidence inventory
+Files: new runs/nominal_package_inventory/inventory.json and, if needed,
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - Inventory the register, plain-tube STEP, contract, hand calculations, FEA
+    summaries, tolerance stack, existing reports, and their SHA-256 hashes.
+  - For every number, record source file, source revision, unit, evidence state,
+    and whether it is configured, assumed, simulated, nominal CAD, or pending.
+  - Explicitly record the two stale-record checks: FEA_SETUP numbers must agree
+    with the current 0.175 kg FEA summary; the hand-calculation summary must
+    distinguish the rejected baseline from the selected design.
+Done when:
+  - A reviewer can trace every headline nominal number to one committed source.
+  - Any disagreement is listed as a blocker instead of being averaged away.
+
+Workstream 1: nominal mast package
+==================================
+
+Design decision for this week
+-----------------------------
+
+Keep the physical owner register and the nominal design register separate.
+Do not overwrite the six pending rows in parameters.csv. If new nominal values
+are needed for clamp, bracket, deck-stub, or fixture placement proposals, put
+them in a dedicated file such as:
+
+  cad/roboracer/nominal_package_parameters.csv
+
+Each row must include parameter, value, unit, evidence_state=design_choice,
+source, assumption_owner, replacement_input, and intended_use. The package may
+bind nominal geometry to this file, but fixture_contract.py and physical
+campaign provenance must continue to use the canonical owner register. This
+prevents a nominal drawing from masquerading as an inspection record.
+
+W1.1 — Reconcile stale narrative records
+Files: docs/design/FEA_SETUP.md, runs/mast_hand_calc/summary.txt,
+       experiments/test_final_report.py, docs/data-and-figures.md if needed.
+Do:
+  - Compare every displayed tip mass, crash force, first frequency, deflection,
+    and stress against runs/mast_fea/fea_summary.txt and the selected design
+    sweep.
+  - Keep the 174.7 Hz result, but label it REJECTED BASELINE everywhere.
+  - Do not delete historical results; add a source note or a corrected current
+    summary when a document presents the old run as selected.
+  - Add a regression assertion for the selected 0.175 kg nominal run and a
+    separate assertion that the rejected 174.7 Hz baseline remains identified as
+    rejected.
+Done when:
+  - python experiments/test_final_report.py passes.
+  - No current document presents the 0.20 kg / 267.4 Hz run as the selected
+    result.
+  - The diff contains no changed physical claim.
+
+W1.2 — Define nominal package geometry API
+Files: cad/generate.py, cad/contract.json,
+       cad/roboracer/nominal_package_parameters.csv.
+Do:
+  - Preserve the existing default tube generation and CLI behavior.
+  - Add explicit part selection for the nominal package: tube, root_clamp,
+    lidar_bracket, mast_assembly, deck_stub, and all.
+  - Keep all unmeasured clamp, bolt, bracket, optical-offset, and load-height
+    values visibly marked as design_choice. Do not read pending owner values as
+    zero or as nominal defaults.
+  - Use named datums: A=deck/reference plane, B=tube axis, C=bolt-pattern
+    origin. Store units in millimetres and convert only at report boundaries.
+  - Emit one geometry.json per part and an assembly geometry.json containing
+    part names, source parameter hash, bounding box, volume, mass, CG frame,
+    and evidence_state for each quantity.
+Done when:
+  - Existing tube tests still pass unchanged.
+  - A missing nominal input produces a controlled error naming the parameter.
+  - Part and assembly outputs are deterministic for the same parameter hash.
+
+W1.3 — Model nominal root clamp and base
+Files: cad/generate.py, cad/contract.json, cad/roboracer/nominal_package_parameters.csv,
+       cad/tests/test_geometry.py.
+Do:
+  - Model a machinable split clamp around the 20 mm tube with a declared
+    engagement length, slit, bolt count, bolt diameter, bolt pattern, base
+    footprint, and deck-side mounting patch.
+  - Use nominal values only as design choices. Include a replacement-input field
+    pointing to the future clamp drawing/inspection record.
+  - Check tube-to-bore fit, wall clearance, bolt-hole placement, clamp/base
+    bounding box, and deck-height envelope (nominal deck limit 0.138 m).
+  - Treat root joint stiffness as a model assumption; do not represent the
+    clamp as automatically rigid in the physical claim.
+Done when:
+  - Fresh-process STEP reimport finds the expected solids and contracted metrics.
+  - Negative controls cover missing engagement, invalid bore, duplicate bolt
+    points, nonpositive tolerance, and out-of-envelope deck height.
+  - The report calls this a NOMINAL DESIGN PROPOSAL, not a fabrication release.
+
+W1.4 — Model nominal LiDAR bracket and top interface
+Files: cad/generate.py, cad/contract.json, cad/roboracer/nominal_package_parameters.csv,
+       cad/tests/test_geometry.py.
+Do:
+  - Model a plate/bracket interface for the exact sensor envelope already cited
+    in the repository: 50 x 50 x 70 mm body and 0.130 kg body mass.
+  - Keep bracket mass and moving-cable mass as separate assumptions. Do not add
+    the manufacturer's 200 x 200 x 2 mm heat-sink plate unless a future owner
+    record explicitly changes the mass model and triggers FEA review.
+  - Include bolt pattern, optical-center offset, cable exit, strain relief,
+    clearance, and service direction as named nominal inputs.
+  - Calculate total moving mass and flag any change greater than 0.010 kg from
+    the committed 0.175 kg assumption as an FEA rerun trigger.
+Done when:
+  - Bracket/body/moving-cable masses sum transparently in geometry.json.
+  - The sensor envelope and cable route are testable from the output metadata.
+  - An unprovided purchased-sensor revision cannot be described as inspected.
+
+W1.5 — Build the nominal assembly and deck stub
+Files: cad/generate.py, cad/contract.json, cad/tests/test_geometry.py.
+Do:
+  - Compose tube, clamp, bracket, and a small deck mating stub without building
+    the deferred full vehicle deck.
+  - Preserve the 0.324 m selected chassis wheelbase versus 0.3302 m simulation
+    wheelbase as a documented interface deviation; do not hide it in a bracket.
+  - Check front transponder bay clearance (at least 8 x 12 cm in the documented
+    front-half region), mast/deck height, sensor sightline, cable route, mass,
+    CG frame, and bolt datum consistency.
+Done when:
+  - Assembly geometry and metrics are deterministic and source-linked.
+  - A reviewer can identify every nominal assumption that must be replaced by
+    owner input before fabrication.
+  - RR-CAD-04 remains blocked in the ledger because RR-CAD-02 is still blocked.
+
+W1.6 — Add independent load-path checks
+Files: new cad/nominal_load_path.py and cad/tests/test_nominal_load_path.py.
+Do:
+  - Write equations before numbers. Use the selected load height from the
+    nominal package, not a hidden constant.
+  - Calculate tube root moment, tube stress/deflection checks, clamp bolt-group
+    force/moment demand, bracket demand, and a clearly labelled joint-stiffness
+    sensitivity.
+  - Resolve the narrative discrepancy between a 100 mm nominal load height and
+    any report that prints a 15.45 N m moment. The correct moment must be
+    recomputed as M = F_crash * h and the chosen h must be visible.
+  - Screen yield, bolt shear/tension, bearing, slip/preload sensitivity,
+    fatigue relevance, buckling relevance, and resonance. If a mode cannot be
+    evaluated from nominal inputs, return UNKNOWN with the missing input.
+Done when:
+  - Tests cover units, zero/negative dimensions, mass changes, load-height
+    changes, and a deliberate joint-compliance sensitivity.
+  - The output distinguishes tube-only safety factor from assembly safety factor.
+  - No clamp or bolt safety claim is made without a declared material, fastener,
+    preload, friction, and joint model.
+
+W1.7 — Rerun FEA only when the trigger fires
+Files: experiments/mast_fea.py, runs/mast_fea/*, docs/design/FEA_SETUP.md,
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - First run the nominal package with the existing 0.175 kg tip assumption and
+    ideal-root model. Do not rerun simply to manufacture a newer number.
+  - Rerun when modeled moving mass changes by more than 0.010 kg, joint boundary
+    conditions change, or the assembly geometry changes the load path.
+  - Preserve mesh convergence, gauge region, solver version, mesh/source hash,
+    and the distinction between tube-only FEA and assembly analysis.
+Done when:
+  - If no trigger fires, the report explicitly reuses the committed FEA and
+    explains why it remains applicable only to the nominal tube.
+  - If triggered, f1 remains at least 200 Hz, hand/FEA comparison remains within
+    the existing ±15% design-review band, and mesh changes remain below 5%; a
+    failure opens a redesign task instead of relaxing thresholds.
+
+W1.8 — Publish the nominal package report
+Files: new docs/design/17_nominal_mast_package.md,
+       docs/design/figures/nominal-mast-package.svg or equivalent,
+       docs/data-and-figures.md, docs/figure-manifest.json.
+Do:
+  - Report scope, datums, mass/CG table, design-choice register, load path,
+    clamp/joint assumptions, sightline/deck stack, current FEA applicability,
+    and owner inputs that would replace each choice.
+  - Include one assembly view and one dimensioned view. Every number needs a
+    source or a design-choice marker. Every figure needs an input hash and
+    generation command.
+  - State explicit non-claims: no as-built geometry, physical stiffness,
+    fabrication approval, modal acceptance band, fatigue life, thermal proof,
+    or vehicle-performance validation.
+Done when:
+  - A fresh checkout can regenerate the report and figures from committed inputs.
+  - A reviewer can tell selected design, rejected baseline, model assumption,
+    owner-pending measurement, and simulation output apart at a glance.
+
+Workstream 2: hardware-free vehicle credibility study
+=======================================================
+
+Goal: challenge the simulator/controller chain with a deliberately changed plant
+so the project learns what survives outside the oracle case. This is simulation
+only and does not establish physical performance.
+
+W2.1 — Define the mismatch matrix before running it
+Files: new experiments/vehicle_mismatch_sweep.py,
+       new experiments/test_vehicle_mismatch_sweep.py,
+       new runs/vehicle_mismatch_sweep/config.json.
+Do:
+  - Start from the current pure-pursuit, LQR, and MPC comparison APIs.
+  - Sweep a small predeclared matrix: model wheelbase 0.3302 m versus selected
+    chassis 0.324 m; mass 3.74 kg versus nominal 4.42 kg; tire/friction scale
+    at 0.8/1.0/1.2; command delay at 0/20/50 ms; steering saturation and one
+    sensor-dropout case where the existing APIs support it.
+  - Keep map, timestep, controller update rate, initial state, random seeds,
+    and lap termination criteria fixed. Record all settings in JSON.
+  - Use a deterministic run ID derived from config hash and source commit.
+Done when:
+  - The matrix is small enough to run in under 15 minutes in CI or a developer
+    laptop, yet contains at least one nominal and one changed-plant case.
+  - Tests reject missing factors, duplicate cases, nonfinite values, and changed
+    seeds that are not recorded.
+
+W2.2 — Run and validate the mismatch sweep
+Files: experiments/vehicle_mismatch_sweep.py,
+       experiments/test_vehicle_mismatch_sweep.py,
+       runs/vehicle_mismatch_sweep/results.csv,
+       runs/vehicle_mismatch_sweep/metadata.json.
+Do:
+  - Record lap completion, lap time, RMS/max cross-track error, steering effort,
+    collision/termination reason, controller runtime p95/max, and estimator
+    dropout recovery metrics where applicable.
+  - Compare each controller on identical cases. Never rank controllers from
+    different maps or different random seeds.
+  - Mark a case INCONCLUSIVE when the required metric is missing or the run
+    terminates for an unclassified reason.
+Done when:
+  - Re-running with the same source/config hash reproduces the metrics within a
+    declared floating-point tolerance.
+  - At least one changed-plant result differs materially from the nominal result
+    or the report explicitly says the factor was not influential in this model.
+  - MPC timing keeps both p95 and worst-case values; the known max-spike risk
+    cannot disappear into an average.
+
+W2.3 — Write the simulation credibility report
+Files: new reports/vehicle_mismatch_sweep.md,
+       docs/data-and-figures.md, docs/figure-manifest.json if figures are made.
+Do:
+  - State the hypothesis: controller conclusions should be stable under the
+    declared nonphysical plant deviations, or the report should identify where
+    they fail.
+  - Separate nominal ranking from robust ranking. If pure pursuit remains best,
+    say under which cases; if another controller wins, explain the tradeoff.
+  - Convert every failure into a next experiment, not a claim about the real car.
+  - Compare only against existing simulation gates and state their limits.
+Done when:
+  - Report includes setup, variables, metrics, seed/config identity, outcomes,
+    limitations, and a kill criterion for the next iteration.
+  - It does not claim sim-to-real transfer, hardware readiness, or physical
+    vehicle performance.
+
+Workstream 3: nominal fixture feasibility screen
+===============================================
+
+This work prepares RR-CAD-05 without closing it. It answers whether the proposed
+fixture concept is numerically plausible before someone spends time fabricating
+it.
+
+W3.1 — Build the analytic screen
+Files: new cad/fixture_feasibility.py,
+       new cad/tests/test_fixture_feasibility.py,
+       new runs/mast_fixture_feasibility/nominal_screen.json.
+Do:
+  - Recompute specimen stiffness from the accepted nominal tube: approximately
+    775.984 N/mm for E=68,900 N/mm², L=100 mm, OD=20 mm, wall=1.5 mm.
+  - Require fixture stiffness at least 10 times specimen stiffness independently
+    in x and y; do not substitute a rigid CAD visual for stiffness evidence.
+  - Model tip/root indicator resolution, root translation, root rotation, station
+    spacing, load height, force uncertainty, repeatability, and reference-model
+    uncertainty as explicit inputs. Missing terms remain UNKNOWN, never zero.
+  - Propagate a conservative U95 screen through the actual fitted-compliance
+    estimator. Preserve the 4/8/12/16/20 N, two-axis, three-cycle matrix.
+Done when:
+  - Tests reproduce the known 7,759.84 N/mm nominal fixture target and 5.155 µm
+    ideal 4 N specimen displacement.
+  - A 50 µrad root rotation at a 100 mm lever visibly contributes about 5 µm and
+    cannot be ignored by the screen.
+  - The output is labelled NOMINAL FEASIBILITY SCREEN ONLY and lists every
+    missing physical input.
+
+W3.2 — Choose the next physical-readiness questions
+Files: docs/specs/mast-physical-validation/campaign-readiness.md,
+       docs/CAD_MEASUREMENT_CONTRACT.md, docs/REVIEW_READY.md.
+Do:
+  - Use W3.1 to rank the three owner inputs with the largest effect on feasibility.
+  - Prefer inputs that remove ambiguity in root restraint, load height, or
+    root-rotation observability before cosmetic CAD or full deck packaging.
+  - Keep static ±15% and U95 ≤10% criteria separate from any modal criterion.
+Done when:
+  - The handoff names exactly three requested inputs, why each matters, source
+    format, and the decision it unlocks.
+  - No request asks for a complete vehicle deck when the mast fixture can be
+    resolved independently.
+
+Workstream 4: review and reproducibility packet
+===============================================
+
+W4.1 — Add a single reproducibility entry point
+Files: new scripts/reproduce_nominal_week.py or a documented command block in
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - Run inventory, nominal geometry, geometry checks, nominal load-path checks,
+    fixture feasibility screen, and vehicle mismatch sweep in dependency order.
+  - Write a manifest containing source commit, config hashes, tool versions,
+    output hashes, evidence labels, and expected blocked gates.
+  - Keep long FEA and legacy Gym regeneration opt-in; the default path must be
+    bounded and runnable without hardware.
+Done when:
+  - A clean checkout can run the bounded path and produce the same manifest
+    structure and deterministic outputs.
+  - Failing optional dependencies give a clear blocked message rather than
+    silently skipping an analysis.
+
+W4.2 — Prepare the reviewer packet
+Files: docs/REVIEW_READY.md, new evidence/week-2026-09-19/README.md,
+       new evidence/week-2026-09-19/manifest.json.
+Do:
+  - Link the package report, mismatch report, feasibility screen, source hashes,
+    exact commands, local environment, and known limitations.
+  - List what was not executed: hardware, calibration, CAD release, physical
+    static campaign, modal acquisition, full legacy simulation, and independent
+    review if still unavailable.
+  - Keep RR-S02, RR-S09, RR-S12, RR-S13, RR-CAD-02/04/05/06/07 blocked unless
+    their existing evidence criteria are actually met.
+Done when:
+  - A reviewer can reproduce the nominal work without reading chat history.
+  - The packet contains no claim stronger than its evidence label.
+
+Suggested schedule
+==================
+
+September 19: W0.1, W0.2, W1.1. Stop if main/PR24 state is unclear.
+September 20: W1.2 and W1.3. Keep geometry proposals separate from owner rows.
+September 21: W1.4, W1.5, W1.6. Stop before drawing polish if load-path checks fail.
+September 22: W1.7 and W1.8. Rerun FEA only if the documented trigger fires.
+September 23: W2.1 and W2.2. Freeze matrix and seeds before execution.
+September 24: W2.3, W3.1, and W3.2. Rank owner inputs from sensitivity results.
+September 25: W4.1, W4.2, full verification, and a final implementation PR.
+
+If time is short, cut in this order: extra renders, C6 fixture placement sketch,
+additional controller cases, and optional ponytail audit. Keep source inventory,
+load-path checks, fixture feasibility, negative controls, and evidence labels.
+
+Acceptance command suite
+========================
+
+Run from repository root. Use the pinned CAD environment for CadQuery commands
+and the portable Python environment for evidence/report commands.
+
+Baseline and ledgers:
+  python3 cad/ledger_validator.py live
+  python3 cad/input_requests.py --check
+  python3 cad/fixture_contract.py --check
+  python3 cad/fixture_contract.py --check-draft
+  python3 cad/modal_freeze.py --check-draft
+
+Portable software checks:
+  PYTHONPATH=gym python experiments/test_rosbag_to_telemetry.py
+  PYTHONPATH=gym python experiments/test_bag_evidence.py
+  PYTHONPATH=gym python experiments/validate_item11.py
+  PYTHONPATH=gym python experiments/test_mast_physical_validation.py
+  PYTHONPATH=gym python experiments/test_cad_inputs.py
+  PYTHONPATH=gym python experiments/test_final_report.py
+
+Nominal/CAD checks:
+  python cad/input_requests.py --check
+  python cad/fixture_contract.py --check
+  python -m pytest cad/tests -q
+  python cad/generate.py --parameters cad/roboracer/parameters.csv --output <tmp>
+  git diff --check
+
+Expected blocked commands, run separately and record as expected:
+  python3 cad/fixture_contract.py --release       # exit 2 while owner inputs remain pending
+  python3 cad/modal_freeze.py                     # exit 2 while modal inputs remain unresolved
+
+Do not report an expected refusal as a failed software check. Do not report an
+untriggered CAD workflow as newly passed. Keep hosted CI observations separate
+from local runs.
+
+Final handoff format for Claude
+===============================
+
+At the end of the week, Claude should produce one implementation PR or a small
+sequence of dependency-ordered PRs. Each PR description must contain:
+
+  - source and target commits;
+  - exact files changed;
+  - design-choice versus owner-input table;
+  - commands, exits, and evidence paths;
+  - output hashes/config identity;
+  - known blockers and non-claims;
+  - which ledger rows remain unchanged and why.
+
+The final paragraph must answer:
+
+  1. What nominal engineering result became more reproducible?
+  2. What changed-plant simulation result changed or challenged the vehicle
+     decision?
+  3. Which three owner inputs would unlock the next physical or review gate?
+
+Adaptive triggers for later work
+=================================
+
+Promote nominal CAD toward RR-CAD-04 only when a reviewed owner drawing or
+inspection record replaces the corresponding design choice and the datum is
+defined. Promote the fixture toward RR-CAD-05 only when both-axis stiffness,
+root-rotation observability, instrument resolution, and a complete uncertainty
+budget are reviewable. Promote RR-S02 only when apparatus, calibration, as-built
+inspection/FEA, zero checks, setup evidence, and authorization exist. Promote
+RR-S12 only when x/y as-built modal references, uncertainty, numerical band,
+reviewer rationale, and commit chronology are approved. Promote RR-S13 only
+after RR-S12 freezes the observable and decision rule.
+
+Maybe-later triggers:
+  - Full deck packaging: only after the mast/clamp/fixture review is accepted
+    and a vehicle-integration milestone exists.
+  - Ponytail deletion audit: only after the nominal package and reproducibility
+    path are stable; an audit can then use caller and artifact evidence.
+  - New modal generator: only if a concrete deterministic regeneration need is
+    recorded; PR #16 remains closed by decision.
+  - Physical campaign: only after the full readiness packet and authorized
+    human review; no calendar date alone is a trigger.
+
+End state
+=========
+
+This week's best result is a credible nominal design and simulation package that
+makes the next real-world decision easier. It is not a fabricated test campaign,
+not a complete vehicle, and not a physical validation claim.

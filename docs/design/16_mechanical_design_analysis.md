@@ -67,7 +67,7 @@ Record the section (I, c), the numbers, and the margin against σ_yield. **This 
 | --- | --- | ---: | --- |
 | Governing crash force | F | **128.8 N** | = m_LiDAR_tip × 50 g × SF_crash (0.175 kg × 490 m/s² × 1.5); **a_lat,peak = 19.4 m/s² known**; m_LiDAR_tip **firmed 0.175 kg** (item 15) |
 | Moment arm | h_arm | **0.100 m** | optical-center height = mast length |
-| Root bending moment | M | **15.45 N·m** | F × h_arm |
+| Root bending moment | M | **12.88 N·m** | F × h_arm = 128.76 N × 0.100 m (corrected 2026-09-19; 15.45 N·m belongs to the rejected 120 mm baseline in §3.1) |
 | Section modulus / I, c | — | **I = 3754 mm⁴, c = 10.0 mm** | recommended OD=20 mm tube |
 | Hand-calc max stress | σ_hand | **34.3 MPa** | M·c/I (crash, root) |
 | Hand-calc tip deflection | δ_hand | **0.166 mm** | F·L³/(3EI) (crash) |

@@ -495,6 +495,8 @@ def _fmt_lines(sec: SectionProps, cases: list[CantileverResult], f1: float, k_ef
     a("=" * 72)
     a("LiDAR MAST — HAND CALCULATION (analytical baseline for item-16 FEA)")
     a("=" * 72)
+    a("REJECTED BASELINE GEOMETRY (L=120 mm, OD=16 mm): its f1 fails the 200 Hz guard.")
+    a("The SELECTED design is the RECOMMEND row in design_sweep.txt (L=100, OD=20, wall 1.5).")
     a("")
     a("ASSUMPTIONS (geometry/material ASSUMED; tip mass FIRMED, item-15 Hokuyo UST-10LX)")
     a("-" * 72)
