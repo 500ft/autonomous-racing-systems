@@ -4,16 +4,25 @@
     "outer_diameter": {"value": 20.0, "unit": "mm", "evidence_state": "design_choice"},
     "wall_thickness": {"value": 1.5, "unit": "mm", "evidence_state": "design_choice"},
     "free_length": {"value": 100.0, "unit": "mm", "evidence_state": "design_choice"},
-    "clamp_engagement": {"value": 30.0, "unit": "mm", "evidence_state": "provisional_design",
-                         "basis": "1.5 x OD; above the rejected 0.75 x OD collar, below the 1.65 x OD catalogue width"}
+    "clamp_engagement": {"value": 35.0, "unit": "mm", "evidence_state": "provisional_design",
+                         "basis": "1.75 x OD, mid-range of the 30-40 mm spec band rather than at its floor. Clamp fixity is the dominant risk in spec 6.3 and minimum engagement is where the fixed-end assumption is weakest; 35 mm costs nothing and buys margin."}
+  },
+  "support_sleeve": {
+    "_comment": "Spec 6.1 requires an internal support over the clamped length: a 1.5 mm wall under a 16 N.m seating torque is unvalidated, and a crushed root changes I locally and softens exactly the region the hand calculation and the FEA both assume is rigid.",
+    "outer_diameter": {"value": 16.95, "unit": "mm", "evidence_state": "provisional_design",
+                       "basis": "0.05 mm clearance in the nominal 17 mm tube bore so the sleeve can be inserted"},
+    "inner_diameter": {"value": 10.0, "unit": "mm", "evidence_state": "provisional_design",
+                       "basis": "retains a cable path through the root rather than plugging the tube"},
+    "length": {"value": 35.0, "unit": "mm", "evidence_state": "provisional_design",
+               "basis": "equals clamp_engagement so the support spans the full clamped length"}
   },
   "root_clamp": {
     "block_width": {"value": 44.0, "unit": "mm", "evidence_state": "provisional_design"},
     "block_height": {"value": 56.0, "unit": "mm", "evidence_state": "provisional_design"},
-    "block_depth": {"value": 30.0, "unit": "mm", "evidence_state": "provisional_design",
+    "block_depth": {"value": 35.0, "unit": "mm", "evidence_state": "provisional_design",
                     "basis": "equals clamp_engagement"},
-    "bore_diameter": {"value": 20.0, "unit": "mm", "evidence_state": "design_choice",
-                      "basis": "slip fit on tube OD before clamping"},
+    "bore_diameter": {"value": 20.1, "unit": "mm", "evidence_state": "provisional_design",
+                      "basis": "0.1 mm over nominal tube OD. A line-to-line 20.0 bore on a 20.0 tube is not a slip fit and, with the OD tolerance unverified and possibly positive, the tube may not enter at all. A split clamp closes 2 mm at the slot, so this clearance does not compromise grip. Replace with an H8 callout once the delivered OD is measured."},
     "bore_center_x": {"value": 22.0, "unit": "mm", "evidence_state": "provisional_design"},
     "bore_center_y": {"value": 22.0, "unit": "mm", "evidence_state": "provisional_design"},
     "slot_width": {"value": 2.0, "unit": "mm", "evidence_state": "provisional_design",
@@ -23,8 +32,8 @@
     "clamp_bolt_diameter": {"value": 6.6, "unit": "mm", "evidence_state": "design_choice",
                             "basis": "M6 clearance, DIN 912 / ISO 4762 per spec Part 2"},
     "clamp_bolt_y": {"value": 44.0, "unit": "mm", "evidence_state": "provisional_design"},
-    "clamp_bolt_z": {"value": [8.0, 22.0], "unit": "mm", "evidence_state": "provisional_design",
-                     "basis": "two bolts distributed along the 30 mm engagement"}
+    "clamp_bolt_z": {"value": [9.0, 26.0], "unit": "mm", "evidence_state": "provisional_design",
+                     "basis": "two bolts distributed along the 35 mm engagement, 9 mm from each end"}
   },
   "material": {
     "density": {"value": 2700.0, "unit": "kg/m^3", "evidence_state": "model_assumption"}

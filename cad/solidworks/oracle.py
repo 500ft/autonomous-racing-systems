@@ -33,6 +33,15 @@ def build_tube(g):
     return solid, {"stock_length_mm": length}
 
 
+def build_sleeve(g):
+    """Internal support over the clamped length. Spec 6.1 requires it: the 1.5 mm
+    tube wall is not validated against the clamp seating torque without it."""
+    s = g["support_sleeve"]
+    od, idia, length = v(s["outer_diameter"]), v(s["inner_diameter"]), v(s["length"])
+    solid = cq.Workplane("XY").circle(od / 2).circle(idia / 2).extrude(length)
+    return solid, {"length_mm": length}
+
+
 def build_clamp(g):
     c = g["root_clamp"]
     W, H, D = v(c["block_width"]), v(c["block_height"]), v(c["block_depth"])
@@ -82,7 +91,9 @@ def main():
     density = v(g["material"]["density"])
 
     out = {"geometry_source": a.geometry.name, "density_kg_m3": density, "parts": {}}
-    for name, builder in (("mast_tube_stock", build_tube), ("root_clamp", build_clamp)):
+    for name, builder in (("mast_tube_stock", build_tube),
+                          ("support_sleeve", build_sleeve),
+                          ("root_clamp", build_clamp)):
         solid, extra = builder(g)
         m = metrics(solid, density)
         m.update(extra)

@@ -1,0 +1,73 @@
+{
+ "contract_version": 1,
+ "family": "mast_assembly",
+ "source_geometry": "cad/solidworks/geometry.json",
+ "authored_by": "cad/solidworks/author_mast_assembly.py (SOLIDWORKS, licensed host)",
+ "reviewed_against": "cad/solidworks/oracle.py, an independent CadQuery model of the same geometry",
+ "density_kg_m3": 2700.0,
+ "parts": {
+  "mast_tube_stock": {
+   "volume_mm3": 11769.191478510766,
+   "mass_kg": 0.03177681699197907,
+   "bbox_mm": [
+    20.0,
+    20.0,
+    135.0
+   ],
+   "n_solids": 1
+  },
+  "support_sleeve": {
+   "volume_mm3": 5148.746382491268,
+   "mass_kg": 0.013901615232726424,
+   "bbox_mm": [
+    16.95,
+    16.95,
+    35.0
+   ],
+   "n_solids": 1
+  },
+  "root_clamp": {
+   "volume_mm3": 70582.72919191429,
+   "mass_kg": 0.1905733688181686,
+   "bbox_mm": [
+    44.0,
+    56.0,
+    35.0
+   ],
+   "n_solids": 1
+  }
+ },
+ "tolerances": {
+  "volume_mm3_rel": 1e-06,
+  "bbox_mm_abs": 1e-06,
+  "step_roundtrip_volume_rel": 1e-09
+ },
+ "parametric": {
+  "driven_by": "global variables declared in each part; see cad/solidworks/README.md",
+  "redrive_verified": "ClampEngagement 35 -> 40 mm re-drove all three parts onto their new oracle values (cad/solidworks/redrive.py)"
+ },
+ "provisional_design_values": [
+  "mast_tube_stock.clamp_engagement",
+  "root_clamp.block_depth",
+  "root_clamp.block_height",
+  "root_clamp.block_width",
+  "root_clamp.bore_center_x",
+  "root_clamp.bore_center_y",
+  "root_clamp.bore_diameter",
+  "root_clamp.clamp_bolt_y",
+  "root_clamp.clamp_bolt_z",
+  "root_clamp.slot_bottom_y",
+  "root_clamp.slot_width",
+  "support_sleeve.inner_diameter",
+  "support_sleeve.length",
+  "support_sleeve.outer_diameter"
+ ],
+ "not_modelled": {
+  "clamp_bolt_pitch": "measurement - deck bolt pattern omitted from the clamp block",
+  "lidar_bracket_bolt_pitch": "vendor_drawing - Part 3 not modelled",
+  "optical_center_offset": "measurement - Part 3 not modelled",
+  "actual_load_height": "measurement - Part 4 load feature not modelled",
+  "root_rotation_station_spacing": "design_then_inspect, chosen 40.0 mm, but Part 4 not modelled this pass"
+ },
+ "evidence_note": "This contract covers the SOLIDWORKS mast assembly parts only. It is deliberately separate from cad/contract.json, which is the frozen 100 mm analysis specimen the 285.5 Hz modal result was computed against; mast_tube_stock is a distinct part and must not inherit those expected values. Passing means the model reproduces the intended geometry, not that an as-built part matches it."
+}

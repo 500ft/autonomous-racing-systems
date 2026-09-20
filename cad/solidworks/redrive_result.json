@@ -1,0 +1,53 @@
+{
+  "status": "ok",
+  "message": "every part re-drove to its new oracle",
+  "variable": "ClampEngagement",
+  "new_value_mm": 40.0,
+  "parts": {
+    "mast_tube_stock": {
+      "equations_changed": [
+        {
+          "index": 3,
+          "readback": "\"ClampEngagement\"= 40mm"
+        }
+      ],
+      "rebuilt": true,
+      "volume_before_mm3": 11769.191478510773,
+      "volume_after_mm3": 12205.087459196353,
+      "oracle_after_mm3": 12205.08745919634,
+      "error_rel": 1.043247405427393e-15,
+      "n_solids": 1,
+      "accepted": true
+    },
+    "support_sleeve": {
+      "equations_changed": [
+        {
+          "index": 2,
+          "readback": "\"ClampEngagement\"= 40mm"
+        }
+      ],
+      "rebuilt": true,
+      "volume_before_mm3": 5148.746382491269,
+      "volume_after_mm3": 5884.281579990022,
+      "oracle_after_mm3": 5884.281579990022,
+      "error_rel": 0.0,
+      "n_solids": 1,
+      "accepted": true
+    },
+    "root_clamp": {
+      "equations_changed": [
+        {
+          "index": 2,
+          "readback": "\"ClampEngagement\"= 40mm"
+        }
+      ],
+      "rebuilt": true,
+      "volume_before_mm3": 70582.72919191429,
+      "volume_after_mm3": 81076.51954730172,
+      "oracle_after_mm3": 81076.51954730174,
+      "error_rel": 1.7948371870942191e-16,
+      "n_solids": 1,
+      "accepted": true
+    }
+  }
+}

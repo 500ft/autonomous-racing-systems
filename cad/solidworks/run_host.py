@@ -18,7 +18,7 @@ CONFIG_PATH = Path(os.environ.get("CADLOOP_HOST_CONFIG",
 HERE = Path(__file__).resolve().parent
 REMOTE_DIR = r"C:\RRMast"
 REMOTE_DIR_POSIX = REMOTE_DIR.replace("\\", "/")
-SUPPORT_FILES = ("geometry.json", "oracle.json")
+SUPPORT_FILES = ("geometry.json", "oracle.json", "oracle_redrive.json")
 POLL_S = 3
 LAUNCH_TIMEOUT_S = 20
 
