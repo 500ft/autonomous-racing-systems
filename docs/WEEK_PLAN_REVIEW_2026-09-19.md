@@ -1,8 +1,9 @@
 # Week plan 2026-09-19 → 25 — review, amendments and Day-1 record
 
 Source: [WEEK_PLAN_2026-09-19_TO_25.txt](WEEK_PLAN_2026-09-19_TO_25.txt) (owner-authored, committed
-verbatim). This file is the agent's critique, the amendments it proposes, and the Day-1 execution
-record. Amendments are proposals until the owner merges this PR; the source text is not edited.
+verbatim; revised by the owner 2026-09-20 after equipment purchases, see the revision section below).
+This file is the agent's critique, the amendments it proposes, and the day-by-day execution record.
+Amendments are proposals until the owner merges this PR; the source text is not edited.
 
 ## Verdict
 
@@ -26,19 +27,51 @@ Environment facts checked 2026-09-19: CalculiX `ccx` is in the `fea` conda env a
 so W1.7 can run if triggered. `f1tenth-gym` env exists locally. Base `python3` has numpy, so the
 hand calc regenerates outside the pinned envs.
 
-## Amended schedule
+## Revision 2026-09-20 — equipment purchased, priorities re-ordered
+
+The owner revised the source plan after purchasing a QT Py RP2040, NAU7802 ADC, 5 kg and 1 kg load
+cells, LIS3DH, INA260 and an IR break-beam pair. New workstream E (E0–E6) makes force acquisition and
+calibration tooling the must-finish track; nominal CAD extension moves to "next", the controller sweep
+to stretch. Findings 1–7 above still hold; the schedule below supersedes the earlier one.
+
+Critique of the revision (verified where a fact is claimed):
+
+| # | finding | amendment |
+|---|---|---|
+| 8 | **Arithmetic checks out.** 5 kg → 49.05 N, ratio 2.45 at 20 N; 1 kg → 9.81 N cannot reach 12 N; FEA 0.176 mm × 20/128.76 = 0.0273 mm at 20 N; NAU7802 320 SPS → 160 Hz Nyquist < 285.5 Hz. The plan's engineering decisions follow from these. | none |
+| 9 | **W1.1 is scheduled for Sep 23 but was delivered Sep 19 in this PR.** The revision says "do not backfill"; nothing is backfilled, the work simply exists. | Sep 23 = W3.1 only; the freed time goes to W3.2. |
+| 10 | **E2 serial capture needs `pyserial`, which is not a repo dependency.** | Import it lazily inside the capture path only; replay and tests stay dependency-free, as the plan requires. Pin it in the firmware README, not the portable requirements. |
+| 11 | **E1 `py_compile` of CircuitPython code under CPython is syntax-only** (the plan says so). `import board` would fail at runtime on the host. | Keep the compile check; add no host-side import test. The device README owns flash and capture steps. |
+| 12 | **E3 and W3.1 must share one estimator.** E3 produces force U95; W3.1 propagates it through the fitted-compliance estimator already in `experiments/mast_physical_validation.py`. | E3 emits a small JSON the W3.1 screen reads; neither reimplements the other. |
+| 13 | **The largest physical gap is unchanged by the purchase:** calibrated tip/root displacement indicators and a root-rotation observation. The plan says this; W3.2's ranked inputs should say it first. | Input bundle 1 stays "displacement and root motion" unless the W3.1 sensitivities disagree. |
+| 14 | **Inventory schema.** The revision asks for stable IDs and a separate schema from the owner register. | Delivered as `docs/hardware/purchased-instruments.json` (E0); E1–E3 reference those IDs. |
+
+## Amended schedule (equipment-first)
 
 | day | work | stop rule |
 |---|---|---|
-| 19 | W0.1, W0.2, W1.1 (this PR) | stop if PR #24 is not merged before Day 2 |
-| 20 | W1.2 geometry API, W1.6 load-path equations + tests | stop before CAD if any load-path screen returns UNKNOWN for a reason that is not an owner input |
-| 21 | W1.3 clamp, W1.4 bracket | stop before drawings if bolt demand exceeds a plausible M4/M5 group without preload data |
-| 22 | W1.5 assembly + deck stub, W1.7 trigger check, W1.8 report + figures | FEA rerun only on the documented trigger |
-| 23 | W2.1 matrix + `params` hook, W2.2 sweep (local) | freeze config hash before first run |
-| 24 | W2.3 report, W3.1 screen, W3.2 top-three inputs | rank inputs from screen sensitivities, not opinion |
-| 25 | W4.2 packet, full acceptance suite, final PR(s) | none |
+| 19 | W0.1, W0.2, W1.1 delivered (this PR, first commit) | — |
+| 20 | E0 inventory + hookup notes (this PR, second commit) | stop if PR #24/#25 still unmerged on Sep 21: rebase, do not fork |
+| 21 | E1 device format + firmware script (NOT DEVICE-TESTED), E2 logger + replay + tests | replay must run with no board and no CadQuery |
+| 22 | E3 calibration record, fit, U95 at 4–20 N, synthetic failure cases incl. 1 kg cell at 20 N | no real calibration fields filled |
+| 23 | W3.1 feasibility screen importing the existing estimator, force U95 from E3 as an assumed case | missing physical terms stay UNKNOWN |
+| 24 | W3.2 top-three input bundles from screen sensitivities; scoped W1.8 report (existing tube + measurement chain) | start W1.2/W1.3 only if all of the above pass |
+| 25 | W4 packet, acceptance suite, final PR(s) | none |
 
-Cut order unchanged: renders, C6 sketch, extra controller cases, ponytail audit.
+Cut order per the revision: W2 sweep, E4–E6, renders/full assembly, then the clamp extension.
+Preserved: E0–E3, nominal-tube source review, W3.1, evidence packet.
+
+## Day 2 record (Sep 20, E0)
+
+- `docs/hardware/purchased-instruments.json`: ten line items, stable IDs (MCU-QTPY-01, ADC-NAU7802-01,
+  LC-5KG-01, LC-1KG-01, ACC-LIS3DH-01, PWR-INA260-01, GATE-IR-01, cables and wires), all at
+  `purchase_identified`; revision, operation, calibration, mounting and wire-colour fields `null` with a
+  stated reason; capacity and range arithmetic embedded; five unconfirmed prerequisites listed. No
+  invoice, address, order or payment data.
+- `docs/hardware/measurement-electronics.md`: evidence ladder, what the purchase changes and does not,
+  hookup 1 (QT Py + NAU7802 + 5 kg cell, one board at a time, 3.3 V logic, STEMMA bus distinction),
+  the conditional owner check, sources.
+- `cad/roboracer/parameters.csv` untouched; the six pending rows stay pending.
 
 ## Day 1 record (W0.1, W0.2, W1.1)
 
