@@ -1,0 +1,9 @@
+# Versions the firmware was WRITTEN AGAINST (published releases checked 2026-09-21). None device-tested.
+# Fill the "observed" column from the board at first flash (boot_out.txt and the library bundle used).
+component                      written_against                          observed_on_device
+circuitpython                  10.3.1 (release 2026-09-14)              (not flashed)
+cedargrove_nau7802             2.1.4 (release 2026-03-30)               (not installed)
+adafruit_bus_device            bundle matching the CircuitPython above  (not installed)
+adafruit_register              bundle matching the CircuitPython above  (not installed)
+board                          QT Py RP2040 (PID 4900)                  revision not observed
+nau7802 breakout               PID 4538                                 revision not observed (Rev C exposes B+/B-)

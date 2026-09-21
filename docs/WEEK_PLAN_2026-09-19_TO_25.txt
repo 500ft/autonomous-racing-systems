@@ -1,7 +1,8 @@
 AUTONOMOUS RACING SYSTEMS
 CLAUDE BUILD HANDOFF: SEPTEMBER 19–25, 2026
 Planning-only source document
-Revised September 20, 2026 after owner supplied equipment purchase records.
+Revised September 21, 2026 to incorporate the shared CAD briefing and branch work.
+Equipment purchase update retained from September 20, 2026.
 
 Purpose
 =======
@@ -85,13 +86,49 @@ Follow-up at that snapshot: PR #24, task/a1-nominal-work-order-20260916, head 85
 PR #24 contains the A1 decision that the old tap-test generator stays closed
 and the nominal CAD/FEA package work order. Do not duplicate or re-open A1.
 
+September 21 CAD briefing and branch reconciliation
+--------------------------------------------------
+
+Read 500ft/engineering-audit -> docs/cad_agent_briefing.md before further CAD/FEA
+work. Reviewed source commit: cf56cdff50b09c9a266292006cbf5b2a0f2e8ac6.
+Its docs/host_setup.md and docs/solidworks_api_findings.md cover the existing host
+and observed API pitfalls. Project adoption details and pinned source links are
+in docs/decisions/0001-shared-cad-workflow.md; AGENTS.md indexes this guidance.
+
+Fetched branch state on September 21:
+  - origin/main remains 17c69c1.
+  - origin/cad/solidworks-mast-assembly at 6ef5f44 contains native SOLIDWORKS
+    tube-stock, internal support sleeve and root clamp, their CadQuery oracle,
+    separate assembly-part contract, and a recorded 35 -> 40 mm engagement test.
+  - origin/week/day1-20260919 at ea901d5 contains the purchased instrument
+    inventory and hookup notes. E0 is existing implementation to reconcile and
+    review, not a blank-slate task. Do not claim it is merged or device-tested.
+
+Use engineering-audit for reusable CAD/FEA machinery and this repo for the mast
+deliverable. Keep cad/generate.py and cad/contract.json scoped to the frozen
+100 mm analysis specimen. Native assembly parts use cad/solidworks/geometry.json
+and cad/solidworks/contract-assembly.v1.json. The 135 mm stock tube includes a
+provisional 35 mm clamped length; it must not inherit the 100 mm specimen's
+contract or automatically inherit its 285.5 Hz modal result.
+
+The next CAD work extends the existing native branch. A single geometry input
+feeds authoring and an independently checked oracle. Acceptance includes actual
+measurements, a variable-change test, positional/clearance checks, and export
+round-trip evidence. Near-machine-precision volume agreement is numerical
+evidence, not a fabrication tolerance or proof every hole is in the right place.
+
+Known remaining gaps: no assembly document/mates, no drawing set, incomplete
+parametric slot/bolt positions, and no independent FEA acceptance oracle in the
+reusable machinery. Host execution is separate from CI oracle checks. These
+are follow-on tasks and do not displace E1-E3 this week.
+
 Authoritative status sources:
   docs/CAD_TASKS.csv
   docs/SPRINT_TASKS.csv
   docs/CAD_DEPENDENCIES.json
   docs/REVIEW_READY.md
 
-Current status to preserve:
+Ledger snapshot to preserve until current evidence supports a change:
   Done: RR-CAD-01, RR-CAD-08, RR-CAD-09, RR-CAD-10, RR-S01, RR-S03,
         RR-S04, RR-S05, RR-S06, RR-S07, RR-S08, RR-S10, RR-D03, RR-S11.
   Blocked: RR-CAD-02, RR-CAD-04, RR-CAD-05, RR-CAD-06, RR-CAD-07,
@@ -125,7 +162,7 @@ the core software deliverable must remain finishable without connecting boards.
 Priority and scope:
   Must finish: W0, E0–E3, W1.1, W3.1–W3.2, W4, and a scoped W1.8 report covering
                the existing nominal tube and measurement-chain feasibility.
-  Next:        W1.2–W1.3 nominal clamp work once the must-finish packet passes.
+  Next:        W1.2–W1.3 reconcile and extend existing native CAD once core passes.
   Stretch:     W1.4–W1.7 assembly work, E4–E6 auxiliary sensor work, then W2.
   Carry over:  Any stretch work not started; report it explicitly as unexecuted.
 
@@ -166,6 +203,9 @@ Do:
     can proceed from current main without waiting for that CAD dependency.
   - Record the exact main SHA, Claude branch SHA, and PR dependency in the final
     handoff.
+  - Inspect the two September 21 branches above before assigning new work.
+    Reuse E0 intake and native part work already present; reconcile branch
+    dependencies without overwriting another session's worktree.
   - Run the status commands below before any change.
 Done when:
   - The worktree is clean.
@@ -196,14 +236,16 @@ Done when:
 Workstream E: purchased equipment acquisition package
 ====================================================
 
-All paths in E0–E6 are proposed implementation paths, not files already built.
+E0 inventory/hookup files now exist on week/day1-20260919; review and reuse them.
+Other E paths are implementation proposals unless current branch inspection
+shows they have also been built. Reconcile status before duplicating files.
 Keep this a small device script plus portable Python tools. Reuse existing
 repository conventions before introducing dependencies. Do not build a ROS
 bridge, dashboard, generic sensor framework, or wireless system this week.
 
-E0 — Record capability and wiring prerequisites
-Files: new docs/hardware/purchased-instruments.json,
-       new docs/hardware/measurement-electronics.md.
+E0 — Reconcile recorded capability and wiring prerequisites
+Files: docs/hardware/purchased-instruments.json,
+       docs/hardware/measurement-electronics.md on week/day1-20260919.
 Do:
   - Give each board and cell a stable local ID, e.g. LC-5KG-01 and LC-1KG-01.
     Record product ID, capacity, purchase-record source, owner statement,
@@ -389,17 +431,18 @@ Design decision for this week
 -----------------------------
 
 Keep the physical owner register and the nominal design register separate.
-Do not overwrite the six pending rows in parameters.csv. If new nominal values
-are needed for clamp, bracket, deck-stub, or fixture placement proposals, put
-them in a dedicated file such as:
+Do not overwrite the six pending rows in parameters.csv. Use the native branch's
+cad/solidworks/geometry.json as the assembly-part geometry source instead of
+creating a duplicate nominal_package_parameters.csv. Preserve each value's
+evidence state and add source/replacement-input/intent metadata where missing.
+Both native authoring and the CadQuery oracle must consume the same input while
+implementing their geometry independently. Hand-check the oracle as well.
 
-  cad/roboracer/nominal_package_parameters.csv
-
-Each row must include parameter, value, unit, evidence_state=design_choice,
-source, assumption_owner, replacement_input, and intended_use. The package may
-bind nominal geometry to this file, but fixture_contract.py and physical
-campaign provenance must continue to use the canonical owner register. This
-prevents a nominal drawing from masquerading as an inspection record.
+Follow the register's acquisition routes. A provisional design choice does not
+close a measurement requirement. Leave unresolved deck bolts, bracket interfaces
+and physical load features out of the accepted model. Any separate conceptual
+study must be labelled and excluded from release and physical campaign inputs.
+fixture_contract.py continues to use the canonical owner register.
 
 W1.1 — Reconcile stale narrative records
 Files: docs/design/FEA_SETUP.md, runs/mast_hand_calc/summary.txt,
@@ -420,49 +463,62 @@ Done when:
     result.
   - The diff contains no changed physical claim.
 
-W1.2 — Define nominal package geometry API
-Files: cad/generate.py, cad/contract.json,
-       cad/roboracer/nominal_package_parameters.csv.
+W1.2 — Reconcile the existing native CAD path and geometry contract
+Files: cad/solidworks/geometry.json, cad/solidworks/oracle.py,
+       cad/solidworks/contract-assembly.v1.json, cad/solidworks/README.md.
 Do:
-  - Preserve the existing default tube generation and CLI behavior.
-  - Add explicit part selection for the nominal package: tube, root_clamp,
-    lidar_bracket, mast_assembly, deck_stub, and all.
-  - Keep all unmeasured clamp, bolt, bracket, optical-offset, and load-height
-    values visibly marked as design_choice. Do not read pending owner values as
-    zero or as nominal defaults.
-  - Use named datums: A=deck/reference plane, B=tube axis, C=bolt-pattern
-    origin. Store units in millimetres and convert only at report boundaries.
-  - Emit one geometry.json per part and an assembly geometry.json containing
-    part names, source parameter hash, bounding box, volume, mass, CG frame,
-    and evidence_state for each quantity.
+  - Reuse cad/solidworks-mast-assembly and inspect its recorded evidence before
+    deciding what to modify. Preserve cad/generate.py and the frozen specimen
+    contract; do not extend them to own the native assembly.
+  - Inventory modeled tube stock, support sleeve and clamp, then explicitly
+    list absent bracket, deck, fixture and assembly-document features.
+  - Preserve design_choice versus provisional_design states in the existing
+    geometry input. Keep measurement-routed missing interfaces absent. Do not
+    read pending owner values as zero or substitute nominal defaults for them.
+  - Record native sketch/assembly frames and map proposed A=deck/reference plane,
+    B=tube axis and C=bolt-pattern origin explicitly. Probe orientation when
+    uncertain; do not assume a plane name establishes its local axes.
+  - Keep one input geometry.json; emit separate result metadata with part names,
+    input hash, bounding box, volume, mass assumptions and evidence states.
 Done when:
   - Existing tube tests still pass unchanged.
   - A missing nominal input produces a controlled error naming the parameter.
-  - Part and assembly outputs are deterministic for the same parameter hash.
+  - Oracle quantities reproduce for the same input; real host runs remain a
+    separate evidence category. The 100 mm specimen and 135 mm stock contracts
+    are explicitly distinct. No absent assembly document is reported complete.
 
-W1.3 — Model nominal root clamp and base
-Files: cad/generate.py, cad/contract.json, cad/roboracer/nominal_package_parameters.csv,
-       cad/tests/test_geometry.py.
+W1.3 — Extend the existing native clamp and sleeve parametrization
+Files: cad/solidworks/author_mast_assembly.py, cad/solidworks/redrive.py,
+       cad/solidworks/geometry.json, cad/solidworks/oracle.py,
+       cad/tests/test_solidworks_assembly_contract.py.
 Do:
-  - Model a machinable split clamp around the 20 mm tube with a declared
-    engagement length, slit, bolt count, bolt diameter, bolt pattern, base
-    footprint, and deck-side mounting patch.
+  - Reuse the recorded clamp, support sleeve and stock tube; do not author them
+    again. Distinguish the clamp's cross-bolts from the unresolved deck mounting
+    pattern. Keep that measurement-routed deck pattern omitted.
+  - Drive slot and bolt-hole positions from explicit design relations and test
+    those positions after a variable change. The recorded 35 -> 40 mm test
+    establishes volume changes, not unrestricted parametric placement.
   - Use nominal values only as design choices. Include a replacement-input field
     pointing to the future clamp drawing/inspection record.
   - Check tube-to-bore fit, wall clearance, bolt-hole placement, clamp/base
     bounding box, and deck-height envelope (nominal deck limit 0.138 m).
   - Treat root joint stiffness as a model assumption; do not represent the
     clamp as automatically rigid in the physical claim.
+  - Hand-check sleeve fit, slot/bore intersection, tube free versus clamped
+    length, and bolt edge clearances. Do not adopt a proposed seating torque or
+    claim grip/yield acceptance without the corresponding joint analysis.
 Done when:
   - Fresh-process STEP reimport finds the expected solids and contracted metrics.
   - Negative controls cover missing engagement, invalid bore, duplicate bolt
     points, nonpositive tolerance, and out-of-envelope deck height.
   - The report calls this a NOMINAL DESIGN PROPOSAL, not a fabrication release.
 
-W1.4 — Model nominal LiDAR bracket and top interface
-Files: cad/generate.py, cad/contract.json, cad/roboracer/nominal_package_parameters.csv,
-       cad/tests/test_geometry.py.
+W1.4 — Model nominal LiDAR bracket and top interface when inputs permit
+Files: extensions under cad/solidworks/ and associated oracle/contract tests.
 Do:
+  - First resolve vendor-drawing and measurement routes for the bracket pattern
+    and optical offset. Otherwise keep the part absent from the accepted native
+    package; any conceptual envelope remains a separately labelled study.
   - Model a plate/bracket interface for the exact sensor envelope already cited
     in the repository: 50 x 50 x 70 mm body and 0.130 kg body mass.
   - Keep bracket mass and moving-cable mass as separate assumptions. Do not add
@@ -473,15 +529,21 @@ Do:
   - Calculate total moving mass and flag any change greater than 0.010 kg from
     the committed 0.175 kg assumption as an FEA rerun trigger.
 Done when:
-  - Bracket/body/moving-cable masses sum transparently in geometry.json.
+  - Bracket/body/moving-cable masses sum transparently in the result metadata,
+    linked to their inputs in geometry.json.
   - The sensor envelope and cable route are testable from the output metadata.
   - An unprovided purchased-sensor revision cannot be described as inspected.
 
-W1.5 — Build the nominal assembly and deck stub
-Files: cad/generate.py, cad/contract.json, cad/tests/test_geometry.py.
+W1.5 — Build the native assembly and deck stub when interfaces permit
+Files: new assembly authoring under cad/solidworks/ with assembly/oracle tests;
+       preserve the separate frozen specimen contract.
 Do:
-  - Compose tube, clamp, bracket, and a small deck mating stub without building
-    the deferred full vehicle deck.
+  - Start with a native assembly of resolved stock tube, sleeve and clamp.
+    Test component transforms, mates, free length and clearances. Add a bracket
+    and deck mating stub only as their interfaces are resolved; keep omissions
+    explicit. Do not infer assembly completion from the directory's name.
+  - Reimport an actual assembly STEP and check component placement as well as
+    total geometry. Preserve host version, input/source hashes and result files.
   - Preserve the 0.324 m selected chassis wheelbase versus 0.3302 m simulation
     wheelbase as a documented interface deviation; do not hide it in a bracket.
   - Check front transponder bay clearance (at least 8 x 12 cm in the documented
@@ -524,6 +586,14 @@ Do:
     conditions change, or the assembly geometry changes the load path.
   - Preserve mesh convergence, gauge region, solver version, mesh/source hash,
     and the distinction between tube-only FEA and assembly analysis.
+  - If proposing the shared MAPDL path, first close its independent verification
+    gap in engineering-audit: benchmark the actual model's load/resultant,
+    constraints, reactions, displacement, reportable stress and mesh convergence.
+    Set tolerances before solving and record UNKNOWN where no reference exists.
+    A completed plate solve or near-exact CAD volume does not validate mast FEA.
+  - Treat that reusable solver work as a separate dependency, not a required
+    extra project this week. Reuse the existing tube-only result for its original
+    scope until the assembly model and verification are actually available.
 Done when:
   - If no trigger fires, the report explicitly reuses the committed FEA and
     explains why it remains applicable only to the nominal tube.
@@ -910,6 +980,7 @@ Engineering inferences (not manufacturer claims or new measurements):
   These bandwidth numbers do not establish response flatness, an anti-alias
   margin, actual host throughput, modal uncertainty, or experimental readiness.
 
-Only this planning text was revised in response to the equipment photos.
-No device was connected, no software was implemented, and no test/calibration
-or ledger-status change was performed as part of this planning update.
+September 20–21 planning updates changed this handoff and added durable guidance
+in AGENTS.md, its CLAUDE.md pointer and the shared-CAD decision record. No device
+was connected, no software was implemented, and no test/calibration, host run or
+ledger-status change was performed as part of these planning updates.

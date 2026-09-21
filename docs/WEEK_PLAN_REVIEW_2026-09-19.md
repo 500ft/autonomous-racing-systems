@@ -61,6 +61,40 @@ Critique of the revision (verified where a fact is claimed):
 Cut order per the revision: W2 sweep, E4–E6, renders/full assembly, then the clamp extension.
 Preserved: E0–E3, nominal-tube source review, W3.1, evidence packet.
 
+## Revision 2026-09-21 — shared CAD briefing and native branch reconciled
+
+The owner adopted `500ft/engineering-audit → docs/cad_agent_briefing.md` (decision record
+[0001](decisions/0001-shared-cad-workflow.md), indexed by the new `AGENTS.md` / `CLAUDE.md`) and
+re-scoped W1.2–W1.5 onto the existing native SOLIDWORKS branch. Checked against the repo:
+
+| # | finding | amendment |
+|---|---|---|
+| 15 | **`cad/solidworks-mast-assembly` (PR #26, base `17c69c1`) is real and disjoint from #24/#25:** 13 files, tube stock 135 mm, support sleeve, root clamp, CadQuery oracle, separate contract, a recorded 35 → 40 mm redrive with ≤ 1e-15 volume error. No file overlaps the two open PRs. | Merge order becomes #24 → #25 → #26 (or #26 first; either is conflict-free). The nominal work order in #24 is marked superseded in part; CadQuery parts C2–C6 are withdrawn. |
+| 16 | **The `nominal_package_parameters.csv` idea from the Sep 20 plan is dropped** in favour of `cad/solidworks/geometry.json` with per-value evidence states. That file already exists on #26. | Finding 14's inventory schema stays separate from both registers; nothing to change in E0. |
+| 17 | **The 135 mm stock tube must not inherit `cad/contract.json` or the 285.5 Hz result.** `cad/tests/test_solidworks_assembly_contract.py` on #26 asserts the two contracts differ. | `cad/nominal_inventory.py` gains no SOLIDWORKS rows until #26 is on main; then add the three oracle volumes with label NOMINAL DESIGN and the redrive error as SOFTWARE CHECK. |
+| 18 | **Load-path equations (finding 2) still precede clamp extension.** The briefing's "no seating-torque or grip/yield acceptance without joint analysis" is the same requirement. | W1.6 stays first in the "next" tier, before W1.3's slot/bolt-position parametrization. |
+| 19 | **E1 driver identity.** The Adafruit guide's CircuitPython driver is `cedargrove_nau7802` (2.1.4, 2026-03-30), not an `adafruit_*` package; API is `gain`, `ldo_voltage`, `poll_rate`, `channel`, `available()`, `read()`, `calibrate()`. | Firmware written against it and pinned in `library-versions.txt` as written-against, not device-tested. |
+
+## Day 3 record (Sep 21, E1 + E2)
+
+- **E1** `firmware/measurement_node/code.py` (NOT DEVICE-TESTED): one NAU7802 channel on the STEMMA
+  bus, 10 SPS, gain 128, LDO 3V0, internal calibration; NDJSON session/sample/error records; new
+  session ID per boot; saturation flagged at full scale; read errors emitted, re-init after five,
+  `missing_device` once a second. `README.md` (conditional owner steps), `library-versions.txt`
+  (written-against vs observed columns). `py_compile` passes; that is syntax only.
+- **E2** `experiments/measurement_logger.py`: one parser for replay and serial capture; pyserial imported
+  only inside capture; outputs `stream.jsonl` (bytes unchanged), `samples.csv` with flags, `diagnostics.json`,
+  `manifest.json` (source kind, hashes, commit, `calibration_id: null`, `complete`), `host_times.csv` on
+  capture. Fourteen flag classes, records retained never repaired. `source_kind` never upgraded by replay;
+  measured replay refuses a hash mismatch; truncated capture exits 3 with `complete: false`.
+- Fixtures `experiments/fixtures/measurement_logger/{valid,faults}.jsonl` (synthetic, labelled);
+  `experiments/test_measurement_logger.py` 9 tests: clean session, every fault class, determinism, hash
+  refusal, missing/corrupt values never interpolated, split serial lines, disconnect, no-data.
+- Format: `docs/hardware/measurement-data-format.md`. CI: the two portable commands added to `ci.yml`.
+- Context files committed from the owner's clone: `AGENTS.md`, `CLAUDE.md`, `docs/decisions/0001-shared-cad-workflow.md`,
+  the Sep 21 plan revision.
+- No device connected, no calibration, no register or ledger change.
+
 ## Day 2 record (Sep 20, E0)
 
 - `docs/hardware/purchased-instruments.json`: ten line items, stable IDs (MCU-QTPY-01, ADC-NAU7802-01,
