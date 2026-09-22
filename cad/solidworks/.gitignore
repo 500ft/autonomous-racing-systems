@@ -1,0 +1,4 @@
+# Retrieved host artifacts. Regenerate with run_host.py; do not commit binaries.
+out/
+authoring_result.json
+probe_result.json

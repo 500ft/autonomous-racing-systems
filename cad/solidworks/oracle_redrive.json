@@ -1,0 +1,39 @@
+{
+  "geometry_source": "geometry-redrive.json",
+  "density_kg_m3": 2700.0,
+  "parts": {
+    "mast_tube_stock": {
+      "volume_mm3": 12205.08745919634,
+      "mass_kg": 0.032953736139830124,
+      "bbox_mm": [
+        20.0,
+        20.0,
+        140.0
+      ],
+      "n_solids": 1,
+      "stock_length_mm": 140.0
+    },
+    "support_sleeve": {
+      "volume_mm3": 5884.281579990022,
+      "mass_kg": 0.01588756026597306,
+      "bbox_mm": [
+        16.95,
+        16.95,
+        40.0
+      ],
+      "n_solids": 1,
+      "length_mm": 40.0
+    },
+    "root_clamp": {
+      "volume_mm3": 81076.51954730174,
+      "mass_kg": 0.2189066027777147,
+      "bbox_mm": [
+        44.0,
+        56.0,
+        40.0
+      ],
+      "n_solids": 1,
+      "slot_bottom_mm": 22.0
+    }
+  }
+}
