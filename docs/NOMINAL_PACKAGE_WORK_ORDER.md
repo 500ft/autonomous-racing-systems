@@ -1,5 +1,14 @@
 # Nominal CAD/FEA design package — work order (2026-09-16)
 
+> **Superseded in part on 2026-09-21** by [decision 0001](decisions/0001-shared-cad-workflow.md) and
+> the revised [week plan](WEEK_PLAN_2026-09-19_TO_25.txt): the clamp is not rebuilt in CadQuery.
+> C2 (root clamp) already exists natively on `cad/solidworks-mast-assembly` (PR #26) together with an
+> internal support sleeve the spec requires; C3–C6 remain proposals but are authored under
+> `cad/solidworks/` against `cad/solidworks/geometry.json`, not `cad/generate.py`. C1 and
+> `cad/contract.json` stay the frozen 100 mm analysis specimen; the 135 mm stock tube is a distinct
+> part that does not inherit the 285.5 Hz result. The design considerations and acceptance ideas below
+> still apply; the file layout in the "outputs" table does not.
+
 Selected under [DAY4_PLAN.md](DAY4_PLAN.md) optional work. Scope: one reproducible package that
 reconciles what already exists for the LiDAR mast (register, generated tube, hand calc, FEA,
 tolerance stack) and adds the nominal clamp and bracket as **labelled design proposals**. It closes
@@ -42,7 +51,7 @@ C6 is optional inside this package; include only if C2–C4 finish inside the es
 ## Design considerations to carry through every part
 
 1. **Modal guard.** f1 ≥ 200 Hz with the assembled tip mass. Every gram added at the tip (bracket, cable, any plate) lowers f1; recompute the hand estimate for the modelled bracket mass and rerun FEA if tip mass moves more than 10 g from 0.175 kg.
-2. **Strength.** Crash 50 g × SF 1.5 governs (128.76 N at the load height). Clamp and bracket bolts must carry the root moment 15.45 N·m with a stated preload and joint model; the tube's SF 8.05 is not the assembly's SF until the joints are checked.
+2. **Strength.** Crash 50 g × SF 1.5 governs (128.76 N at the load height). Clamp and bracket bolts must carry the root moment M = F × h = 128.76 N × 0.100 m = 12.88 N·m (not the 15.45 N·m of the rejected 120 mm baseline) with a stated preload and joint model; the tube's SF 8.05 is not the assembly's SF until the joints are checked.
 3. **Clamp engagement vs root compliance.** The FEA fixes the root ideally. A finite split clamp adds root rotation; the measurement contract shows 50 µrad × 100 mm = 5 µm, the entire 4 N signal. Record the assumed joint stiffness and mark it `model_assumption`.
 4. **Sightline stack.** Deck flatness, base-to-tube squareness, bolt preload rocking, scan-plane tilt, mounting datum. Drawing tolerances on C2 and C3 must reproduce or beat the values in `mast_tolerance_stack.py`; if the modelled bolt pattern is not 40 mm, update the stack input and rerun.
 5. **Deck height.** Mast-root plane ≤ 0.138 m above floor at the 0.30 m wall; mast length is not a lever (locked by the modal guard), so the clamp base height is the only free variable.

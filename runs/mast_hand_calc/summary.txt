@@ -1,6 +1,8 @@
 ========================================================================
 LiDAR MAST — HAND CALCULATION (analytical baseline for item-16 FEA)
 ========================================================================
+REJECTED BASELINE GEOMETRY (L=120 mm, OD=16 mm): its f1 fails the 200 Hz guard.
+The SELECTED design is the RECOMMEND row in design_sweep.txt (L=100, OD=20, wall 1.5).
 
 ASSUMPTIONS (geometry/material ASSUMED; tip mass FIRMED, item-15 Hokuyo UST-10LX)
 ------------------------------------------------------------------------

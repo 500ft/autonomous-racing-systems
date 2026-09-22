@@ -1,0 +1,986 @@
+AUTONOMOUS RACING SYSTEMS
+CLAUDE BUILD HANDOFF: SEPTEMBER 19–25, 2026
+Planning-only source document
+Revised September 21, 2026 to incorporate the shared CAD briefing and branch work.
+Equipment purchase update retained from September 20, 2026.
+
+Purpose
+=======
+
+Use this file as the implementation brief for Claude. Build only the tasks that
+are marked ready. Do not invent owner measurements, calibration records, CAD
+drawings, reviewer approvals, or physical-test results. Every nominal result
+must carry the label NOMINAL DESIGN, MODEL ASSUMPTION, SIMULATION OUTPUT, or
+SOFTWARE CHECK. Nothing in this plan authorizes purchase, fabrication, powered
+hardware, tapping, loading, outreach, or publication.
+
+Planning assumption for this week
+----------------------------------
+
+The owner has now identified purchased measurement electronics. The two invoice
+photos establish the inventory below; they do not establish board revision,
+successful operation, mounting, calibration, or a completed test apparatus.
+No inspected mast, calibrated displacement instruments, approved fixture, or
+physical campaign access has been established. Prioritize acquisition software,
+force-calibration tooling, and nominal measurement feasibility. Human-run
+electronics checks are a conditional follow-up, separate from mast loading.
+
+This revision changes the remaining September 20–25 priorities. September 19 is
+a baseline date, not a claim that any implementation task has been completed.
+
+Purchased inventory
+-------------------
+
+Source: owner-provided IMG_3886.HEIC and IMG_3887.HEIC, reviewed September 20.
+Record product information only. Keep invoice images, address, order identifiers,
+and payment details out of repository artifacts.
+
+Qty  Adafruit product / PID                         Planned role
+ 1   QT Py RP2040 / 4900                            USB acquisition controller
+ 1   NAU7802 24-bit ADC / 4538                      Load-cell interface
+ 1   Four-wire 5 kg load cell / 4541                Primary static-force candidate
+ 1   Four-wire 1 kg load cell / 4540                Separate low-range candidate
+ 1   LIS3DH accelerometer / 2809                    Motion/vibration exploration
+ 1   INA260 voltage/current/power sensor / 4226     Electronics power logging
+ 1   5 mm IR break-beam pair / 2168                 One optical event gate
+ 1   STEMMA QT cable, 100 mm / 4210                 One I2C interconnect
+ 1   Female/female jumper-wire pack / 1951          Wiring support
+ 1   Male/male jumper-wire pack / 1957              Wiring support
+
+The change in capability is specific: a prospective force-acquisition chain now
+has named components. It still needs an actual mounting and calibration record.
+One ADC and two cells do not establish two simultaneous force channels. Begin
+with the 5 kg cell on one channel. One QT cable does not establish that all
+boards can be connected at once; sequential board checks are the default.
+
+Key engineering decisions
+-------------------------
+
+  - Use the 5 kg cell for the planned 4/8/12/16/20 N force range. With the repo's
+    g=9.81 m/s² convention, its nominal capacity is 49.05 N; 20 N corresponds
+    to 2.039 kg equivalent. Check total cell loading including tare and mounting.
+  - The 1 kg cell's nominal capacity is 9.81 N. It cannot cover 12/16/20 N and
+    must never be silently substituted into the full campaign profile. Use it
+    only for a separately bounded low-range exercise with mounting verified.
+  - The nominal FEA predicts approximately 27.3 micrometres displacement at
+    20 N. The LIS3DH cannot replace calibrated tip/root displacement indicators
+    by double-integrating acceleration. Root rotation also needs observation.
+  - NAU7802 tops out at 320 samples/s. Its 160 Hz Nyquist limit is below the
+    selected nominal 285.5 Hz mode. This force chain cannot establish a valid
+    force-to-acceleration response/coherence measurement at that mode.
+  - LIS3DH bandwidth depends on operating mode, not just the advertised sample
+    rate. Keep any vibration results exploratory until timing, filtering,
+    mounting, sensor mass, calibration, and the modal protocol are resolved.
+  - The 128.76 N crash-design load exceeds both cells' nominal force capacities;
+    the 50 g design case also exceeds the LIS3DH's ±16 g maximum range. These
+    design cases are not test instructions for this purchased equipment.
+
+Primary specification sources and the arithmetic are listed at the end.
+
+Repository baseline
+-------------------
+
+Repository: 500ft/autonomous-racing-systems
+Prior repository snapshot: 17c69c1 (PR #23 merged)
+Follow-up at that snapshot: PR #24, task/a1-nominal-work-order-20260916, head 85c12f4
+PR #24 contains the A1 decision that the old tap-test generator stays closed
+and the nominal CAD/FEA package work order. Do not duplicate or re-open A1.
+
+September 21 CAD briefing and branch reconciliation
+--------------------------------------------------
+
+Read 500ft/engineering-audit -> docs/cad_agent_briefing.md before further CAD/FEA
+work. Reviewed source commit: cf56cdff50b09c9a266292006cbf5b2a0f2e8ac6.
+Its docs/host_setup.md and docs/solidworks_api_findings.md cover the existing host
+and observed API pitfalls. Project adoption details and pinned source links are
+in docs/decisions/0001-shared-cad-workflow.md; AGENTS.md indexes this guidance.
+
+Fetched branch state on September 21:
+  - origin/main remains 17c69c1.
+  - origin/cad/solidworks-mast-assembly at 6ef5f44 contains native SOLIDWORKS
+    tube-stock, internal support sleeve and root clamp, their CadQuery oracle,
+    separate assembly-part contract, and a recorded 35 -> 40 mm engagement test.
+  - origin/week/day1-20260919 at ea901d5 contains the purchased instrument
+    inventory and hookup notes. E0 is existing implementation to reconcile and
+    review, not a blank-slate task. Do not claim it is merged or device-tested.
+
+Use engineering-audit for reusable CAD/FEA machinery and this repo for the mast
+deliverable. Keep cad/generate.py and cad/contract.json scoped to the frozen
+100 mm analysis specimen. Native assembly parts use cad/solidworks/geometry.json
+and cad/solidworks/contract-assembly.v1.json. The 135 mm stock tube includes a
+provisional 35 mm clamped length; it must not inherit the 100 mm specimen's
+contract or automatically inherit its 285.5 Hz modal result.
+
+The next CAD work extends the existing native branch. A single geometry input
+feeds authoring and an independently checked oracle. Acceptance includes actual
+measurements, a variable-change test, positional/clearance checks, and export
+round-trip evidence. Near-machine-precision volume agreement is numerical
+evidence, not a fabrication tolerance or proof every hole is in the right place.
+
+Known remaining gaps: no assembly document/mates, no drawing set, incomplete
+parametric slot/bolt positions, and no independent FEA acceptance oracle in the
+reusable machinery. Host execution is separate from CI oracle checks. These
+are follow-on tasks and do not displace E1-E3 this week.
+
+Authoritative status sources:
+  docs/CAD_TASKS.csv
+  docs/SPRINT_TASKS.csv
+  docs/CAD_DEPENDENCIES.json
+  docs/REVIEW_READY.md
+
+Ledger snapshot to preserve until current evidence supports a change:
+  Done: RR-CAD-01, RR-CAD-08, RR-CAD-09, RR-CAD-10, RR-S01, RR-S03,
+        RR-S04, RR-S05, RR-S06, RR-S07, RR-S08, RR-S10, RR-D03, RR-S11.
+  Blocked: RR-CAD-02, RR-CAD-04, RR-CAD-05, RR-CAD-06, RR-CAD-07,
+           RR-S02, RR-S09, RR-S12, RR-S13.
+  Deferred: RR-CAD-03.
+
+Important existing evidence:
+  - The plain mast tube generator, STEP round-trip tests, and CAD CI exist.
+  - The selected nominal tube is 100 mm length, 20 mm OD, 1.5 mm wall.
+  - Nominal hand/FEA results are 330.1 Hz / 285.5 Hz first mode, 0.166 /
+    0.176 mm tip deflection, and 17.1 / 17.4 MPa reportable stress.
+  - The rejected baseline is 174.7 Hz and must remain visibly rejected.
+  - Six interface rows in cad/roboracer/parameters.csv remain pending.
+  - fixture-contract.json is draft-blocked; --release must continue to refuse.
+  - modal-freeze.json is draft-blocked; strict modal checking must continue to
+    refuse until a real inspection-linked reference and reviewed uncertainty
+    budget exist.
+  - The physical compliance evaluator is software-tested but has no physical
+    campaign data. Synthetic agreement is never physical validation.
+
+Week outcome
+------------
+
+By September 25, deliver a reproducible force-acquisition and calibration software
+package for the purchased parts, plus a nominal measurement-feasibility report.
+A reviewer should be able to replay raw data, inspect calibration assumptions,
+see why displacement/root-motion measurement remains necessary, and identify
+the next physical-readiness decision. A hardware session is optional evidence;
+the core software deliverable must remain finishable without connecting boards.
+
+Priority and scope:
+  Must finish: W0, E0–E3, W1.1, W3.1–W3.2, W4, and a scoped W1.8 report covering
+               the existing nominal tube and measurement-chain feasibility.
+  Next:        W1.2–W1.3 reconcile and extend existing native CAD once core passes.
+  Stretch:     W1.4–W1.7 assembly work, E4–E6 auxiliary sensor work, then W2.
+  Carry over:  Any stretch work not started; report it explicitly as unexecuted.
+
+Do not commit to the original full CAD assembly and controller sweep as well as
+the new electronics track within the same remaining week. Keep the detailed
+tasks below as the ordered follow-on backlog, with these priorities controlling.
+
+The week succeeds when:
+
+  1. Raw force records and calibration outputs have device, configuration, and
+     source identity; synthetic replay cannot be mistaken for measured data.
+  2. The package never changes the six pending physical interface rows into
+     measurements or closes RR-CAD-02/04/05/06/07.
+  3. Calibration tooling rejects the 1 kg cell for the full 20 N profile,
+     missing calibration, unsupported extrapolation, and dropped/reset records.
+  4. Every generated artifact has a command, input identity, evidence label,
+     and validation check.
+  5. The final handoff distinguishes purchased, function-checked, calibrated,
+     and campaign-ready evidence and names three next owner-input bundles.
+
+Non-goals
+---------
+
+Do not build a physical fixture, release a fabrication drawing as approved,
+populate the physical fixture contract from guesses, freeze a modal band, run a
+tap test, run a static load test, claim as-built FEA, transfer simulator tire or
+mass parameters to a car, or delete code before a caller/evidence audit.
+
+Workstream 0: clean starting gate
+==================================
+
+W0.1 — Rebase and inspect current state
+Files: none.
+Do:
+  - Start from a fresh branch based on current main after PR #24 is merged. If
+    PR #24 is not merged, read its files and treat them as a dependency; do not
+    fork a second nominal-package design. Independent E0–E3 acquisition tooling
+    can proceed from current main without waiting for that CAD dependency.
+  - Record the exact main SHA, Claude branch SHA, and PR dependency in the final
+    handoff.
+  - Inspect the two September 21 branches above before assigning new work.
+    Reuse E0 intake and native part work already present; reconcile branch
+    dependencies without overwriting another session's worktree.
+  - Run the status commands below before any change.
+Done when:
+  - The worktree is clean.
+  - Both ledgers and the pending-input sheet match current main.
+  - No task status is changed by this week's package work.
+Commands:
+  git status --short --branch
+  git log -1 --format='%H %s'
+  python3 cad/ledger_validator.py live
+  python3 cad/input_requests.py --check
+  python3 cad/fixture_contract.py --check
+
+W0.2 — Freeze the evidence inventory
+Files: new runs/nominal_package_inventory/inventory.json and, if needed,
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - Inventory the register, plain-tube STEP, contract, hand calculations, FEA
+    summaries, tolerance stack, existing reports, and their SHA-256 hashes.
+  - For every number, record source file, source revision, unit, evidence state,
+    and whether it is configured, assumed, simulated, nominal CAD, or pending.
+  - Explicitly record the two stale-record checks: FEA_SETUP numbers must agree
+    with the current 0.175 kg FEA summary; the hand-calculation summary must
+    distinguish the rejected baseline from the selected design.
+Done when:
+  - A reviewer can trace every headline nominal number to one committed source.
+  - Any disagreement is listed as a blocker instead of being averaged away.
+
+Workstream E: purchased equipment acquisition package
+====================================================
+
+E0 inventory/hookup files now exist on week/day1-20260919; review and reuse them.
+Other E paths are implementation proposals unless current branch inspection
+shows they have also been built. Reconcile status before duplicating files.
+Keep this a small device script plus portable Python tools. Reuse existing
+repository conventions before introducing dependencies. Do not build a ROS
+bridge, dashboard, generic sensor framework, or wireless system this week.
+
+E0 — Reconcile recorded capability and wiring prerequisites
+Files: docs/hardware/purchased-instruments.json,
+       docs/hardware/measurement-electronics.md on week/day1-20260919.
+Do:
+  - Give each board and cell a stable local ID, e.g. LC-5KG-01 and LC-1KG-01.
+    Record product ID, capacity, purchase-record source, owner statement,
+    board revision if observed, wiring revision, operation evidence path,
+    calibration ID, intended range, and outstanding dependencies.
+  - Use a separate inventory schema. Do not add purchase evidence states to
+    the existing strict physical parameter register or fill its six pending rows.
+  - Distinguish manufacturer conformity paperwork from a force calibration.
+  - Draft one-board-at-a-time wiring notes using 3.3 V logic and verified board
+    pinouts. QT Py's STEMMA connector uses board.STEMMA_I2C() in CircuitPython;
+    board.I2C() refers to its separate header bus. Record observed I2C addresses.
+  - Check actual NAU7802 revision: newer Rev C exposes B+/B-; older boards do
+    not. Neither revision establishes simultaneous conversion of two cells.
+  - List the unconfirmed prerequisites: USB-C data cable, fitted headers and
+    terminal blocks where needed, suitable connections, and cell mounting parts.
+    Jumper packs alone do not establish a complete assembled circuit.
+Done when:
+  - All ten invoice line items are represented without personal invoice data.
+  - Unknown revision/calibration/operation fields remain null with a reason.
+  - The first hookup drawing has one QT Py, one NAU7802, and one 5 kg cell;
+    actual wire colors and load direction are checked against the cell records.
+
+E1 — Specify and implement the minimal force device script
+Files: new firmware/measurement_node/code.py and README.md,
+       new firmware/measurement_node/library-versions.txt.
+Do:
+  - Start with CircuitPython and the NAU7802 library recommended by Adafruit's
+    guide. Pin tested runtime/library versions; do not invent current versions.
+  - Use one ADC channel and a proposed initial 10 samples/s configuration for
+    slow static-force development. Record gain, excitation setting, channel,
+    output rate, and any internal-calibration operation. Never claim 24 useful
+    bits simply because the converter output is 24-bit.
+  - Emit newline-delimited JSON: one session metadata record, followed by raw
+    sample or error records. Avoid text banners mixed into the data stream.
+  - Each sample needs schema_version, session_id, sensor_id, sequence number,
+    device monotonic timestamp, raw_counts, configuration ID, and status.
+    The host generates/provides a new session ID at each connection/reset.
+  - Record whether time means conversion-ready observation or register-read
+    time. If there is no hardware timestamp, retain the uncertainty; do not
+    describe host USB arrival as the original sampling instant.
+  - Read each new conversion once. Preserve raw counts, errors, saturation,
+    missing-device events, and reset boundaries. Do not auto-tare during a run.
+  - Keep calibration conversion on the host initially. A missing calibration
+    means force_N is null, not raw_counts renamed to newtons.
+Done when:
+  - Host-facing format and example synthetic records are reviewable before
+    board deployment. Firmware status says NOT DEVICE-TESTED until evidence exists.
+  - A conditional owner check, if performed, records a 60-second unloaded run,
+    actual record rate, timing gaps, zero drift, configuration, and reset behavior.
+  - No acceptance test relies solely on the sensor address appearing in a scan.
+
+E2 — Build the host recorder and deterministic replay
+Files: new experiments/measurement_logger.py,
+       new experiments/test_measurement_logger.py,
+       new experiments/fixtures/measurement_logger/*.jsonl,
+       new docs/hardware/measurement-data-format.md.
+Do:
+  - Provide serial capture and file replay through the same parser. Serial
+    access is optional; replay must run with no board and no CAD environment.
+  - Preserve the input stream unchanged alongside parsed CSV/JSON and a manifest
+    containing source commit, firmware/config hashes, sensor ID, calibration ID,
+    host receive times, source_kind, units, start/stop times, and summary counts.
+  - Use source_kind=synthetic for fixtures and replayed synthetic data; replay
+    does not change the original evidence class. Preserve measured-source hashes
+    when replaying a real acquisition. Label raw uncalibrated counts explicitly.
+  - Detect malformed lines, duplicate/reversed sequence numbers, time reversal,
+    resets, gaps, clipping, NaN, stale repeated conversions, and sensor changes.
+    Identical count values alone are not proof of stale data: use conversion
+    identity/timing. Retain bad records with reasons; never silently interpolate.
+  - Implement a connection-timeout path and orderly end-of-session behavior.
+    A truncated session must remain inspectable without appearing complete.
+Done when:
+  - Tests cover valid sessions, split serial lines, disconnect/reset, missing
+    samples, corrupt values, configuration changes, and synthetic-data labeling.
+  - Replay gives identical parsed values and diagnostics for identical inputs;
+    live arrival timestamps and wall-clock metadata are not claimed deterministic.
+  - Missing hardware is an explicit capture prerequisite, not a replay failure.
+
+E3 — Build the force-calibration record and analysis
+Files: new experiments/load_cell_calibration.py,
+       new experiments/test_load_cell_calibration.py,
+       new docs/hardware/load-cell-calibration-protocol.md,
+       new experiments/fixtures/load_cell_calibration/*.
+Do:
+  - Define a record for one cell + mount + channel + ADC configuration. Include
+    calibration date, operator, reviewer state, reference masses/uncertainties,
+    gravity convention, tare, loading direction, temperature if available,
+    zero readings, raw file hash, stable windows, and fit/verification results.
+  - Use F = m*g with consistent units; distinguish total cell loading from
+    tare-subtracted applied force. Capacity checks include supported tare.
+  - Prepare a CONDITIONAL human protocol for a correctly fixed cell, verified
+    load direction, suitable load application and known reference masses. These
+    prerequisites are not established by the invoice. No mast loading is involved.
+  - Proposed 5 kg calibration points: unloaded plus approximately 0.5, 1.0,
+    1.5, 2.0, and 2.1 kg applied mass, subject to actual mounting and total load.
+    These span roughly 4.9–20.6 N; add a known point at/below 4 N, such as 0.25 kg,
+    so the entire 4–20 N campaign range is calibrated rather than extrapolated.
+    Enter actual reference values and uncertainties, not their nominal labels.
+  - Predeclare settling rules and stable averaging windows; preserve the full
+    time series. Plan at least three ascending/descending cycles, with start/end
+    unloaded records. Reserve an independent cycle or additional masses for
+    verification rather than scoring only the data used to fit the curve.
+  - Fit an affine counts-to-force model. Report residuals, slope/intercept and
+    their covariance, repeatability, loading/unloading difference, zero drift,
+    and reference uncertainty. Use a method that accounts for material reference
+    uncertainty; document assumptions rather than reporting R² as calibration.
+  - Report force U95 at 4/8/12/16/20 N, the coverage convention, supported force
+    and raw-count ranges, and any unresolved terms. Unknown uncertainty gives
+    an incomplete record. Propagate this force contribution through W3.1's
+    fitted-compliance estimator; the total existing U95 <=10% gate stays fixed.
+  - Reject conversion outside the calibrated range, mismatched cell/config,
+    excessive gross load, missing uncertainty, and an unreviewed record being
+    promoted to campaign readiness. Changed mounting requires a documented
+    recheck; do not reuse the 5 kg coefficients for the 1 kg cell.
+Done when:
+  - Synthetic tests recover a known affine mapping and detect wrong units,
+    inadequate range, hysteresis, drift, configuration mismatch, clipping,
+    excessive reference uncertainty, and use of the 1 kg cell for 20 N.
+  - A fully synthetic example is labelled SOFTWARE CHECK throughout. Real
+    calibration fields are empty until actual reference measurements exist.
+  - Existing physical evaluator CSVs receive no fabricated force, displacement,
+    root-motion, or calibration fields from this tool. Any future import requires
+    reviewed synchronization and all fields required by the campaign protocol.
+
+E4 — LIS3DH operation and vibration feasibility (stretch)
+Files: proposed device profile in firmware/measurement_node/,
+       docs/hardware/lis3dh-feasibility.md.
+Do:
+  - First prepare axis mapping, stationary noise, clipping, and six-orientation
+    gravity sanity checks. Treat these as function checks, not a dynamic sensor
+    calibration or a modal experiment. Keep raw acceleration and range metadata.
+  - For prospective 285–330 Hz exploration, evaluate 1.344 kHz NORMAL mode:
+    the datasheet gives bandwidth ODR/2, versus ODR/9 in high-resolution mode.
+    At 1.344 kHz, high-resolution bandwidth is only about 149 Hz. Increasing
+    host polling speed cannot fix that filter limitation.
+  - Do not promise high-rate performance from E1's low-rate CircuitPython path.
+    Require an actual timing/FIFO-overrun and frequency-response check. If a
+    separate FIFO/batched or compiled driver is needed, propose it for next week
+    after recording the failure, instead of expanding the core implementation.
+  - Account for filtering/aliasing, record duration, mounting orientation, cable
+    forces, and added moving mass. Resolve these before interpreting an FFT peak.
+Done when:
+  - A source-linked feasibility note separates verified settings, software-only
+    checks, pending device checks, and unestablished modal capability.
+  - No tap-test generator is reopened and RR-S12/RR-S13 remain blocked.
+
+E5 — INA260 electronics power profile (stretch)
+Files: proposed device profile and docs/hardware/power-logging.md.
+Do:
+  - Prepare a connection diagram for one known low-voltage, low-current bench
+    electronics load, with current measured in series and logic at 3.3 V.
+    Record board/connector/wire limits and the chosen load before human hookup.
+    The chip's advertised envelope is not proof of a suitable traction harness.
+  - Store voltage, current, power, conversion/averaging settings, sign convention,
+    timestamps, and gaps. Verify library units explicitly. Integrate energy using
+    actual elapsed time; leave missing intervals unestimated in the core output.
+  - Use known synthetic V/I/time inputs to check watts/joules/watt-hours and gap
+    handling. A future device session needs an independent reference to support
+    accuracy claims. Keep ESC/motor and whole-vehicle current work deferred.
+Done when:
+  - A reproducible power-data example exists with accurate evidence labeling;
+    no vehicle energy or battery-life claim is inferred from an electronics load.
+
+E6 — One-gate optical event timing (stretch)
+Files: proposed GPIO profile and docs/hardware/optical-gate.md.
+Do:
+  - Draft receiver wiring with a pull-up to 3.3 V, a common receiver/MCU ground,
+    and a named GPIO. The receiver is open collector; verify the actual pin map.
+  - Log both beam-break and beam-clear edges. Preserve raw events, then apply a
+    declared debounce/re-arm rule. Test chatter, a held obstruction, missed edge,
+    timer reset, and event-window ambiguity with synthetic timestamps.
+  - Call the result an event/occlusion-duration logger. One pair is one gate.
+    Lap intervals require identified repeated crossings; speed needs a reviewed
+    known-length occluder model or a second spaced gate. Neither is yet provided.
+Done when:
+  - Replayed events yield exact expected intervals and ambiguous events remain
+    flagged. No instantaneous speed or real lap performance is claimed.
+
+Workstream 1: nominal mast package
+==================================
+
+Design decision for this week
+-----------------------------
+
+Keep the physical owner register and the nominal design register separate.
+Do not overwrite the six pending rows in parameters.csv. Use the native branch's
+cad/solidworks/geometry.json as the assembly-part geometry source instead of
+creating a duplicate nominal_package_parameters.csv. Preserve each value's
+evidence state and add source/replacement-input/intent metadata where missing.
+Both native authoring and the CadQuery oracle must consume the same input while
+implementing their geometry independently. Hand-check the oracle as well.
+
+Follow the register's acquisition routes. A provisional design choice does not
+close a measurement requirement. Leave unresolved deck bolts, bracket interfaces
+and physical load features out of the accepted model. Any separate conceptual
+study must be labelled and excluded from release and physical campaign inputs.
+fixture_contract.py continues to use the canonical owner register.
+
+W1.1 — Reconcile stale narrative records
+Files: docs/design/FEA_SETUP.md, runs/mast_hand_calc/summary.txt,
+       experiments/test_final_report.py, docs/data-and-figures.md if needed.
+Do:
+  - Compare every displayed tip mass, crash force, first frequency, deflection,
+    and stress against runs/mast_fea/fea_summary.txt and the selected design
+    sweep.
+  - Keep the 174.7 Hz result, but label it REJECTED BASELINE everywhere.
+  - Do not delete historical results; add a source note or a corrected current
+    summary when a document presents the old run as selected.
+  - Add a regression assertion for the selected 0.175 kg nominal run and a
+    separate assertion that the rejected 174.7 Hz baseline remains identified as
+    rejected.
+Done when:
+  - python experiments/test_final_report.py passes.
+  - No current document presents the 0.20 kg / 267.4 Hz run as the selected
+    result.
+  - The diff contains no changed physical claim.
+
+W1.2 — Reconcile the existing native CAD path and geometry contract
+Files: cad/solidworks/geometry.json, cad/solidworks/oracle.py,
+       cad/solidworks/contract-assembly.v1.json, cad/solidworks/README.md.
+Do:
+  - Reuse cad/solidworks-mast-assembly and inspect its recorded evidence before
+    deciding what to modify. Preserve cad/generate.py and the frozen specimen
+    contract; do not extend them to own the native assembly.
+  - Inventory modeled tube stock, support sleeve and clamp, then explicitly
+    list absent bracket, deck, fixture and assembly-document features.
+  - Preserve design_choice versus provisional_design states in the existing
+    geometry input. Keep measurement-routed missing interfaces absent. Do not
+    read pending owner values as zero or substitute nominal defaults for them.
+  - Record native sketch/assembly frames and map proposed A=deck/reference plane,
+    B=tube axis and C=bolt-pattern origin explicitly. Probe orientation when
+    uncertain; do not assume a plane name establishes its local axes.
+  - Keep one input geometry.json; emit separate result metadata with part names,
+    input hash, bounding box, volume, mass assumptions and evidence states.
+Done when:
+  - Existing tube tests still pass unchanged.
+  - A missing nominal input produces a controlled error naming the parameter.
+  - Oracle quantities reproduce for the same input; real host runs remain a
+    separate evidence category. The 100 mm specimen and 135 mm stock contracts
+    are explicitly distinct. No absent assembly document is reported complete.
+
+W1.3 — Extend the existing native clamp and sleeve parametrization
+Files: cad/solidworks/author_mast_assembly.py, cad/solidworks/redrive.py,
+       cad/solidworks/geometry.json, cad/solidworks/oracle.py,
+       cad/tests/test_solidworks_assembly_contract.py.
+Do:
+  - Reuse the recorded clamp, support sleeve and stock tube; do not author them
+    again. Distinguish the clamp's cross-bolts from the unresolved deck mounting
+    pattern. Keep that measurement-routed deck pattern omitted.
+  - Drive slot and bolt-hole positions from explicit design relations and test
+    those positions after a variable change. The recorded 35 -> 40 mm test
+    establishes volume changes, not unrestricted parametric placement.
+  - Use nominal values only as design choices. Include a replacement-input field
+    pointing to the future clamp drawing/inspection record.
+  - Check tube-to-bore fit, wall clearance, bolt-hole placement, clamp/base
+    bounding box, and deck-height envelope (nominal deck limit 0.138 m).
+  - Treat root joint stiffness as a model assumption; do not represent the
+    clamp as automatically rigid in the physical claim.
+  - Hand-check sleeve fit, slot/bore intersection, tube free versus clamped
+    length, and bolt edge clearances. Do not adopt a proposed seating torque or
+    claim grip/yield acceptance without the corresponding joint analysis.
+Done when:
+  - Fresh-process STEP reimport finds the expected solids and contracted metrics.
+  - Negative controls cover missing engagement, invalid bore, duplicate bolt
+    points, nonpositive tolerance, and out-of-envelope deck height.
+  - The report calls this a NOMINAL DESIGN PROPOSAL, not a fabrication release.
+
+W1.4 — Model nominal LiDAR bracket and top interface when inputs permit
+Files: extensions under cad/solidworks/ and associated oracle/contract tests.
+Do:
+  - First resolve vendor-drawing and measurement routes for the bracket pattern
+    and optical offset. Otherwise keep the part absent from the accepted native
+    package; any conceptual envelope remains a separately labelled study.
+  - Model a plate/bracket interface for the exact sensor envelope already cited
+    in the repository: 50 x 50 x 70 mm body and 0.130 kg body mass.
+  - Keep bracket mass and moving-cable mass as separate assumptions. Do not add
+    the manufacturer's 200 x 200 x 2 mm heat-sink plate unless a future owner
+    record explicitly changes the mass model and triggers FEA review.
+  - Include bolt pattern, optical-center offset, cable exit, strain relief,
+    clearance, and service direction as named nominal inputs.
+  - Calculate total moving mass and flag any change greater than 0.010 kg from
+    the committed 0.175 kg assumption as an FEA rerun trigger.
+Done when:
+  - Bracket/body/moving-cable masses sum transparently in the result metadata,
+    linked to their inputs in geometry.json.
+  - The sensor envelope and cable route are testable from the output metadata.
+  - An unprovided purchased-sensor revision cannot be described as inspected.
+
+W1.5 — Build the native assembly and deck stub when interfaces permit
+Files: new assembly authoring under cad/solidworks/ with assembly/oracle tests;
+       preserve the separate frozen specimen contract.
+Do:
+  - Start with a native assembly of resolved stock tube, sleeve and clamp.
+    Test component transforms, mates, free length and clearances. Add a bracket
+    and deck mating stub only as their interfaces are resolved; keep omissions
+    explicit. Do not infer assembly completion from the directory's name.
+  - Reimport an actual assembly STEP and check component placement as well as
+    total geometry. Preserve host version, input/source hashes and result files.
+  - Preserve the 0.324 m selected chassis wheelbase versus 0.3302 m simulation
+    wheelbase as a documented interface deviation; do not hide it in a bracket.
+  - Check front transponder bay clearance (at least 8 x 12 cm in the documented
+    front-half region), mast/deck height, sensor sightline, cable route, mass,
+    CG frame, and bolt datum consistency.
+Done when:
+  - Assembly geometry and metrics are deterministic and source-linked.
+  - A reviewer can identify every nominal assumption that must be replaced by
+    owner input before fabrication.
+  - RR-CAD-04 remains blocked in the ledger because RR-CAD-02 is still blocked.
+
+W1.6 — Add independent load-path checks
+Files: new cad/nominal_load_path.py and cad/tests/test_nominal_load_path.py.
+Do:
+  - Write equations before numbers. Use the selected load height from the
+    nominal package, not a hidden constant.
+  - Calculate tube root moment, tube stress/deflection checks, clamp bolt-group
+    force/moment demand, bracket demand, and a clearly labelled joint-stiffness
+    sensitivity.
+  - Resolve the narrative discrepancy between a 100 mm nominal load height and
+    any report that prints a 15.45 N m moment. The correct moment must be
+    recomputed as M = F_crash * h and the chosen h must be visible.
+  - Screen yield, bolt shear/tension, bearing, slip/preload sensitivity,
+    fatigue relevance, buckling relevance, and resonance. If a mode cannot be
+    evaluated from nominal inputs, return UNKNOWN with the missing input.
+Done when:
+  - Tests cover units, zero/negative dimensions, mass changes, load-height
+    changes, and a deliberate joint-compliance sensitivity.
+  - The output distinguishes tube-only safety factor from assembly safety factor.
+  - No clamp or bolt safety claim is made without a declared material, fastener,
+    preload, friction, and joint model.
+
+W1.7 — Rerun FEA only when the trigger fires
+Files: experiments/mast_fea.py, runs/mast_fea/*, docs/design/FEA_SETUP.md,
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - First run the nominal package with the existing 0.175 kg tip assumption and
+    ideal-root model. Do not rerun simply to manufacture a newer number.
+  - Rerun when modeled moving mass changes by more than 0.010 kg, joint boundary
+    conditions change, or the assembly geometry changes the load path.
+  - Preserve mesh convergence, gauge region, solver version, mesh/source hash,
+    and the distinction between tube-only FEA and assembly analysis.
+  - If proposing the shared MAPDL path, first close its independent verification
+    gap in engineering-audit: benchmark the actual model's load/resultant,
+    constraints, reactions, displacement, reportable stress and mesh convergence.
+    Set tolerances before solving and record UNKNOWN where no reference exists.
+    A completed plate solve or near-exact CAD volume does not validate mast FEA.
+  - Treat that reusable solver work as a separate dependency, not a required
+    extra project this week. Reuse the existing tube-only result for its original
+    scope until the assembly model and verification are actually available.
+Done when:
+  - If no trigger fires, the report explicitly reuses the committed FEA and
+    explains why it remains applicable only to the nominal tube.
+  - If triggered, f1 remains at least 200 Hz, hand/FEA comparison remains within
+    the existing ±15% design-review band, and mesh changes remain below 5%; a
+    failure opens a redesign task instead of relaxing thresholds.
+
+W1.8 — Publish the nominal package report
+Files: new docs/design/17_nominal_mast_package.md,
+       docs/design/figures/nominal-mast-package.svg or equivalent,
+       docs/data-and-figures.md, docs/figure-manifest.json.
+Do:
+  - This week's must-finish version covers the existing selected tube, source
+    reconciliation, purchased force-chain range, and W3.1 measurement feasibility.
+    Add new assembly claims only for extension tasks actually completed.
+  - Report scope, datums, mass/CG table, design-choice register, load path,
+    clamp/joint assumptions, sightline/deck stack, current FEA applicability,
+    and owner inputs that would replace each choice.
+  - If an assembly was built, include one assembly view and one dimensioned
+    view; otherwise link the existing tube view and list unbuilt parts. Every number needs a
+    source or a design-choice marker. Every figure needs an input hash and
+    generation command.
+  - State explicit non-claims: no as-built geometry, physical stiffness,
+    fabrication approval, modal acceptance band, fatigue life, thermal proof,
+    or vehicle-performance validation.
+Done when:
+  - A fresh checkout can regenerate the report and figures from committed inputs.
+  - A reviewer can tell selected design, rejected baseline, model assumption,
+    owner-pending measurement, and simulation output apart at a glance.
+
+Workstream 2: hardware-free vehicle credibility study
+=======================================================
+
+Priority after equipment update: stretch/carry-over. Do not start this work until
+the core acquisition, calibration, feasibility, and reviewer packet pass. A
+partial sweep is not required to call this week's core deliverable complete.
+
+Goal: challenge the simulator/controller chain with a deliberately changed plant
+so the project learns what survives outside the oracle case. This is simulation
+only and does not establish physical performance.
+
+W2.1 — Define the mismatch matrix before running it
+Files: new experiments/vehicle_mismatch_sweep.py,
+       new experiments/test_vehicle_mismatch_sweep.py,
+       new runs/vehicle_mismatch_sweep/config.json.
+Do:
+  - Start from the current pure-pursuit, LQR, and MPC comparison APIs.
+  - Sweep a small predeclared matrix: model wheelbase 0.3302 m versus selected
+    chassis 0.324 m; mass 3.74 kg versus nominal 4.42 kg; tire/friction scale
+    at 0.8/1.0/1.2; command delay at 0/20/50 ms; steering saturation and one
+    sensor-dropout case where the existing APIs support it.
+  - Keep map, timestep, controller update rate, initial state, random seeds,
+    and lap termination criteria fixed. Record all settings in JSON.
+  - Use a deterministic run ID derived from config hash and source commit.
+Done when:
+  - The matrix is small enough to run in under 15 minutes in CI or a developer
+    laptop, yet contains at least one nominal and one changed-plant case.
+  - Tests reject missing factors, duplicate cases, nonfinite values, and changed
+    seeds that are not recorded.
+
+W2.2 — Run and validate the mismatch sweep
+Files: experiments/vehicle_mismatch_sweep.py,
+       experiments/test_vehicle_mismatch_sweep.py,
+       runs/vehicle_mismatch_sweep/results.csv,
+       runs/vehicle_mismatch_sweep/metadata.json.
+Do:
+  - Record lap completion, lap time, RMS/max cross-track error, steering effort,
+    collision/termination reason, controller runtime p95/max, and estimator
+    dropout recovery metrics where applicable.
+  - Compare each controller on identical cases. Never rank controllers from
+    different maps or different random seeds.
+  - Mark a case INCONCLUSIVE when the required metric is missing or the run
+    terminates for an unclassified reason.
+Done when:
+  - Re-running with the same source/config hash reproduces the metrics within a
+    declared floating-point tolerance.
+  - At least one changed-plant result differs materially from the nominal result
+    or the report explicitly says the factor was not influential in this model.
+  - MPC timing keeps both p95 and worst-case values; the known max-spike risk
+    cannot disappear into an average.
+
+W2.3 — Write the simulation credibility report
+Files: new reports/vehicle_mismatch_sweep.md,
+       docs/data-and-figures.md, docs/figure-manifest.json if figures are made.
+Do:
+  - State the hypothesis: controller conclusions should be stable under the
+    declared nonphysical plant deviations, or the report should identify where
+    they fail.
+  - Separate nominal ranking from robust ranking. If pure pursuit remains best,
+    say under which cases; if another controller wins, explain the tradeoff.
+  - Convert every failure into a next experiment, not a claim about the real car.
+  - Compare only against existing simulation gates and state their limits.
+Done when:
+  - Report includes setup, variables, metrics, seed/config identity, outcomes,
+    limitations, and a kill criterion for the next iteration.
+  - It does not claim sim-to-real transfer, hardware readiness, or physical
+    vehicle performance.
+
+Workstream 3: nominal fixture feasibility screen
+===============================================
+
+This work prepares RR-CAD-05 without closing it. It answers whether the proposed
+fixture concept is numerically plausible before someone spends time fabricating
+it.
+
+W3.1 — Build the analytic screen
+Files: new cad/fixture_feasibility.py,
+       new cad/tests/test_fixture_feasibility.py,
+       new runs/mast_fixture_feasibility/nominal_screen.json.
+Do:
+  - Recompute specimen stiffness from the accepted nominal tube: approximately
+    775.984 N/mm for E=68,900 N/mm², L=100 mm, OD=20 mm, wall=1.5 mm.
+  - Require fixture stiffness at least 10 times specimen stiffness independently
+    in x and y; do not substitute a rigid CAD visual for stiffness evidence.
+  - Model tip/root indicator resolution, root translation, root rotation, station
+    spacing, load height, force uncertainty, repeatability, and reference-model
+    uncertainty as explicit inputs. Missing terms remain UNKNOWN, never zero.
+  - Propagate a conservative U95 screen through the actual fitted-compliance
+    estimator. Preserve the 4/8/12/16/20 N, two-axis, three-cycle matrix.
+  - Add the purchased 5 kg cell as the primary force-chain candidate. Use E3's
+    force-uncertainty result only if supported by a real calibration; otherwise
+    run visibly labelled assumed sensitivity cases and retain UNKNOWN for the
+    physical decision. Include a negative case with the 1 kg cell at 20 N.
+  - Compare force uncertainty, displacement quantization, and root-rotation
+    uncertainty in the same fitted-slope budget. This determines the next useful
+    measurement, rather than assuming more ADC bits resolve the largest error.
+  - Preserve tip/root resolution <=0.001 mm, >=20 predicted full-scale counts,
+    R² >=0.99, hysteresis <=5%, relative U95 <=10%, and physical agreement ±15%.
+    These are campaign gates, not acceptance criteria for a force-only logger.
+Done when:
+  - Tests reproduce the known 7,759.84 N/mm nominal fixture target and 5.155 µm
+    ideal 4 N specimen displacement.
+  - A 50 µrad root rotation at a 100 mm lever visibly contributes about 5 µm and
+    cannot be ignored by the screen.
+  - The output is labelled NOMINAL FEASIBILITY SCREEN ONLY and lists every
+    missing physical input.
+
+W3.2 — Choose the next physical-readiness questions
+Files: docs/specs/mast-physical-validation/campaign-readiness.md,
+       docs/CAD_MEASUREMENT_CONTRACT.md, docs/REVIEW_READY.md.
+Do:
+  - Use W3.1 to rank the three owner inputs with the largest effect on feasibility.
+  - Prefer inputs that remove ambiguity in root restraint, load height, or
+    root-rotation observability before cosmetic CAD or full deck packaging.
+  - Keep static ±15% and U95 ≤10% criteria separate from any modal criterion.
+  - Starting input bundles after the purchase update (refine order from W3.1):
+    1. Displacement and root-motion arrangement: available indicator model/ID,
+       calibration/resolution records, tip/root support sketch and spaced root
+       observations. Unlocks observability and the displacement uncertainty term.
+    2. Cell mounting and force references: intended load direction, mount drawing
+       or photos, actual reference masses with uncertainty, tare, and operator.
+       Unlocks a reviewable 5 kg cell calibration; purchase alone does not.
+    3. Specimen/fixture definition: as-built tube dimensions, clamp engagement,
+       load height, station spacing, bench arrangement, and named reviewer.
+       Unlocks interface review and a meaningful physical-reference comparison.
+    Keep USB cable/header/revision checks in E0's small bring-up checklist instead
+    of allowing them to displace these three substantive engineering questions.
+Done when:
+  - The handoff names exactly three requested inputs, why each matters, source
+    format, and the decision it unlocks.
+  - No request asks for a complete vehicle deck when the mast fixture can be
+    resolved independently.
+
+Workstream 4: review and reproducibility packet
+===============================================
+
+W4.1 — Add a single reproducibility entry point
+Files: new scripts/reproduce_nominal_week.py or a documented command block in
+       docs/design/17_nominal_mast_package.md.
+Do:
+  - The default path runs inventory validation, E2 replay checks, E3 synthetic
+    calibration checks, nominal-source checks, and W3.1 feasibility in dependency
+    order. It must work without a USB device, firmware deployment, or CadQuery.
+  - Provide a separate documented CAD command group for completed W1 extensions.
+    Keep the vehicle mismatch sweep opt-in and explicitly mark unbuilt extensions.
+  - Write a manifest containing source commit, config hashes, tool versions,
+    output hashes, evidence labels, and expected blocked gates.
+  - Keep long FEA and legacy Gym regeneration opt-in. Pin only dependencies the
+    selected path actually needs. There is no requirement for a new orchestrator
+    if a clear command block and manifest do the job.
+Done when:
+  - A clean checkout can run the bounded path and produce the same manifest
+    structure and deterministic outputs.
+  - Failing optional dependencies give a clear blocked message rather than
+    silently skipping an analysis.
+
+W4.2 — Prepare the reviewer packet
+Files: docs/REVIEW_READY.md, new evidence/week-2026-09-19/README.md,
+       new evidence/week-2026-09-19/manifest.json.
+Do:
+  - Link the scoped nominal report, equipment inventory, acquisition format,
+    replay outputs, calibration example, feasibility screen, source hashes,
+    exact commands, local environment, and limitations. Link stretch reports only
+    when they exist; record an explicit not-started entry otherwise.
+  - List what was not executed. Distinguish software checks, device function
+    checks, real calibration, CAD release, static campaign, modal acquisition,
+    legacy simulation, and independent review. A human device check does not
+    authorize reporting the other categories as completed.
+  - Keep RR-S02, RR-S09, RR-S12, RR-S13, RR-CAD-02/04/05/06/07 blocked unless
+    their existing evidence criteria are actually met.
+Done when:
+  - A reviewer can reproduce the nominal work without reading chat history.
+  - The packet contains no claim stronger than its evidence label.
+
+Suggested schedule
+==================
+
+September 19: Historical planning baseline. Verify prior work; do not backfill it.
+September 20: W0 and E0. Reconcile repository snapshot and purchased inventory.
+September 21: E1 and E2. Deliver the device format, logger, and replay tests.
+September 22: E3. Deliver calibration tooling and its synthetic failure cases.
+September 23: W1.1 and W3.1. Reconcile nominal numbers and evaluate measurement
+              feasibility, with missing physical terms kept explicitly unknown.
+September 24: W3.2 and scoped W1.8. Complete core reviewer material. If core work
+              passes early, start W1.2–W1.3; choose at most one auxiliary E4–E6
+              spike if it resolves a concrete question and fits remaining time.
+September 25: W4, relevant verification, and Claude's final implementation PR(s).
+
+Dates are sequencing targets, not proof of completed work. If hardware remains
+unconnected, finish the software path and record all device checks as pending.
+If implementation starts late, preserve the order and carry remaining tasks
+forward; do not compress review or fabricate evidence to match the dates.
+
+Cut scope in this order: W2 controller sweep, auxiliary E4–E6 implementation,
+extra renders/full assembly, then nominal clamp extension. Preserve E0–E3,
+the existing nominal-tube/source review, W3.1, and the evidence packet. Full
+assembly/load-path checks become mandatory if that extension is actually built.
+
+Acceptance command suite
+========================
+
+Run from repository root. Use the pinned CAD environment for CadQuery commands
+and the portable Python environment for evidence/report commands.
+
+New equipment checks (PROPOSED commands, valid after Claude implements E2/E3):
+  python3 experiments/test_measurement_logger.py
+  python3 experiments/test_load_cell_calibration.py
+  python3 experiments/measurement_logger.py --replay experiments/fixtures/measurement_logger/valid.jsonl --output <new-output-directory>
+  python3 experiments/load_cell_calibration.py --input experiments/fixtures/load_cell_calibration/known_affine.json --output <new-output-directory>
+  python3 -m py_compile firmware/measurement_node/code.py
+
+The compile check checks syntax only; it does not validate CircuitPython drivers,
+USB behavior, or an actual sensor. Capture/flash commands belong in the device
+README and are conditional human steps. No default verification command should
+open a serial port or require hardware. Add W3.1's test command when implemented.
+
+Baseline and ledgers:
+  python3 cad/ledger_validator.py live
+  python3 cad/input_requests.py --check
+  python3 cad/fixture_contract.py --check
+  python3 cad/fixture_contract.py --check-draft
+  python3 cad/modal_freeze.py --check-draft
+
+Portable software checks:
+  PYTHONPATH=gym python experiments/test_rosbag_to_telemetry.py
+  PYTHONPATH=gym python experiments/test_bag_evidence.py
+  PYTHONPATH=gym python experiments/validate_item11.py
+  PYTHONPATH=gym python experiments/test_mast_physical_validation.py
+  PYTHONPATH=gym python experiments/test_cad_inputs.py
+  PYTHONPATH=gym python experiments/test_final_report.py
+
+Nominal/CAD checks (required if the CAD extension is implemented):
+  python cad/input_requests.py --check
+  python cad/fixture_contract.py --check
+  python -m pytest cad/tests -q
+  python cad/generate.py --parameters cad/roboracer/parameters.csv --output <tmp>
+  git diff --check
+
+Expected blocked commands, run separately and record as expected:
+  python3 cad/fixture_contract.py --release       # exit 2 while owner inputs remain pending
+  python3 cad/modal_freeze.py                     # exit 2 while modal inputs remain unresolved
+
+Do not report an expected refusal as a failed software check. Do not report an
+untriggered CAD workflow as newly passed. Keep hosted CI observations separate
+from local runs.
+
+Final handoff format for Claude
+===============================
+
+At the end of the week, Claude should produce one implementation PR or a small
+sequence of dependency-ordered PRs. Each PR description must contain:
+
+  - source and target commits;
+  - exact files changed;
+  - design-choice versus owner-input table;
+  - commands, exits, and evidence paths;
+  - output hashes/config identity;
+  - known blockers and non-claims;
+  - which ledger rows remain unchanged and why.
+  - which purchased devices were actually connected, which raw records are real,
+    which calibration records are reviewed, and which checks remain software-only.
+
+The final paragraph must answer:
+
+  1. What force-acquisition/calibration behavior is now reproducible, and what
+     was actually verified on a device versus only by replay?
+  2. What nominal result or uncertainty sensitivity changed the next engineering
+     decision? Include a simulation result only if the stretch study was run.
+  3. Which three owner inputs would unlock the next physical or review gate?
+
+Adaptive triggers for later work
+=================================
+
+Equipment intake gate:
+  - Purchase identified: record product/quantity and source; no functional claim.
+  - Operation demonstrated: record actual unit/revision, wiring/configuration,
+    firmware identity and raw check session; no calibration claim.
+  - Calibrated for an intended use: record references, range, uncertainty,
+    mounting, configuration and review; no complete campaign-readiness claim.
+  - Campaign-ready: satisfy the existing combined apparatus, inspection,
+    reference-model, displacement/root-motion, protocol and reviewer gates below.
+Keep these distinctions in the instrument inventory. Do not weaken the existing
+ledger schemas or make every intermediate step into a new approval workflow.
+
+Promote nominal CAD toward RR-CAD-04 only when a reviewed owner drawing or
+inspection record replaces the corresponding design choice and the datum is
+defined. Promote the fixture toward RR-CAD-05 only when both-axis stiffness,
+root-rotation observability, instrument resolution, and a complete uncertainty
+budget are reviewable. Promote RR-S02 only when apparatus, calibration, as-built
+inspection/FEA, zero checks, setup evidence, and authorization exist. Promote
+RR-S12 only when x/y as-built modal references, uncertainty, numerical band,
+reviewer rationale, and commit chronology are approved. Promote RR-S13 only
+after RR-S12 freezes the observable and decision rule.
+
+Maybe-later triggers:
+  - Full deck packaging: only after the mast/clamp/fixture review is accepted
+    and a vehicle-integration milestone exists.
+  - Ponytail deletion audit: only after the nominal package and reproducibility
+    path are stable; an audit can then use caller and artifact evidence.
+  - New modal generator: only if a concrete deterministic regeneration need is
+    recorded; PR #16 remains closed by decision.
+  - High-rate vibration acquisition: only after E4 identifies a supported mode,
+    measured timing/filter performance, and a reviewed experiment worth running.
+    The purchased NAU7802 is not an impact-force channel at the nominal mast mode.
+  - Vehicle power or speed claims: only after a reviewed vehicle current path
+    or a calibrated timing geometry exists; INA260 and one gate alone are
+    insufficient evidence.
+  - Physical campaign: only after the full readiness packet and authorized
+    human review; no calendar date alone is a trigger.
+
+End state
+=========
+
+This week's best result is a reproducible acquisition/calibration software
+package matched to equipment the owner has purchased, with a clear nominal
+measurement-feasibility result. It makes the next bench session useful while
+preserving the distinction between purchase, operation, calibration and validation.
+
+Equipment specification sources and derived checks
+==================================================
+
+Primary sources checked September 20, 2026. URLs describe product capabilities;
+actual unit revision, condition, mounting and calibration still need records.
+
+QT Py RP2040 pinouts / separate STEMMA bus:
+  https://learn.adafruit.com/adafruit-qt-py-2040/pinouts
+NAU7802 board revisions / connections:
+  https://learn.adafruit.com/adafruit-nau7802-24-bit-adc-stemma-qt-qwiic/pinouts
+NAU7802 sample-rate settings:
+  https://learn.adafruit.com/adafruit-nau7802-24-bit-adc-stemma-qt-qwiic/arduino
+NAU7802 CircuitPython driver and wiring:
+  https://learn.adafruit.com/adafruit-nau7802-24-bit-adc-stemma-qt-qwiic/python-circuitpython
+5 kg cell capacity / mounting / calibration guidance:
+  https://www.adafruit.com/product/4541
+1 kg cell product identity:
+  https://www.adafruit.com/product/4540
+LIS3DH mode-dependent bandwidth and output rate, Tables 10 and 31:
+  https://www.st.com/resource/en/datasheet/lis3dh.pdf
+LIS3DH breakout pinouts and range identity:
+  https://learn.adafruit.com/adafruit-lis3dh-triple-axis-accelerometer-breakout/pinouts
+  https://www.adafruit.com/product/2809
+INA260 capabilities and connection constraints:
+  https://learn.adafruit.com/adafruit-ina260-current-voltage-power-sensor-breakout/overview
+IR break-beam open-collector wiring:
+  https://learn.adafruit.com/ir-breakbeam-sensors/arduino
+
+Engineering inferences (not manufacturer claims or new measurements):
+  Cell capacity: 5*9.81 = 49.05 N; 1*9.81 = 9.81 N.
+  20 N equivalent applied mass: 20/9.81 = 2.039 kg, excluding extra tare.
+  5 kg nominal force-capacity ratio at 20 N: 49.05/20 = 2.45, before extra tare.
+  Nominal FEA deflection at 20 N: (0.176/128.76)*20 = 0.02734 mm.
+  Ideal Nyquist bound for the force ADC: 320/2 = 160 Hz < 285.5 Hz.
+  LIS3DH at 1344 samples/s: normal BW=672 Hz; high-resolution BW≈149.3 Hz.
+  These bandwidth numbers do not establish response flatness, an anti-alias
+  margin, actual host throughput, modal uncertainty, or experimental readiness.
+
+September 20–21 planning updates changed this handoff and added durable guidance
+in AGENTS.md, its CLAUDE.md pointer and the shared-CAD decision record. No device
+was connected, no software was implemented, and no test/calibration, host run or
+ledger-status change was performed as part of these planning updates.

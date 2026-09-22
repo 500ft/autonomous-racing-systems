@@ -1,0 +1,26 @@
+{
+  "schema": "purchased-instruments/1",
+  "label": "PURCHASE IDENTIFIED: product and quantity from owner purchase records reviewed 2026-09-20. No operation, calibration, mounting or campaign-readiness claim. Separate from cad/roboracer/parameters.csv, whose six pending rows are untouched.",
+  "evidence_ladder": ["purchase_identified", "operation_demonstrated", "calibrated_for_intended_use", "campaign_ready"],
+  "source": {"kind": "owner_purchase_record", "reviewed": "2026-09-20", "note": "two invoice photos held by owner; not committed (personal and payment data)"},
+  "null_reason": "no device connected, no revision observed, no calibration performed as of 2026-09-20",
+  "items": [
+    {"id": "MCU-QTPY-01", "product": "Adafruit QT Py RP2040", "pid": 4900, "qty": 1, "role": "USB acquisition controller (CircuitPython)", "state": "purchase_identified", "board_revision": null, "operation_evidence": null, "calibration_id": null, "notes": "STEMMA QT connector is board.STEMMA_I2C(); header pins are board.I2C(), a separate bus", "spec": "https://learn.adafruit.com/adafruit-qt-py-2040/pinouts"},
+    {"id": "ADC-NAU7802-01", "product": "Adafruit NAU7802 24-bit ADC", "pid": 4538, "qty": 1, "role": "load-cell interface, one channel at a time", "state": "purchase_identified", "board_revision": null, "operation_evidence": null, "calibration_id": null, "max_samples_per_s": 320, "nyquist_hz": 160, "notes": "Rev C exposes B+/B-; older boards do not. Neither gives simultaneous two-cell conversion. 160 Hz Nyquist < 285.5 Hz nominal mast mode: not a modal force channel", "spec": "https://learn.adafruit.com/adafruit-nau7802-24-bit-adc-stemma-qt-qwiic/pinouts"},
+    {"id": "LC-5KG-01", "product": "Adafruit four-wire strain-gauge load cell 5 kg", "pid": 4541, "qty": 1, "role": "primary static-force candidate for the 4/8/12/16/20 N profile", "state": "purchase_identified", "nominal_capacity_kg": 5, "nominal_capacity_N": 49.05, "intended_range_N": [4, 20], "capacity_ratio_at_20N_before_tare": 2.45, "mounting_record": null, "calibration_id": null, "observed_wire_colors": null, "notes": "requires calibration after mounting; total loading incl. tare must be checked against capacity", "spec": "https://www.adafruit.com/product/4541"},
+    {"id": "LC-1KG-01", "product": "Adafruit four-wire strain-gauge load cell 1 kg", "pid": 4540, "qty": 1, "role": "separate low-range exercise only", "state": "purchase_identified", "nominal_capacity_kg": 1, "nominal_capacity_N": 9.81, "intended_range_N": [0, 8], "mounting_record": null, "calibration_id": null, "observed_wire_colors": null, "notes": "cannot cover 12/16/20 N; must never be substituted into the full campaign profile; coefficients not transferable from LC-5KG-01", "spec": "https://www.adafruit.com/product/4540"},
+    {"id": "ACC-LIS3DH-01", "product": "Adafruit LIS3DH triple-axis accelerometer", "pid": 2809, "qty": 1, "role": "motion/vibration exploration (stretch E4)", "state": "purchase_identified", "board_revision": null, "operation_evidence": null, "range_g_max": 16, "notes": "bandwidth is mode dependent: at 1.344 kHz ODR, normal mode BW 672 Hz, high-resolution BW ~149 Hz. Does not replace displacement indicators; 50 g design case exceeds range", "spec": "https://www.st.com/resource/en/datasheet/lis3dh.pdf"},
+    {"id": "PWR-INA260-01", "product": "Adafruit INA260 voltage/current/power sensor", "pid": 4226, "qty": 1, "role": "bench electronics power logging (stretch E5)", "state": "purchase_identified", "board_revision": null, "operation_evidence": null, "notes": "not a traction/ESC current path", "spec": "https://learn.adafruit.com/adafruit-ina260-current-voltage-power-sensor-breakout/overview"},
+    {"id": "GATE-IR-01", "product": "Adafruit 5 mm IR break-beam pair", "pid": 2168, "qty": 1, "role": "one optical event gate (stretch E6)", "state": "purchase_identified", "operation_evidence": null, "notes": "open-collector receiver; one pair = one gate, no speed claim", "spec": "https://learn.adafruit.com/ir-breakbeam-sensors/arduino"},
+    {"id": "CBL-STEMMA-01", "product": "STEMMA QT / Qwiic cable 100 mm", "pid": 4210, "qty": 1, "role": "one I2C interconnect", "state": "purchase_identified", "notes": "one cable: sequential single-board checks are the default"},
+    {"id": "WIRE-FF-01", "product": "Female/female jumper wires", "pid": 1951, "qty": 1, "role": "wiring support", "state": "purchase_identified"},
+    {"id": "WIRE-MM-01", "product": "Male/male jumper wires", "pid": 1957, "qty": 1, "role": "wiring support", "state": "purchase_identified"}
+  ],
+  "unconfirmed_prerequisites": [
+    "USB-C data cable (not charge-only)",
+    "headers or terminal blocks fitted on NAU7802 for the cell leads",
+    "load-cell mounting parts (two-plate bending-beam mount, fasteners)",
+    "reference masses with stated uncertainty for E3 calibration",
+    "calibrated displacement indicators (tip and root, <= 0.001 mm) and a root-rotation observation: NOT purchased; still the largest physical gap"
+  ]
+}

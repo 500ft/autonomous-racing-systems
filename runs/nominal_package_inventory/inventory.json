@@ -1,0 +1,222 @@
+{
+ "source_commit": "85c12f477a20498c55e19c0d6ffb8fdb538dc3b4",
+ "label": "SOFTWARE CHECK: traceability inventory, not validation",
+ "artifacts": {
+  "cad/contract.json": "b884c770a85219edf27cf9b31053ede01f35137f3bc985d3d50e405d46e26e46",
+  "cad/roboracer/fixture-contract.json": "61349f814195278c9ccfdf304d521431c5fd20ba1ce233968d118e2373341080",
+  "cad/roboracer/input-requests.csv": "a68e204f05d4ce6ab5e0a52d4a81e86da4a50d2eea43935483006f82631db810",
+  "cad/roboracer/parameters.csv": "1c4e547374946515800cf2df2ad93102c0fd2c2e29da1ffa83de6e9dc065e303",
+  "docs/CAD_MEASUREMENT_CONTRACT.md": "c4c3b2e6fabbb2eef08521e19ae936ea2656e5e2181e88a6edc0986344d5a66c",
+  "docs/design/16_mechanical_design_analysis.md": "afe59ce56375fa90ebd07d0c558b05d0b593ae92cf2305273aaa242baeb12873",
+  "docs/design/FEA_SETUP.md": "3786f28bb78eb14426bbb2e44720b36bcdaf9b0f8bc4496342d6f4e0d8a2d3c9",
+  "evidence/task-2026-09-09/cad-out/geometry.json": "e84d225426ab8e039820d27892426176570daa057dfabf25366771bdfc72ff82",
+  "evidence/task-2026-09-09/cad-out/mast_tube.step": "a1e74213ed2bb1604106e7239f25622dbb884f3b43e72bf5d23b8f0a3166486e",
+  "runs/mast_fea/fea_summary.txt": "35506c3527951676ed6c9dc421c6a7d78308447cb0e3e9f9417104c6e93f2876",
+  "runs/mast_fea/mesh_convergence.txt": "cac22eac5159ba40d057d6bb5bfd5effe6449fcc1ed09b370bd924c25884c485",
+  "runs/mast_hand_calc/design_sweep.txt": "101358fa0f5f37e07fd966ae70c0d67d73f0be1bff65bb9535c78d233456aa8f",
+  "runs/mast_hand_calc/summary.txt": "17dcf4560df385100fab96f35b030b179875add07e26cc264aff732573bfd4e9",
+  "runs/mast_tolerance_stack/summary.txt": "3d329c1c9fb4f77a67f68a9a8576c9631cf6ede44fd87a92cf237406c7f1b627"
+ },
+ "headlines": [
+  {
+   "quantity": "mast_length",
+   "value": "100",
+   "unit": "mm",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "mast_outer_diameter",
+   "value": "20",
+   "unit": "mm",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "mast_wall_thickness",
+   "value": "1.5",
+   "unit": "mm",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "youngs_modulus",
+   "value": "68900",
+   "unit": "N/mm^2",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "density",
+   "value": "2700",
+   "unit": "kg/m^3",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "tip_total_mass",
+   "value": "0.175",
+   "unit": "kg",
+   "source": "cad/roboracer/parameters.csv",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "tube_volume_contract",
+   "value": "8717.919613711676",
+   "unit": "mm^3",
+   "source": "cad/contract.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "tube_mass_contract",
+   "value": "0.023538382957021525",
+   "unit": "kg",
+   "source": "cad/contract.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "crash_force",
+   "value": "128.76",
+   "unit": "N",
+   "source": "runs/mast_hand_calc/summary.txt",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "selected_f1_hand",
+   "value": "330.1",
+   "unit": "Hz",
+   "source": "runs/mast_hand_calc/design_sweep.txt",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "selected_crash_sf_hand",
+   "value": "8.05",
+   "unit": "1",
+   "source": "runs/mast_hand_calc/design_sweep.txt",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "selected_root_stress_hand",
+   "value": "34.3",
+   "unit": "MPa",
+   "source": "runs/mast_hand_calc/design_sweep.txt",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "selected_root_moment",
+   "value": "12.88",
+   "unit": "N.m",
+   "source": "docs/design/16_mechanical_design_analysis.md",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "rejected_baseline_f1",
+   "value": "174.7",
+   "unit": "Hz",
+   "source": "runs/mast_hand_calc/summary.txt",
+   "label": "REJECTED BASELINE"
+  },
+  {
+   "quantity": "rejected_baseline_moment",
+   "value": "15.451",
+   "unit": "N.m",
+   "source": "runs/mast_hand_calc/summary.txt",
+   "label": "REJECTED BASELINE"
+  },
+  {
+   "quantity": "fea_f1",
+   "value": "285.5",
+   "unit": "Hz",
+   "source": "runs/mast_fea/fea_summary.txt",
+   "label": "SIMULATION OUTPUT"
+  },
+  {
+   "quantity": "fea_tip_deflection",
+   "value": "0.176",
+   "unit": "mm",
+   "source": "runs/mast_fea/fea_summary.txt",
+   "label": "SIMULATION OUTPUT"
+  },
+  {
+   "quantity": "fea_gauge_stress",
+   "value": "17.4",
+   "unit": "MPa",
+   "source": "runs/mast_fea/fea_summary.txt",
+   "label": "SIMULATION OUTPUT"
+  },
+  {
+   "quantity": "fea_mesh_delta_f1",
+   "value": "-1.42",
+   "unit": "%",
+   "source": "runs/mast_fea/mesh_convergence.txt",
+   "label": "SIMULATION OUTPUT"
+  },
+  {
+   "quantity": "tilt_blind_worst",
+   "value": "1.284",
+   "unit": "deg",
+   "source": "runs/mast_tolerance_stack/summary.txt",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "tilt_levelled",
+   "value": "0.354",
+   "unit": "deg",
+   "source": "runs/mast_tolerance_stack/summary.txt",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "deck_height_limit",
+   "value": "0.138",
+   "unit": "m",
+   "source": "runs/mast_tolerance_stack/summary.txt",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "specimen_stiffness",
+   "value": "775.98",
+   "unit": "N/mm",
+   "source": "docs/CAD_MEASUREMENT_CONTRACT.md",
+   "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "fixture_stiffness_min",
+   "value": "7,759.84",
+   "unit": "N/mm",
+   "source": "docs/CAD_MEASUREMENT_CONTRACT.md",
+   "label": "NOMINAL DESIGN"
+  }
+ ],
+ "owner_pending": [
+  {
+   "parameter": "actual_load_height",
+   "label": "OWNER PENDING"
+  },
+  {
+   "parameter": "clamp_bolt_pitch",
+   "label": "OWNER PENDING"
+  },
+  {
+   "parameter": "clamp_engagement",
+   "label": "OWNER PENDING"
+  },
+  {
+   "parameter": "lidar_bracket_bolt_pitch",
+   "label": "OWNER PENDING"
+  },
+  {
+   "parameter": "optical_center_offset",
+   "label": "OWNER PENDING"
+  },
+  {
+   "parameter": "root_rotation_station_spacing",
+   "label": "OWNER PENDING"
+  }
+ ],
+ "stale_record_checks": {
+  "hand_calc_summary_labels_rejected_baseline": true,
+  "fea_setup_current_before_superseded": true,
+  "design_doc_selected_moment_is_F_times_h": true
+ },
+ "blockers": []
+}
