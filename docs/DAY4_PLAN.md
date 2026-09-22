@@ -58,7 +58,7 @@ inconsistent or ambiguous source remains pending until resolved.
 
 ### O1. RR-S11 follow-up — tap-test generator
 
-Decision: `____` (`closed` | `regenerate` | `defer`).
+Decision: `closed` (`closed` | `regenerate` | `defer`). Owner instruction 2026-09-16; recorded in [CAD_REVIEW_DISPOSITION.md](CAD_REVIEW_DISPOSITION.md).
 
 Recommendation: `closed` unless deterministic regeneration has a concrete use;
 the [draft procedure](specs/mast-physical-validation/modal-preregistration.md),
@@ -259,7 +259,7 @@ protocol amendment before campaign loads.
 
 ## Optional work without hardware
 
-Selection: `____` (`nominal package` | `audit` | `both` | `neither`).
+Selection: `nominal package` (`nominal package` | `audit` | `both` | `neither`). Owner instruction 2026-09-16; work order in [NOMINAL_PACKAGE_WORK_ORDER.md](NOMINAL_PACKAGE_WORK_ORDER.md).
 If both, preferred first deliverable: `____`.
 
 - **Nominal CAD/FEA package:** first reconcile existing tube STEP, parameter
