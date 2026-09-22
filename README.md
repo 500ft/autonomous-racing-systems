@@ -91,6 +91,7 @@ versions intentionally differ.
 | [Fixture preparation](cad/roboracer/fixture-preparation.md) | Inspect the mast interface and metrology decisions |
 | [CAD inventory](docs/CAD_ITEMS.md) | See planned parts without confusing them with completed geometry |
 | [Review index](docs/REVIEW_READY.md) | Find verification records and unresolved gates |
+| [Literature](literature/README.md) | Check a claim against verified sources; start at the [claim ledger](literature/claim-ledger.md) |
 
 ```text
 gym/          F1TENTH simulator package and dynamics
