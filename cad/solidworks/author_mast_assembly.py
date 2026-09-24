@@ -373,6 +373,7 @@ def main():
     result_path = os.path.join(work_dir, "authoring_result.json")
 
     sw = None
+    unattended_saved = None   # so teardown is safe if Dispatch fails
     try:
         if solidworks_running():
             RESULT["message"] = "SLDWORKS.exe already running; refusing to attach to a session this script does not own"
@@ -380,6 +381,8 @@ def main():
 
         import pythoncom
         import win32com.client
+
+        import unattended
 
         callout = win32com.client.VARIANT(pythoncom.VT_DISPATCH, None)
         warning_flag = win32com.client.VARIANT(pythoncom.VT_BOOL | pythoncom.VT_BYREF, False)
@@ -391,6 +394,9 @@ def main():
         sw = win32com.client.Dispatch("SldWorks.Application")
         sw.Visible = False
         time.sleep(8)
+
+        # No operator on this host: disable the prompts that would block a run.
+        unattended_saved, RESULT["unattended"] = unattended.begin(sw)
 
         template = sw.GetUserPreferenceStringValue(SW_DEFAULT_PART_TEMPLATE)
         if not template or not os.path.exists(template):
@@ -418,6 +424,7 @@ def main():
     finally:
         try:
             if sw is not None:
+                unattended.end(sw, unattended_saved)
                 sw.ExitApp()
         except Exception:
             pass

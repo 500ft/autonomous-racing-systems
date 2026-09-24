@@ -95,6 +95,39 @@ re-scoped W1.2–W1.5 onto the existing native SOLIDWORKS branch. Checked agains
   the Sep 21 plan revision.
 - No device connected, no calibration, no register or ledger change.
 
+## Day 5 record (Sep 23, W3.1 + unattended host)
+
+**W3.1 fixture feasibility screen.** `cad/fixture_feasibility.py`, `cad/tests/test_fixture_feasibility.py`
+(22 tests), `runs/mast_fixture_feasibility/nominal_screen.json`. It propagates the declared error terms
+through the **actual** campaign estimator (`_linear_fit`, imported not copied) by Monte Carlo, per
+finding 5 and 12. Reproduces the frozen contract arithmetic exactly: k = 775.9837 N/mm, fixture target
+7759.84 N/mm per axis, 5.155 µm at 4 N, and 4.08 µrad → 0.408 µm from a 100 mm root baseline at 1 µm
+resolution.
+
+Default verdict is **UNKNOWN**, because no fixture exists and its stiffness is not declared. A missing
+term is never zero; any UNKNOWN makes the screen UNKNOWN and no feasibility number is claimed. With an
+explicitly assumed fixture stiffness the relative U95 lands near 4.5 % against the 10 % gate.
+
+**The operational finding:** ranked one term at a time, reading repeatability dominates, then residual
+root rotation, then the two quantization terms, and **force uncertainty is last**. More ADC bits would
+buy the campaign almost nothing. The next useful measurement is indicator repeatability and a bounded
+root rotation, not a better force channel. The 1 kg cell is carried as a negative control and is refused
+at 20 N.
+
+**Unattended host.** Owner constraint recorded 2026-09-23: the SOLIDWORKS host has no monitor and nobody
+to click anything. The host scripts set `sw.Visible = False` but never disabled **"Input dimension
+value"**, which raises a modal Modify box on every `AddDimension2` — an unattended run would block at the
+first dimension with no error. `cad/solidworks/unattended.py` disables it (toggle id 10, cross-checked
+against three independent sources, one read from `swconst.tlb`) and restores the host afterwards. It is
+**NOT HOST-VERIFIED**, so the toggle is read back and the outcome recorded under `"unattended"` in the
+result JSON; the next host run proves or disproves it. `unattended.py` was added to `run_host.py`'s
+upload list, without which the host-side import would fail. Ten offline tests against a fake COM object
+cover applied, already-off, raising, and silently-ignored writes plus restore.
+
+Not claimed: no general suppress-all-dialogs switch exists or is implied. A licence, template or
+graphics failure still blocks and is caught by the runner's polling timeout. A monitorless host still
+needs its interactive session logged in and unlocked for the COM server to start.
+
 ## Day 4 record (Sep 22, E3)
 
 `experiments/load_cell_calibration.py` (stdlib only), `test_load_cell_calibration.py` (23 tests),

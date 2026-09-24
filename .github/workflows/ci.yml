@@ -36,6 +36,8 @@ jobs:
       run: |
         python experiments/test_measurement_logger.py
         python experiments/test_load_cell_calibration.py
+        python cad/tests/test_fixture_feasibility.py
+        python cad/tests/test_unattended.py
         python -m py_compile firmware/measurement_node/code.py
     - name: Check README links, identity and negative controls
       run: |

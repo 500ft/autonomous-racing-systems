@@ -105,6 +105,28 @@ python3 run_host.py redrive.py redrive_result.json 700         # prove it is par
 `run_host.py` needs the same host config as engineering-audit's cadloop
 (`CADLOOP_HOST_CONFIG`, default `~/.config/sw_pc_credentials.json`).
 
+## Unattended host (no monitor, no operator)
+
+The host has no display and nobody to click a dialog, so a modal prompt is a hang. `sw.Visible = False`
+hides the window but does not stop SOLIDWORKS asking for values.
+
+[`unattended.py`](unattended.py) disables **"Input dimension value"** (`swUserPreferenceToggle_e`
+id 10) before authoring and restores the host's own setting afterwards. With that option on, every
+`AddDimension2` call raises a modal Modify box waiting for a number, so an unattended run blocks at the
+first dimension with no error and no output. Disabling it makes SOLIDWORKS take the value the script
+already passes; the dimension is not guessed, only the confirmation click is removed.
+
+The toggle is **read back after writing** and the outcome recorded under `"unattended"` in the result
+JSON, because the identifier is cross-checked against three independent sources but has not yet run on
+this host. Check that field on the next host run: `applied: true` means it worked. If it is false, the
+journal says why, and the fallback is to clear Tools > Options > General > "Input dimension value" once
+on the host by hand.
+
+Scope, stated rather than implied: this disables that prompt and nothing else. It is not a general
+suppress-all-dialogs switch and no such switch is claimed. A licence, template or graphics failure will
+still block, and `run_host.py`'s polling timeout is what catches that. A host with no monitor also needs
+its interactive session to stay logged in and unlocked for the COM server to start at all.
+
 ## Host API findings
 
 These are additional to engineering-audit's `docs/solidworks_api_findings.md` and
