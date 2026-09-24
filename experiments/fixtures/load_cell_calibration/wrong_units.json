@@ -1,0 +1,331 @@
+{
+ "schema": "load-cell-calibration/1",
+ "label": "SOFTWARE CHECK: fully synthetic calibration. No cell was mounted, loaded or measured.",
+ "source_kind": "synthetic",
+ "cell_id": "LC-5KG-01",
+ "cell_capacity_N": 49.05,
+ "mount_id": "MOUNT-SYNTH-01",
+ "mount_record": "experiments/fixtures/load_cell_calibration/README-synthetic.md",
+ "mount_changed_since_calibration": false,
+ "promoted_to_campaign_ready": false,
+ "adc_id": "ADC-NAU7802-01",
+ "channel": 1,
+ "config_id": "g128-ldo3V0-10sps-ch1",
+ "date": "2026-09-22",
+ "operator": "synthetic",
+ "reviewer_state": "unreviewed",
+ "g_m_s2": 9.81,
+ "u_g_m_s2": 0.0001,
+ "g_source": "synthetic nominal; a real record needs a local value",
+ "tare_N": 0.85,
+ "loading_direction": "tension, along the cell's marked axis",
+ "temperature_C": 21.5,
+ "zero_start_counts": 20000,
+ "zero_end_counts": 20030,
+ "raw_file": "synthetic",
+ "raw_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+ "settling_s": 5.0,
+ "window_s": 10.0,
+ "points": [
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 3.9999543031192872,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1981944.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 3.9999646203086434,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1982013.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 7.999767812394292,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3943986.6,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 8.000083383507802,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3943973.7,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 11.999871753748767,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5906098.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 12.000464844540577,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5905994.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.000012426697516,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7867919.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.00065317146615,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7868025.6,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 19.99997710113526,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9830017.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 19.999928862679546,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9830013.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 4.000117894958343,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1981954.4,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 3.999955265980248,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1982062.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 7.999941475371539,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3943945.1,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 8.000020817021465,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3944029.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 11.999611687179693,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5905962.1,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 12.000166369823468,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5905980.7,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.000235493740774,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7867986.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.000333261375346,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7868008.1,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 20.000417651700158,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9829991.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 20.000260765077,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9829999.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 3.9998767020267514,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1982016.1,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 4.0,
+   "reference_mass_kg": 4.000056112102186,
+   "u_reference_mass_kg": 0.0002,
+   "counts_mean": 1981976.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 8.00016215058301,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3943969.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 8.0,
+   "reference_mass_kg": 7.999676658716793,
+   "u_reference_mass_kg": 0.0004,
+   "counts_mean": 3944005.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 12.000160467801564,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5906013.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 12.0,
+   "reference_mass_kg": 12.000224142405095,
+   "u_reference_mass_kg": 0.0006000000000000001,
+   "counts_mean": 5905986.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.00026349428603,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7867928.7,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 16.0,
+   "reference_mass_kg": 16.000248549923064,
+   "u_reference_mass_kg": 0.0008,
+   "counts_mean": 7868044.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 20.000338278766783,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9829914.4,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 20.0,
+   "reference_mass_kg": 19.999681852590644,
+   "u_reference_mass_kg": 0.001,
+   "counts_mean": 9829999.5,
+   "counts_sd": 40.0,
+   "n": 100
+  }
+ ]
+}

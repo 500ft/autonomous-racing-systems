@@ -95,6 +95,32 @@ re-scoped W1.2–W1.5 onto the existing native SOLIDWORKS branch. Checked agains
   the Sep 21 plan revision.
 - No device connected, no calibration, no register or ledger change.
 
+## Day 4 record (Sep 22, E3)
+
+`experiments/load_cell_calibration.py` (stdlib only), `test_load_cell_calibration.py` (23 tests),
+`docs/hardware/load-cell-calibration-protocol.md` (CONDITIONAL, nothing performed), and ten synthetic
+fixtures with a README. CI runs the tests.
+
+Three method choices come straight from [literature §4](../literature/04-measurement-uncertainty-and-calibration.md),
+merged the same day:
+
+- **Errors-in-variables fit (York), not OLS**, because both axes carry uncertainty. A Monte Carlo test
+  over 200 draws shows the OLS attenuation bias and that the York fit removes it. **Scope, measured not
+  assumed:** at the NAU7802's expected noise the two agree to within 0.1 %; the fit is the default
+  because nothing guarantees that holds.
+- **No R² anywhere.** Fit quality is a lack-of-fit versus pure-error decomposition, which the three
+  ascending/descending cycles supply replicates for. A test asserts the string never appears in output.
+- **Coverage factor from Student's t at the fit's degrees of freedom**, not an automatic k=2.
+
+Fail-closed verdicts: `REFUSED` (missing reference uncertainty, saturation, over capacity, wrong cell for
+the range, unreviewed record promoted, mounting changed), `CALIBRATION_INCOMPLETE` (extrapolated level,
+hysteresis or zero drift over a predeclared limit, coarse references, missing identity),
+`CALIBRATION_USABLE` (the force channel only, explicitly not campaign readiness). Conversion outside the
+calibrated count range is refused rather than extrapolated.
+
+Recovery check: the known mapping is recovered to 0.003 % on slope and 0.5 mN on intercept. No cell was
+mounted, loaded or measured; every fixture is labelled synthetic and unreviewed.
+
 ## Day 2 record (Sep 20, E0)
 
 - `docs/hardware/purchased-instruments.json`: ten line items, stable IDs (MCU-QTPY-01, ADC-NAU7802-01,
