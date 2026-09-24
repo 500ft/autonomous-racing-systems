@@ -48,6 +48,8 @@ runs/*
 !runs/mast_fea/**
 !runs/nominal_package_inventory/
 !runs/nominal_package_inventory/inventory.json
+!runs/mast_fixture_feasibility/
+!runs/mast_fixture_feasibility/nominal_screen.json
 runs/mast_fea/*.inp
 runs/mast_fea/*.frd
 runs/mast_fea/*.12d

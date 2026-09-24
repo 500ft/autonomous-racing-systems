@@ -40,6 +40,7 @@ def main():
     result_path = os.path.join(work_dir, "redrive_result.json")
 
     sw = None
+    unattended_saved = None   # so teardown is safe if Dispatch fails
     try:
         if solidworks_running():
             RESULT["message"] = "SLDWORKS.exe already running; refusing to attach"
@@ -47,6 +48,8 @@ def main():
 
         import pythoncom
         import win32com.client
+
+        import unattended
 
         long_a = win32com.client.VARIANT(pythoncom.VT_I4 | pythoncom.VT_BYREF, 0)
         long_b = win32com.client.VARIANT(pythoncom.VT_I4 | pythoncom.VT_BYREF, 0)
@@ -57,6 +60,9 @@ def main():
 
         sw = win32com.client.Dispatch("SldWorks.Application")
         sw.Visible = False
+
+        # No operator on this host: disable the prompts that would block a run.
+        unattended_saved, RESULT["unattended"] = unattended.begin(sw)
 
         for name in ("mast_tube_stock", "support_sleeve", "root_clamp"):
             path = os.path.join(work_dir, "%s.sldprt" % name)
@@ -123,6 +129,7 @@ def main():
     finally:
         try:
             if sw is not None:
+                unattended.end(sw, unattended_saved)
                 sw.ExitApp()
         except Exception:
             pass

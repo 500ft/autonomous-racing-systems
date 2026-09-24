@@ -1,0 +1,105 @@
+{
+ "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+ "schema": "fixture-feasibility/1",
+ "specimen": {
+  "e_n_per_mm2": 68900.0,
+  "length_mm": 100.0,
+  "od_mm": 20.0,
+  "wall_mm": 1.5,
+  "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv",
+  "second_moment_mm4": 3754.1541336545906,
+  "stiffness_n_per_mm": 775.9836594264038,
+  "compliance_mm_per_n": 0.0012886869302624051
+ },
+ "stiffness_screen": {
+  "required_per_axis_n_per_mm": 7759.8365942640385,
+  "ratio_minimum": 10.0,
+  "declared_x": null,
+  "declared_y": null,
+  "verdict": "UNKNOWN",
+  "note": "a rigid-looking CAD model is not stiffness evidence; this ratio does not constrain root rotation, which is budgeted separately"
+ },
+ "ideal_signal": {
+  "deflection_at_4N_mm": 0.0051547477210496205,
+  "deflection_at_20N_mm": 0.025773738605248103,
+  "fea_compliance_mm_per_n": 0.0013668841255048152,
+  "fea_deflection_at_20N_mm": 0.027337682510096304,
+  "note": "hand-model and FEA compliances are different quantities and are kept apart"
+ },
+ "terms": {
+  "tip_quantization_mm": 0.0002886751345948129,
+  "root_quantization_mm": 0.0002886751345948129,
+  "repeatability_mm": 0.0005,
+  "residual_root_rotation_mm": 0.0004082482904638631,
+  "force_relative": 0.005,
+  "root_rotation_sd_rad": 4.082482904638631e-06
+ },
+ "unknown_terms": [
+  "fixture_stiffness_n_per_mm_x",
+  "fixture_stiffness_n_per_mm_y"
+ ],
+ "matrix": {
+  "load_levels_n": [
+   4.0,
+   8.0,
+   12.0,
+   16.0,
+   20.0
+  ],
+  "cycles": 3,
+  "directions": [
+   "load",
+   "unload"
+  ],
+  "axes": [
+   "x",
+   "y"
+  ],
+  "points_per_axis": 30
+ },
+ "gates": {
+  "relative_U95_max": 0.1,
+  "r_squared_min": 0.99,
+  "hysteresis_fraction_max": 0.05,
+  "fea_relative_error_max": 0.15,
+  "indicator_counts_min": 20.0,
+  "note": "frozen campaign gates, imported not restated; this screen does not relax or reinterpret any of them"
+ },
+ "force_chain": [
+  {
+   "cell_id": "LC-5KG-01",
+   "capacity_N": 49.05,
+   "role": "primary candidate",
+   "covers_campaign_range": true,
+   "refusal": null,
+   "evidence": "ASSUMED sensitivity; no calibration record exists. Replace with an E3 CALIBRATION_USABLE result before any physical decision."
+  },
+  {
+   "cell_id": "LC-1KG-01",
+   "capacity_N": 9.81,
+   "role": "negative control at 20 N",
+   "covers_campaign_range": false,
+   "refusal": "capacity 9.81 N cannot reach the 20.0 N campaign level",
+   "evidence": "ASSUMED sensitivity; no calibration record exists. Replace with an E3 CALIBRATION_USABLE result before any physical decision."
+  }
+ ],
+ "indicator_screen": {
+  "resolution_mm": 0.001,
+  "counts_at_full_scale": 27.337682510096304,
+  "passes": true,
+  "note": "full-scale screen only; it does not mean the 4 N point has 20 counts"
+ },
+ "axes": {
+  "x": {
+   "verdict": "UNKNOWN",
+   "reason": "one or more terms are UNKNOWN"
+  },
+  "y": {
+   "verdict": "UNKNOWN",
+   "reason": "one or more terms are UNKNOWN"
+  }
+ },
+ "dominant_terms": null,
+ "verdict": "UNKNOWN",
+ "verdict_note": "Terms are missing, so no feasibility number is claimed. A missing term is never treated as zero."
+}
