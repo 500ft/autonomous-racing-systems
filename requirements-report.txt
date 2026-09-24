@@ -4,4 +4,4 @@
 setuptools<66
 wheel
 reportlab>=4.4,<6
-pypdf>=6,<7
+pypdf>=6.19.0,<7
