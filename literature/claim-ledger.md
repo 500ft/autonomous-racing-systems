@@ -14,11 +14,18 @@ threshold or a protocol; see [README](README.md) for why.
 ### M1. The mast's first bending mode is 285.5 Hz and clears the 200 Hz guard
 
 - **Support:** `runs/mast_fea/fea_summary.txt` (SIMULATION OUTPUT, converged mesh). Method backing from
-  Blevins and Rao ([§3](03-structural-dynamics-and-modal-testing.md)); the Rayleigh estimate is a rigorous
-  upper bound, Dunkerley a lower one, so the true value is bracketed.
+  Blevins and Rao ([§3](03-structural-dynamics-and-modal-testing.md)).
 - **Counter-evidence or gaps:** No measurement exists. The tap test is a **draft**, RR-S12 is blocked, and
   ISO 7626-5:2019 is the standard the frozen procedure would have to be written against.
-- **Confidence: moderate** for the nominal tube as modelled; **none** as a statement about hardware.
+  **Corrected 2026-09-24:** an earlier version of this claim argued the true frequency was bracketed
+  between the Rayleigh upper bound and a Dunkerley lower bound. That argument is withdrawn here for the
+  same reason it was withdrawn in [§3](03-structural-dynamics-and-modal-testing.md): a bound brackets the
+  FE value only if both describe the same problem, and the [modal audit](../docs/design/MODAL_MODEL_AUDIT.md)
+  shows they do not — the FE deck carries a one-node translational mass attached off-axis. The 285.5 Hz
+  figure stands on its own model, not on an analytical bound around it.
+- **Confidence: moderate** for the nominal tube as modelled; **none** as a statement about hardware. The
+  margin over 200 Hz is comfortable enough that the withdrawn bracketing argument does not change the
+  pass/fail reading, but it is no longer offered as support.
 
 ### M2. The cause of the 13.5 % gap between the 330.1 Hz hand calc and the 285.5 Hz FEA is UNRESOLVED
 
@@ -222,13 +229,27 @@ wrong in two places and is withdrawn.
 
 ## Evidence-strength summary
 
-The mechanical lane rests on **grade A–B** foundations: established handbook formulas, adopted standards, and
-primary sources with long experimental backing. Its weakness is not the literature but that **every claim is
-still simulation or hand calculation** — the experimental half is unbuilt.
+Updated 2026-09-24 after the source audit and the decision-logic repairs.
 
-The measurement lane is the best-supported by standards and the **worst-aligned to them today**: three
-specific conflicts (M8, M9) between the frozen protocol and adopted metrological practice.
+The **mechanical lane** rests on grade A–B literature: established handbook formulas, adopted standards
+and primary sources with long experimental backing. Two weaknesses are now explicit rather than implied.
+Every claim is still simulation or hand calculation, because the experimental half is unbuilt. And the
+one place where mechanisms were attributed to a specific numerical result, M2, turned out to be wrong:
+the attribution is withdrawn and the cause of the 330.1 → 285.5 Hz gap is unresolved. M1 lost its
+bracketing argument for the same reason. Good literature did not prevent either error, because neither
+was a literature question — both were questions about what the model actually contains.
 
-The vehicle lane is the weakest. Its headline comparative result (V2) has **no supporting citation and one
-credible contradicting one**, and its identification result is honest but, by the literature's own standard,
-validates only the estimator.
+The **measurement lane** is the best supported by standards and still the worst aligned to them. The
+conflicts recorded in M8 and M9 are conflicts with the **frozen protocol**, which is unchanged: it still
+gates on R² ≥ 0.99 and does not specify an errors-in-variables estimator or an effective-degrees-of-freedom
+coverage factor. What changed on 2026-09-24 is that the *new tooling* no longer repeats those mistakes and
+no longer returns a passing verdict while its own checks fail. Amending the protocol itself remains a
+prospective, owner-reviewed act.
+
+The **vehicle lane** is the weakest and is unchanged by this round. Its headline comparative result, V2,
+still has no supporting citation and one credible contradicting one, and its identification result
+validates the estimator rather than the model.
+
+One methodological lesson worth keeping, because it produced three of the errors above: a computed
+diagnostic that does not participate in a verdict is not a check, and a mechanism that is absent from a
+model cannot explain that model's output.

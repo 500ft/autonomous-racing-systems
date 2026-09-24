@@ -1,18 +1,24 @@
 {
- "source_commit": "85c12f477a20498c55e19c0d6ffb8fdb538dc3b4",
+ "source_commit": "fb7379f59890552802d218021b52b2d51bdc9226",
  "label": "SOFTWARE CHECK: traceability inventory, not validation",
  "artifacts": {
   "cad/contract.json": "b884c770a85219edf27cf9b31053ede01f35137f3bc985d3d50e405d46e26e46",
+  "cad/fixture_feasibility.py": "71ed3689e4467274fb380f9c1eefdfecda4612be14c719c9b9d0331e0ad52194",
   "cad/roboracer/fixture-contract.json": "61349f814195278c9ccfdf304d521431c5fd20ba1ce233968d118e2373341080",
   "cad/roboracer/input-requests.csv": "a68e204f05d4ce6ab5e0a52d4a81e86da4a50d2eea43935483006f82631db810",
   "cad/roboracer/parameters.csv": "1c4e547374946515800cf2df2ad93102c0fd2c2e29da1ffa83de6e9dc065e303",
   "docs/CAD_MEASUREMENT_CONTRACT.md": "c4c3b2e6fabbb2eef08521e19ae936ea2656e5e2181e88a6edc0986344d5a66c",
   "docs/design/16_mechanical_design_analysis.md": "afe59ce56375fa90ebd07d0c558b05d0b593ae92cf2305273aaa242baeb12873",
   "docs/design/FEA_SETUP.md": "3786f28bb78eb14426bbb2e44720b36bcdaf9b0f8bc4496342d6f4e0d8a2d3c9",
+  "docs/design/MODAL_MODEL_AUDIT.md": "3eff080133a3cd9cff2933dbda0baeb8df82674db6988972efd257f07d9f28fb",
   "evidence/task-2026-09-09/cad-out/geometry.json": "e84d225426ab8e039820d27892426176570daa057dfabf25366771bdfc72ff82",
   "evidence/task-2026-09-09/cad-out/mast_tube.step": "a1e74213ed2bb1604106e7239f25622dbb884f3b43e72bf5d23b8f0a3166486e",
+  "experiments/load_cell_calibration.py": "0b01df8ac3010cd71822955166888338a23a701dfc87579f1b707fbe6ee88010",
+  "experiments/mast_fea.py": "1ac78fdd0d27a14e3253f8f745bd18a1263882c17c85bfa104567441537bdb32",
+  "literature/claim-ledger.md": "81c8118eaa5d58af667815a7b5d9fcc326fc91f40800f60d7f848759539fb482",
   "runs/mast_fea/fea_summary.txt": "35506c3527951676ed6c9dc421c6a7d78308447cb0e3e9f9417104c6e93f2876",
   "runs/mast_fea/mesh_convergence.txt": "cac22eac5159ba40d057d6bb5bfd5effe6449fcc1ed09b370bd924c25884c485",
+  "runs/mast_fixture_feasibility/nominal_screen.json": "fa4ec3aed438b95b74ffc5c9ace26a600c6b6d4eb9845ea717cc0bc994864786",
   "runs/mast_hand_calc/design_sweep.txt": "101358fa0f5f37e07fd966ae70c0d67d73f0be1bff65bb9535c78d233456aa8f",
   "runs/mast_hand_calc/summary.txt": "17dcf4560df385100fab96f35b030b179875add07e26cc264aff732573bfd4e9",
   "runs/mast_tolerance_stack/summary.txt": "3d329c1c9fb4f77a67f68a9a8576c9631cf6ede44fd87a92cf237406c7f1b627"
@@ -185,6 +191,48 @@
    "unit": "N/mm",
    "source": "docs/CAD_MEASUREMENT_CONTRACT.md",
    "label": "NOMINAL DESIGN"
+  },
+  {
+   "quantity": "screen_specimen_stiffness",
+   "value": "775.9836594264038",
+   "unit": "N/mm",
+   "source": "runs/mast_fixture_feasibility/nominal_screen.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "screen_required_fixture_stiffness",
+   "value": "7759.8365942640385",
+   "unit": "N/mm",
+   "source": "runs/mast_fixture_feasibility/nominal_screen.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "screen_ideal_deflection_at_4N",
+   "value": "0.0051547477210496205",
+   "unit": "mm",
+   "source": "runs/mast_fixture_feasibility/nominal_screen.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "screen_verdict",
+   "value": "UNKNOWN",
+   "unit": "1",
+   "source": "runs/mast_fixture_feasibility/nominal_screen.json",
+   "label": "SOFTWARE CHECK"
+  },
+  {
+   "quantity": "modal_mass_attachment",
+   "value": "nearest existing material node",
+   "unit": "1",
+   "source": "docs/design/MODAL_MODEL_AUDIT.md",
+   "label": "MODEL ASSUMPTION"
+  },
+  {
+   "quantity": "modal_gap_cause",
+   "value": "unresolved",
+   "unit": "1",
+   "source": "docs/design/MODAL_MODEL_AUDIT.md",
+   "label": "MODEL ASSUMPTION"
   }
  ],
  "owner_pending": [
@@ -216,7 +264,10 @@
  "stale_record_checks": {
   "hand_calc_summary_labels_rejected_baseline": true,
   "fea_setup_current_before_superseded": true,
-  "design_doc_selected_moment_is_F_times_h": true
+  "design_doc_selected_moment_is_F_times_h": true,
+  "claim_M2_says_cause_unresolved": true,
+  "claim_M1_no_longer_asserts_bracketing": true,
+  "section3_carries_the_superseded_note": true
  },
  "blockers": []
 }
