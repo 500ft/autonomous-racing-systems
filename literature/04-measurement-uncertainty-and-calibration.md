@@ -45,7 +45,7 @@ mass, g and tare; displacement from indicator resolution and root rotation.
 
 | Citation | Link | Why it matters here | Ab | Ev |
 |---|---|---|---|---|
-| **York, D. (1966). *Least-squares fitting of a straight line.* Can. J. Phys. 44(5), 1079–1086.** | [10.1139/p66-090](https://doi.org/10.1139/p66-090) | The originating errors-in-variables solution. **Ordinary least squares biases the compliance slope low** when x carries error, which is exactly this case. | 3 | A |
+| **York, D. (1966). *Least-squares fitting of a straight line.* Can. J. Phys. 44(5), 1079–1086.** | [10.1139/p66-090](https://doi.org/10.1139/p66-090) | The originating errors-in-variables solution. Under the classical error-in-x model, ordinary least squares attenuates the slope toward zero. **Conditional, not universal** — see the Cantrell row for when it matters, and note the effect is negligible at this ADC's expected noise. | 3 | A |
 | **York, D.; Evensen, N. M.; López Martínez, M.; De Basabe Delgado, J. (2004). *Unified equations for the slope, intercept, and standard errors of the best straight line.* Am. J. Phys. 72(3), 367–375.** | [10.1119/1.1632486](https://doi.org/10.1119/1.1632486) | The implementable version: closed-form **standard errors** on slope and intercept under correlated errors in both variables. This is the equation set that produces u(compliance) before the coverage factor is applied. | 3 | A |
 | Cantrell, C. A. (2008). *Review of methods for linear least-squares fitting of data…* Atmos. Chem. Phys. 8, 5477–5487. | [10.5194/acp-8-5477-2008](https://doi.org/10.5194/acp-8-5477-2008) | Open-access side-by-side of OLS, weighted LS, York and other bivariate fits with guidance on which to use when. The fastest way to justify the fitting-method choice to a reviewer. | 3 | A |
 | Fuller, W. A. (1987). *Measurement Error Models.* Wiley. | [10.1002/9780470316665](https://doi.org/10.1002/9780470316665) | Canonical monograph. Cite for the formal attenuation result and for variance estimators of the errors-in-variables slope. | 2 | A |
@@ -88,9 +88,12 @@ amendment; none is applied here.
    discourages for calibration.** A high R² is compatible with visible curvature. The cited replacement is
    lack-of-fit versus pure-error decomposition, **which requires replicates at each of the 4/8/12/16/20 N
    points** — a change to the test matrix, not just to the arithmetic.
-2. **Ordinary least squares is the wrong estimator here and biases compliance low.** Both axes carry
-   uncertainty, so York's errors-in-variables equations are the right basis, and they also supply the
-   slope standard error the U95 gate needs.
+2. **Ordinary least squares is not the default-safe estimator here.** Both axes carry uncertainty, so
+   York's equations are the right basis and also supply the slope standard error the U95 gate needs.
+   The strength of the objection is conditional: attenuation assumes a particular error model, and at
+   this ADC's expected count noise the two estimators agree to within 0.1 %. The case for York is that
+   nothing guarantees the noise stays small, not that OLS is always wrong. **Neither estimator removes a
+   shared calibration gain error**, which is a separate failure mode.
 3. **A k=2 coverage factor is not automatically right for a five-point fit.** EA-4/02 §5 requires
    effective degrees of freedom and a t-based factor unless the output is near-normal with large ν.
 4. **The 4 N point may fall below the cell's usable floor.** ASTM E74's lower limit factor sets the
@@ -110,6 +113,7 @@ amendment; none is applied here.
 - **The NAU7802 "up to 23-bit ENOB" figure** came from indexed datasheet text, not a fetched PDF. Verify the
   ENOB against gain and output rate directly; the usable figure at gain 128 will be well below 23.
 - **ISO 376 currency**: no revision found, but iso.org returned 403 so the status line could not be read first-hand.
-- **No standard governs cantilever compliance testing at this scale, and no published uncertainty budget for a
-  sub-30 µm static deflection test was found.** That gap is real: this test plan must be justified by composing
+- **No standard governing cantilever compliance testing at this scale was located in this scoped search**, and
+  no published uncertainty budget for a sub-30 µm static deflection test was found. Absence in this search is
+  not proof that none exists. That gap is real: this test plan must be justified by composing
   the GUM, EA-4/02, the NIST handbook and the dimensional-metrology guides rather than by citing one document.

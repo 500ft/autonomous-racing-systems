@@ -1,0 +1,425 @@
+{
+ "schema": "load-cell-calibration/1",
+ "label": "SOFTWARE CHECK: fully synthetic calibration. No cell was mounted, loaded or measured. reviewer_state and the review record below are SYNTHETIC, present only to exercise the CALIBRATION_USABLE path in tests. They are not a real review.",
+ "source_kind": "synthetic",
+ "cell_id": "LC-5KG-01",
+ "cell_capacity_N": 49.05,
+ "mount_id": "MOUNT-SYNTH-01",
+ "mount_record": "experiments/fixtures/load_cell_calibration/README-synthetic.md",
+ "mount_changed_since_calibration": false,
+ "promoted_to_campaign_ready": false,
+ "adc_id": "ADC-NAU7802-01",
+ "channel": 1,
+ "config_id": "g128-ldo3V0-10sps-ch1",
+ "date": "2026-09-22",
+ "operator": "synthetic",
+ "reviewer_state": "reviewed",
+ "g_m_s2": 9.81,
+ "u_g_m_s2": 0.0001,
+ "g_source": "synthetic nominal; a real record needs a local value",
+ "tare_N": 0.85,
+ "loading_direction": "tension, along the cell's marked axis",
+ "temperature_C": 21.5,
+ "zero_start_counts": 20000,
+ "zero_end_counts": 20030,
+ "raw_file": "synthetic",
+ "raw_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+ "settling_s": 5.0,
+ "window_s": 10.0,
+ "points": [
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.24999576675805305,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142674.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.50001699868366,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265192.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 1.000000383209167,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510515.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.4999713144183642,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755720.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 2.0000258807945155,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1001059.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "up",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.0999615573956487,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050003.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.0999487723019397,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050086.7,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 1.9999973443796333,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1000972.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.499972263300976,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755781.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 1.000018665900862,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510546.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.5000058946643213,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265256.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 1,
+   "direction": "down",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.24999532112382156,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142716.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.25000420447226235,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142670.6,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.499998276195289,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265262.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 1.000011751904709,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510525.4,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.5000109505881958,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755754.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 2.000052548059625,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1000978.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "up",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.1000027045328373,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050073.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.0999692488580495,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050010.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 1.9999973152402708,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1001025.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.4999923028384499,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755759.7,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 0.9999895740317686,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510508.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.5000150461240954,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265272.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 2,
+   "direction": "down",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.25000103432733006,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142627.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.24999826919740867,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142613.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.4999972699348239,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265214.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 1.000009336152248,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510530.8,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.4999792397326714,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755726.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 2.0000201535881557,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1000998.9,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "up",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.099979383628781,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050069.6,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 2.1,
+   "reference_mass_kg": 2.099969603560045,
+   "u_reference_mass_kg": 0.000105,
+   "counts_mean": 1050007.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 2.0,
+   "reference_mass_kg": 2.0000872861113606,
+   "u_reference_mass_kg": 0.0001,
+   "counts_mean": 1000953.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 1.5,
+   "reference_mass_kg": 1.499988683994373,
+   "u_reference_mass_kg": 7.500000000000001e-05,
+   "counts_mean": 755765.2,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 1.0,
+   "reference_mass_kg": 0.9999511854294602,
+   "u_reference_mass_kg": 5e-05,
+   "counts_mean": 510514.5,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 0.5,
+   "reference_mass_kg": 0.5000092230034924,
+   "u_reference_mass_kg": 2.5e-05,
+   "counts_mean": 265259.3,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 3,
+   "direction": "down",
+   "nominal_mass_kg": 0.25,
+   "reference_mass_kg": 0.2499993341249887,
+   "u_reference_mass_kg": 1.25e-05,
+   "counts_mean": 142598.2,
+   "counts_sd": 40.0,
+   "n": 100
+  }
+ ],
+ "review_record": "SYNTHETIC: no human reviewed this record",
+ "u_g_declared_negligible": "SYNTHETIC basis: g uncertainty is declared negligible against a 0.5 % reference-mass term for this test fixture only",
+ "verification_points": [
+  {
+   "cycle": 4,
+   "direction": "up",
+   "nominal_mass_kg": 0.75,
+   "reference_mass_kg": 0.7500056867749046,
+   "u_reference_mass_kg": 3.7500000000000003e-05,
+   "counts_mean": 387853.0,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 4,
+   "direction": "up",
+   "nominal_mass_kg": 1.25,
+   "reference_mass_kg": 1.2500170349624322,
+   "u_reference_mass_kg": 6.25e-05,
+   "counts_mean": 633138.1,
+   "counts_sd": 40.0,
+   "n": 100
+  },
+  {
+   "cycle": 4,
+   "direction": "up",
+   "nominal_mass_kg": 1.75,
+   "reference_mass_kg": 1.749973432007935,
+   "u_reference_mass_kg": 8.75e-05,
+   "counts_mean": 878376.9,
+   "counts_sd": 40.0,
+   "n": 100
+  }
+ ]
+}

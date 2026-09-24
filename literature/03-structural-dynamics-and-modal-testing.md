@@ -15,13 +15,16 @@ RR-S11/RR-S12. Grading scheme: [README](README.md).
 | Blevins, R. D. (2015). *Formulas for Dynamics, Acoustics and Vibration.* Wiley. ISBN 9781119038115. | [10.1002/9781119038122](https://doi.org/10.1002/9781119038122) | Modern, DOI-citable successor to the 1979 tables. Clamped-free λ₁ and the tip-mass-loaded variants: the defensible source for the 330.1 Hz hand calculation. | 3 | A |
 | Blevins, R. D. (1979). *Formulas for Natural Frequency and Mode Shape.* Van Nostrand Reinhold; reprints Krieger 1984/1995, 2001. | ISBN 9780442207106 / 9780894648946 / 9781575241845 | The canonical table source usually cited. **No DOI and four printings exist — cite the reprint actually held**, do not copy an ISBN from elsewhere. | 3 | A |
 | Rao, S. S. (2021). *Mechanical Vibrations*, 6th ed. Pearson. ISBN 9780134361307. | <https://www.pearson.com/en-us/subject-catalog/p/Rao-Mechanical-Vibrations-6th-Edition/P200000003425/9780134361307> | Ch. 7 carries Rayleigh and Dunkerley with worked examples; Ch. 10 covers vibration measurement. Textbook citation for the Rayleigh energy method behind 330.1 Hz. | 3 | A |
-| Dunkerley, S. (1894). *On the whirling and vibration of shafts.* Phil. Trans. R. Soc. Lond. A 185, 279–360. | [10.1098/rsta.1894.0008](https://doi.org/10.1098/rsta.1894.0008) | Primary source for the **lower**-bound estimate. Rayleigh gives an upper bound, Dunkerley a lower one; together they bracket the true f₁ and show 285.5 Hz is physically plausible. | 2 | A |
+| Dunkerley, S. (1894). *On the whirling and vibration of shafts.* Phil. Trans. R. Soc. Lond. A 185, 279–360. | [10.1098/rsta.1894.0008](https://doi.org/10.1098/rsta.1894.0008) | Primary source for the **lower**-bound estimate. Rayleigh gives an upper bound for the problem it is actually applied to. **A bound only brackets the FE value if both describe the same problem** — same mass model, same boundary conditions, same kinematics. That equivalence is not yet established here (see the [modal audit](../docs/design/MODAL_MODEL_AUDIT.md)), so the bracketing argument is currently unavailable. | 2 | A |
 | Laura, P. A. A.; Pombo, J. L.; Susemihl, E. A. (1974). *A note on the vibrations of a clamped-free beam with a mass at the free end.* J. Sound Vib. 37(2), 161–168. | [10.1016/S0022-460X(74)80325-1](https://doi.org/10.1016/S0022-460X(74)80325-1) | The classic closed form for exactly this configuration. A direct analytical check on the Rayleigh number for the 0.175 kg tip mass. | 3 | A |
 
 ## Why the FEA lands 13.5 % below the hand calculation
 
-Four physically distinct, separately cited mechanisms. Rayleigh is a rigorous **upper bound**, so the
-FE value being lower is the correct sign, not an error.
+> **Superseded in part, 2026-09-24.** These entries correctly describe mechanisms that shift a
+> cantilever's frequency. They are **not** an attribution of this repo's 330.1 → 285.5 Hz gap. A source
+> audit found that root flexibility and tip-mass rotary inertia cannot act between those two particular
+> models: both fix the root, and the FE deck carries a one-node translational mass. See the
+> [modal model audit](../docs/design/MODAL_MODEL_AUDIT.md) and revised claim M2. The cause is unresolved.
 
 | Citation | Link | Mechanism and relevance | Ab | Ev |
 |---|---|---|---|---|
@@ -69,10 +72,15 @@ requirement as well.
 
 ## What this section changes in the test plan
 
-1. **Mount the accelerometer near the root, not at the tip**, or apply the hammer-specific mass-loading
-   correction. *Derived estimate, not quoted by any cited paper:* a 5–10 g sensor is roughly 3–6 % of the
-   175 g tip mass, which by √(1/(1+Δm/m)) scaling is several Hz at 285 Hz — enough to matter against a
-   200 Hz criterion, not enough to flip pass/fail.
+1. **Accelerometer placement is a tradeoff to be quantified, not a rule.** Yadav & Singh show the
+   frequency shift depends on sensor position, which argues against mounting at the tip. It does **not**
+   establish "near the root" as correct: close to a fixed root the bending response is also small, so
+   signal-to-noise falls. Choose the position from the expected mode shape, the measured noise floor,
+   the added mass and cable effects, and the quantity being identified — and record the comparison.
+   *Derived estimate, not quoted by any cited paper, and using an illustrative sensor mass rather than a
+   weighed LIS3DH assembly:* a 5–10 g addition is roughly 3–6 % of the 175 g tip mass, which by
+   √(1/(1+Δm/m)) scaling is several Hz at 285 Hz. Weigh the actual board, mount and cable before using
+   any such figure.
 2. **Set frequency resolution from Cawley and Schmidt**, and state Δf and the half-power bandwidth
    explicitly rather than inspecting coherence after the fact.
 3. **If an exponential window is used, report corrected damping**, never the windowed value.

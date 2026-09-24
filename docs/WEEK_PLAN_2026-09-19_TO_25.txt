@@ -1,11 +1,18 @@
 AUTONOMOUS RACING SYSTEMS
 CLAUDE BUILD HANDOFF: SEPTEMBER 19–25, 2026
 Planning-only source document
-Revised September 21, 2026 to incorporate the shared CAD briefing and branch work.
+Revised September 24, 2026 with a literature-based review of implemented work.
+September 21 shared-CAD briefing update retained below as dated context.
 Equipment purchase update retained from September 20, 2026.
 
 Purpose
 =======
+
+Read docs/LITERATURE_CRITIQUE_2026-09-24.txt before further implementation. It
+supersedes earlier task-status assumptions and sets the immediate review order:
+repair E3 calibration verdicts, enforce W3.1 gates, model shared uncertainty,
+then audit the modal mass connection. Its physical-protocol changes are proposals;
+no frozen threshold or historical result is amended by this planning text.
 
 Use this file as the implementation brief for Claude. Build only the tasks that
 are marked ready. Do not invent owner measurements, calibration records, CAD
@@ -85,6 +92,30 @@ Prior repository snapshot: 17c69c1 (PR #23 merged)
 Follow-up at that snapshot: PR #24, task/a1-nominal-work-order-20260916, head 85c12f4
 PR #24 contains the A1 decision that the old tap-test generator stays closed
 and the nominal CAD/FEA package work order. Do not duplicate or re-open A1.
+
+September 24 research review: latest inspected state
+----------------------------------------------------
+
+origin/main is now 70802481042100b47fbe11fef547baa0a0b5c102 (PR #38 merged).
+Native SOLIDWORKS parts, E0 inventory, E1/E2 logging and E3 calibration software,
+and the literature folder are on main. Review and extend them; do not rebuild.
+W3.1 exists on task/w31-fixture-feasibility-20260923 at
+02e119dd46b3584b4202aaf1b08c992b965f8008; it is separate from this main snapshot.
+
+The dated critique records synthetic counterexamples: a nonlinear calibration
+can still be called usable, missing zero observations are not decisive, and the
+fixture verdict does not enforce its declared stiffness or R² check. It also
+identifies a modal mass attached to an existing annular tip node rather than a
+new center reference node, making the old frequency-gap explanation premature.
+
+Remaining September 24–25 priority: corrections and evidence review, not new
+auxiliary sensors or controller sweeps. Carry solver comparisons beyond the week
+if needed. Treat the older schedule below as task ordering, not current completion
+state. Keep published/recorded results with their original model identities.
+
+The critique has exact affected files, reproduction inputs, proposed acceptance
+checks, primary sources, confidence levels and a bounded order for Claude. No
+source code or physical campaign gates were changed during this planning review.
 
 September 21 CAD briefing and branch reconciliation
 --------------------------------------------------

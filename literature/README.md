@@ -40,6 +40,13 @@ project is still tangential.
 
 A survey graded D is not a bad source. It is a bad source *to cite for an empirical claim*.
 
+Grade A deliberately spans an adopted standard, an established analytical formula and a replicated
+experiment. Those are **not interchangeable**: a standard fixes definitions and procedure, a formula
+holds under its own assumptions, and an experiment establishes behaviour on its own specimen. Keep
+source access, method applicability and physical validation separate when citing, and do not let the
+single letter imply that a catalogue entry has the same standing as a measurement. A verified catalogue
+record establishes a document's identity and scope, not the content of clauses nobody read.
+
 ## Verification policy
 
 Every entry was checked against a publisher page, DOI record, Crossref metadata or official standards

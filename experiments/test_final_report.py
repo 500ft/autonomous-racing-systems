@@ -68,6 +68,18 @@ class FinalReportTests(unittest.TestCase):
         fea_setup = read("docs/design/FEA_SETUP.md")
         self.assertLess(fea_setup.index("Current result (0.175 kg"), fea_setup.index("SUPERSEDED"))
 
+    def test_modal_audit_agrees_with_the_finite_element_source(self) -> None:
+        """The audit's factual claims must track the source. If the model definition changes, this
+        fails and the audit has to be updated rather than silently going stale (P1-A)."""
+        src = read("experiments/mast_fea.py")
+        audit = read("docs/design/MODAL_MODEL_AUDIT.md")
+        self.assertIn("min(tip_pool, key=lambda t: math.hypot(t[1], t[2]))", src)
+        self.assertIn("NROOT, 1, 3", src)
+        self.assertIn("TYPE=MASS", src)
+        self.assertIn("nearest existing material node", audit)
+        self.assertIn("Root flexibility cannot explain", audit)
+        self.assertIn("unresolved", audit)
+
     def test_simulation_headlines_trace_to_committed_artifacts(self) -> None:
         report = REPORT.read_text(encoding="utf-8")
         literal_sources = {
