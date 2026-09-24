@@ -1,0 +1,458 @@
+AUTONOMOUS RACING SYSTEMS
+LITERATURE-BASED CRITIQUE AND CLAUDE HANDOFF — 2026-09-24
+Planning and review only; no implementation or physical-test authorization.
+
+Decision
+========
+
+Keep the measurement-first direction, purchased force chain, independent CAD
+checks and separation of nominal versus physical evidence. Change the immediate
+priority to correcting the decision logic and uncertainty model in the work
+already built. More citations, more CAD parts and another controller sweep will
+not repair an acceptance result that ignores its own failed checks.
+
+Three priorities before extending the package:
+  P0-A: E3 must not call a demonstrably unsuitable calibration usable.
+  P0-B: W3.1 must enforce fixture and data-quality requirements and preserve
+        correlations that do not disappear with repeated readings.
+  P1-A: audit the modal mass connection before explaining the hand/FEA gap or
+        using the old modal number as the reference for another model.
+
+All changes to frozen physical protocol semantics remain prospective proposals.
+This critique changes no ledger row, threshold, historical verdict or measured
+record. Claude should implement bounded corrections in separate reviewable PRs.
+
+Research question and scope
+===========================
+
+Which published measurement and structural-dynamics methods materially change
+the reliability of this project's force calibration, fitted static compliance,
+and nominal mast modal reference, given its purchased electronics and actual code?
+
+This is a targeted audit of the existing literature synthesis and its application,
+not a second exhaustive bibliography or a verification of all 126 literature rows.
+Vehicle control literature was not independently re-reviewed in this pass.
+
+Eligibility: a source must directly address calibration/model adequacy, correlated
+uncertainty, conformity decisions, structural joints or transducer mass loading.
+Relevance grades: 3=core, 2=relevant, 1=background, 0=excluded. Citation counts and
+publication prestige did not determine eligibility or task priority.
+
+Evidence types are separate: M=mathematical/methodological work, G=metrology
+guidance or normative definitions, B=one controlled experimental study. G and M
+are not grades of replicated experimental validation. Repo observations and
+synthetic counterexamples are identified separately; neither is hardware evidence.
+
+Repository snapshot actually inspected
+======================================
+
+Main: 70802481042100b47fbe11fef547baa0a0b5c102 (PR #38 merged).
+W3.1 branch: task/w31-fixture-feasibility-20260923 at
+  02e119dd46b3584b4202aaf1b08c992b965f8008.
+
+Main already contains the native SOLIDWORKS part work, equipment inventory,
+measurement logger, E3 calibration implementation and the literature folder.
+W3.1 is branch work at the inspected snapshot. Do not plan these from scratch.
+Recheck current refs before implementing; these snapshots are not perpetual status.
+
+Inspected project sources:
+  experiments/load_cell_calibration.py
+  experiments/fixtures/load_cell_calibration/known_affine.json
+  docs/hardware/load-cell-calibration-protocol.md
+  experiments/mast_physical_validation.py
+  experiments/mast_fea.py and experiments/mast_hand_calc.py
+  cad/fixture_feasibility.py on the W3.1 branch
+  literature/03-structural-dynamics-and-modal-testing.md
+  literature/04-measurement-uncertainty-and-calibration.md
+  literature/05-verification-validation-and-mechanical-design.md
+  literature/README.md and literature/claim-ledger.md
+
+Read-only numerical checks loaded committed Python source in memory with bytecode
+writing disabled. They used synthetic records only. No solver, host connection,
+device acquisition or calibration was run. Code and test files were not edited.
+
+1. Repair the calibration verdict before using its uncertainty output
+====================================================================
+
+Observation, verified by synthetic execution:
+  Starting from known_affine.json, add
+      20000 * reference_mass_kg**2
+  to every point's counts_mean; leave the other fields unchanged.
+  analyse() returns:
+      fit_quality.verdict = LACK_OF_FIT_SIGNIFICANT
+      lack_of_fit_F       = 622532.7721752349
+      verdict             = CALIBRATION_USABLE
+      blockers            = []
+
+In a separate run, remove zero_start_counts, zero_end_counts and u_g_m_s2 from
+the original fixture. The result is again CALIBRATION_USABLE, with missing zero
+readings reported but no unresolved term. The gravity-uncertainty default is zero.
+
+This is a decision-logic defect, independent of which fitting method is preferred.
+The tool computes diagnostics but some do not participate in its final verdict.
+The lack_of_fit function also uses a fixed F=5 cutoff and calls the result
+statistically significant/non-significant. NIST's classical test instead uses
+the significance level and numerator/denominator degrees of freedom [S1].
+
+Claude work order P0-A
+  Files: experiments/load_cell_calibration.py, its existing tests and protocol.
+  a. Make one explicit list of required evidence and model-adequacy conditions.
+     A failed condition prevents CALIBRATION_USABLE; an unevaluable required
+     condition gives CALIBRATION_INCOMPLETE, with a specific reason.
+  b. Make zero observations and uncertainty terms mandatory or explicitly bounded
+     with a stated basis. Distinguish a justified negligible term from missing data.
+  c. Replace the arbitrary significance wording. For a classical replicated,
+     fixed-x, homoscedastic model, use the appropriate F distribution and declared
+     alpha. For the present heteroscedastic errors-in-variables model, establish
+     a compatible test or simulation-based null distribution; merely importing
+     an F quantile does not make that model satisfy the classical assumptions.
+  d. Retain residual plots versus force, time and direction and a held-out check.
+     Separate up/down behavior from pure repeatability. Do not pool a systematic
+     direction effect into noise and then call the relationship adequate.
+  e. Require an explicit held-out role or separate validation input; the current
+     analyse() fits all supplied points. Preserve a way to generate diagnostic
+     conversions from incomplete data, but label them unqualified and keep them
+     out of accepted downstream calibration inputs.
+  f. Treat CALIBRATION_USABLE as a defined, tested claim about its declared scope;
+     it cannot substitute for campaign readiness or an independent review.
+
+Acceptance examples:
+  - The curved fixture above cannot return CALIBRATION_USABLE.
+  - Missing zeros or an unresolved required uncertainty cannot return usable.
+  - A perfect synthetic affine fixture has a defined zero-residual result;
+    0/0 in a lack-of-fit ratio must not become an unexplained failure or pass.
+  - Held-out observations do not alter fitted coefficients.
+  - Missing repeats, inconsistent direction labels, nonfinite data, and invalid
+    reference/count uncertainties produce named refusals, not numeric exceptions.
+
+Support: S1, with S5 defining additional load-cell error mechanisms.
+Confidence: high for the reproduced logic failures. The best replacement test
+depends on the adopted error model; it is not settled by citing an F-test paper.
+
+2. Make uncertainty represent the whole measurement, including shared errors
+=========================================================================
+
+Published basis: GUM explicitly requires relevant input correlations [S2]; its
+Monte Carlo supplement propagates distributions and provides interval/stability
+procedures [S3]. EA-4/02 ties coverage to the output distribution and effective
+degrees of freedom, not simply the number of regression rows [S4].
+
+Observed in E3:
+  - u_force includes g uncertainty separately in every row, but the fit assumes
+    independent point errors. One gravity value, one reference calibration and
+    repeated use of the same mass can introduce shared errors across rows.
+  - counts_sd/sqrt(n) assumes independent readings without a correlation check.
+  - force_uncertainty combines coefficient covariance and one scatter term; it
+    does not explicitly include residual creep, temperature, mounting and
+    direction effects, or demonstrate that the scatter term bounds them.
+  - coverage_factor returns 1.96 for every degree of freedom above 30, while
+    claiming Student-t 95% coverage. It changes from 2.042 at 30 to 1.96 at 31.
+    The fit's n-2 is then used for the combined budget without an effective-DOF
+    calculation. Exact 95% and EA's approximately 95.45% convention must also
+    be distinguished instead of borrowing one source's label for the other.
+
+Observed in W3.1:
+  - Fresh independent Gaussian draws represent nearly every error at every row.
+  - True force and measured force are independently perturbed around a nominal
+    target, rather than measuring the same latent applied force.
+  - Indicator quantization is represented as Gaussian noise of matching SD.
+  - Reference-model uncertainty and several shared calibration terms are absent.
+  - U95 is 1.96 times the simulated slope SD; simulation count defaults to 400,
+    without an interval-stability check or a reported estimator-bias diagnostic.
+
+Claude work order P0-B1
+  a. Define a measurement equation and error inventory before changing sampling.
+     Separate common calibration/reference quantities, cycle drift and individual
+     readout variation. Record distributions, units, dependence and uncertainty
+     sources; shared quantities are drawn once at their physical scope.
+  b. In each synthetic trial, create a single true applied force per observation.
+     Generate force readings from that force plus calibration/readout errors and
+     displacement from that same force plus its physical/measurement errors.
+  c. Carry E3's coefficient covariance into the whole campaign. Sample shared
+     reference-mass and gravity errors consistently; avoid counting them twice.
+  d. Model quantization as rounding of the underlying signal, or justify another
+     model from actual readout noise. Use effective sample size or block analysis
+     when ADC/averaging correlation makes n raw samples less than n independent
+     observations. Do not mandate an elaborate drift tool before collecting data.
+  e. Report bias and interval endpoints as well as SD. Increase Monte Carlo
+     batches until endpoints stabilize to a declared reporting tolerance; if a
+     compute cap is reached, report numerical precision unresolved.
+  f. Use a justified effective-DOF method or direct propagated coverage interval.
+     Do not assume all Type B terms have infinite reliability or n-2 governs the
+     whole budget. Separate force-channel uncertainty, compliance uncertainty and
+     uncertainty in the model-comparison decision.
+
+Acceptance: repeated samples reduce the independent-noise contribution but do
+not erase a common gain error; shared-input changes move all affected records
+coherently; interval results remain stable when the trial count increases; missing
+reference uncertainty prevents a complete comparison claim.
+
+These are project-specific implementation requirements inferred from S2-S5 and
+the inspected measurement model, not a claim that those sources prescribe this
+software architecture. Confidence: high on the omissions; their numerical impact
+on real hardware is unknown until input records exist.
+
+3. Enforce fixture gates and model root rotation as physics
+=========================================================
+
+Verified synthetic reproduction on the W3.1 branch:
+  run(NOMINAL with both fixture stiffnesses replaced, trials=120, seed=20260924)
+
+  Declared stiffness    Required stiffness    Overall verdict
+  1 N/mm per axis       7759.8366 N/mm        PLAUSIBLE_PENDING_PHYSICAL_INPUTS
+  8000 N/mm per axis    7759.8366 N/mm        PLAUSIBLE_PENDING_PHYSICAL_INPUTS
+
+Both cases return the same x-axis relative U95=0.0428036412. Both report the
+x-axis R² gate false. Declared stiffness is checked for presence but its magnitude
+does not control the final verdict; the R² flag also does not control that verdict.
+The default UNKNOWN behavior is useful, but filling fields is not acceptance.
+
+Claude work order P0-B2
+  a. Enforce positive dimensions/stiffness, required stiffness on EACH axis,
+     resolution/count conditions and every gate the overall verdict claims to
+     cover. Publish a gate-status map: pass/fail/unknown/not_evaluated.
+  b. Either evaluate a gate or make the report explicitly partial. Do not label
+     the complete fixture plausible when a required gate fails or is unevaluated.
+  c. Keep zero fixture motion and perfect stiffness out of defaults. Account for
+     support motion using the actual measurement geometry and correction model.
+
+Independent calculation illustrating the root-motion issue:
+  Frozen FEA compliance C = 0.176/128.76 = 0.001366884... mm/N.
+  Suppose uncorrected root rotation adds 0.005 mm at 20 N, proportional to force.
+  Observed compliance = C + 0.005/20 mm/N.
+  Slope bias = 18.2898%, while R² = 1.000 for the noiseless five-level curve.
+
+This constructed example does not prove actual root rotation. It proves that
+excellent linearity and repeats cannot detect or average away this kind of bias.
+Modelling it only as independent zero-mean read noise misses that failure mode.
+
+The static-to-modal bridge also needs an identifiability check. Under a simple
+linear cantilever model, with transverse force and displacement both at height L:
+  delta/F = L^3/(3EI) + 1/K_translation + L^2/K_rotation.
+Units must be consistent; rotational stiffness has units of moment/radian.
+Five force levels at one geometry estimate one combined compliance. They do not
+independently identify EI, translational restraint and rotational restraint.
+Additional root observations, independent stiffness information, or a deliberately
+different geometry/load-height experiment are needed to separate those terms.
+Any new physical matrix remains a prospective protocol proposal.
+
+Acceptance: 1 N/mm fails; one bad axis fails; missing terms remain unknown; the
+linear root-rotation example shows its bias; an underdetermined stiffness fit
+reports NON_IDENTIFIABLE rather than returning a uniquely established parameter.
+
+Support: S2-S3 for measurement propagation; equations and numerical example are
+independent mechanics/arithmetic in this review. S8 supports considering joint
+state and excitation dependence, but supplies no stiffness value for this clamp.
+Confidence: high for the reproduced gates and identifiability calculation.
+
+4. Audit the modal model before explaining its 13.5% frequency gap
+================================================================
+
+The literature claim M2 says the 330.1-to-285.5 Hz gap is expected physics rather
+than a modelling defect. The listed mechanisms are hypotheses, not an attribution.
+
+Actual code at the inspected main revision:
+  experiments/mast_fea.py, build_mesh:
+    tip_center_node = min(tip_pool, key=lambda t: hypot(t[1], t[2]))[0]
+  write_modal_inp:
+    one MASS element is attached to that existing node.
+    NROOT translations are fixed.
+
+The tube is hollow. The closest existing tip-plane material node lies on/near
+the inner wall, not the empty cross-section center. No center reference node or
+tip-ring coupling is created by that selection. The root is explicitly fixed,
+so physical clamp flexibility cannot explain a gap between THESE two numerical
+models. Sensor-body rotary inertia/extent are also not explicitly represented
+by the one-node mass definition. Their relevance to future hardware does not
+establish them as causes of this computed difference.
+
+Claude work order P1-A
+  a. Export the selected mass-node coordinates, radial offset, total added mass,
+     root constraints and the first several mode shapes from a fresh model.
+     Confirm which mode is global bending; do not identify it by index alone.
+  b. Define the intended ideal reference: a centered tip mass with a physically
+     stated attachment/coupling. Compare it with the existing single-wall-node
+     attachment while keeping all other inputs fixed. A rigid tip coupling is
+     itself a modelling assumption, not automatically the correct physical joint.
+  c. Compare equivalent analytical/beam and solid models. Then add shear effects,
+     distributed payload/rotary inertia, and root flexibility ONE AT A TIME where
+     appropriate. Record effect sizes instead of assigning causes by analogy.
+  d. Check symmetry, mode shapes, mass participation where available and mesh
+     sensitivity for each declared observable. Preserve the old 285.5 Hz result
+     with its original provenance; do not overwrite it as if it were a rerun.
+  e. Revise claim M2 now to: the cause of the discrepancy is unresolved; model
+     equivalence and the mass connection require verification. Report the old
+     number as the output of its recorded model, not a verified physical target.
+
+Acceptance: source and report agree on actual mass location/connection; equivalent
+models are compared; causes are attributed only after controlled variations.
+Do not widen the existing ±15% band to conceal a changed result.
+
+Confidence: high that the source attaches mass as described and fixes the root;
+unquantified effect on frequency. No fresh mesh or solve was run in this review.
+Support: source inspection; S7 establishes that mass location can matter but does
+not quantify this distinct eccentric-attachment case.
+
+5. Correct the literature synthesis where its conclusions outrun its sources
+=========================================================================
+
+Claude work order P1-B: edit literature/claim-ledger.md and affected domain files.
+
+  - "OLS is wrong whenever both axes have uncertainty": qualify this. Cantrell
+    compares regimes where bivariate fitting matters and where simpler fitting
+    is satisfactory [S6]. Classical attenuation assumes a particular error model;
+    shared gain errors and controlled-load uncertainty need their own analysis.
+    Keep the frozen campaign estimator for compatibility until a prospective
+    amendment is reviewed. Compare candidate estimators on predeclared cases.
+  - "Lack-of-fit requires a new physical test matrix": the current protocol
+    already has repeated load/unload cycles at each force. First assess whether
+    those provide valid within-condition replicates; up/down and drift may need
+    separate treatment. Additional repeats are conditional, not automatic [S1].
+  - "Five levels means five observations and n-2 coverage": distinguish unique
+    levels, independent cycles, correlated ADC readings and effective DOF [S4].
+  - "The thin-wall approximation makes the annular I suspect": the inspected
+    section-properties function uses pi*(OD^4-ID^4)/64, the exact annulus formula.
+    Beam kinematics, shear and boundary assumptions still merit checks, but that
+    is a different limitation from approximating the cross-section's I.
+  - "Rayleigh automatically brackets this FEA": verify the trial field, mass
+    model and boundary conditions are the SAME problem before invoking an upper
+    bound. A rounded effective-mass coefficient is not a demonstrated tight bound.
+  - "Measured not assumed" in the E3 protocol's expected count-noise discussion:
+    replace with SYNTHETIC SENSITIVITY RESULT. Its fixtures are explicitly synthetic.
+  - "No governing standard exists": write "none was located in this scoped
+    search" unless an exhaustive basis exists. A catalogue entry verifies a
+    document's identity/scope, not unread clauses or proof of this apparatus.
+  - Do not classify an adopted standard, analytical formula and replicated
+    experiment as one interchangeable strength of empirical evidence. Keep
+    source access, method applicability and physical validation separate.
+
+Acceptance: each changed claim has source, applicable assumptions, evidence type,
+counter-evidence and confidence; no hardware conclusion is inferred from a title,
+synthetic fixture, generic mechanism or numerical fit alone.
+
+6. Improve future modal testing and acceptance without adding hardware now
+========================================================================
+
+S7 reports location-dependent accelerometer mass loading. That supports a placement
+tradeoff, not a universal near-root prescription. Near a fixed root the bending
+response also becomes small. Choose location from expected mode response, measured
+noise, added mass/cable effects and the quantity being identified. Weigh the actual
+board plus mounting/cable contribution; do not reuse an illustrative 5–10 g as a
+measured LIS3DH assembly mass. Confidence: moderate for the placement recommendation
+until this project's mode shapes and noise are available.
+
+S8 shows preload and excitation can change bolted-joint response in its test rig.
+Use that as a reason to record joint state and eventually check amplitude
+dependence, not as proof the present split clamp slips or has a known damping ratio.
+
+Keep E4 exploratory. The existing NAU7802 force channel does not support a roughly
+285 Hz input-force FRF. Separate acceleration-only decay/peak work from a calibrated
+input-output modal experiment; choose the method and decision rule before buying
+or building a different force sensor.
+
+Keep the 200 Hz design guard, but do not describe it as a literature-proven LiDAR
+perception requirement. A future application study should connect measured base
+excitation and mast motion to sensor-pose/scan error and a downstream metric.
+This is proposed validation work, not a reason to change the numerical guard today.
+
+S9 treats conformity as a decision with uncertainty and an explicit rule. Prepare
+a prospective rule for the ±15% model comparison: specify the observable,
+uncertainty of the difference/ratio, shared terms, and handling of a boundary-
+overlapping interval. A guarded acceptance rule is an option, not a universal
+mandate or permission to reinterpret past results. Keep compliance U95 separate
+from uncertainty in the reference-model comparison.
+
+Bounded execution order for the remaining week
+==============================================
+
+1. P0-A: make calibration verdicts consistent with required evidence and adequacy.
+2. P0-B2: enforce fixture gate magnitudes and the scope of the overall verdict.
+3. P0-B1: implement the smallest explicit correlated uncertainty model and test
+   the common-gain and root-rotation counterexamples before adding more terms.
+4. P1-A: first do the no-solver model-definition audit; then budget a controlled
+   solver comparison as a distinct task with a recorded environment.
+5. P1-B: correct the literature claims and update the weekly review's status.
+6. Prepare the reviewer packet. Carry unfinished model work into next week.
+
+Each task gets its own acceptance examples and a small diff. Do not turn the
+statistics fix into a generic metrology framework. Reuse a trustworthy numerical
+library where needed rather than hand-copying another incomplete lookup table.
+No timetable alone upgrades a synthetic result into measured evidence.
+
+Selected evidence register (primary sources checked 2026-09-24)
+==============================================================
+
+S1  NIST/SEMATECH e-Handbook, section 4.4.4.6, lack-of-fit testing.
+    Relevance 3; type G/M. Full web section inspected.
+    https://www.itl.nist.gov/div898/handbook/pmd/section4/pmd446.htm
+    Core support: residual checks, within-condition replication and a test cutoff
+    determined by significance level and degrees of freedom. The classical model's
+    assumptions do not automatically hold for the repository's weighted EIV fit.
+
+S2  JCGM 100:2008, GUM, section 5.2 and uncertainty framework.
+    Relevance 3; type G. Relevant official text inspected.
+    https://www.bipm.org/documents/20126/2071204/JCGM_100_2008_E.pdf
+    Core support: correlated input quantities must be represented when relevant.
+
+S3  JCGM 101:2008, propagation using a Monte Carlo method.
+    Relevance 3; type G/M. Relevant official text inspected.
+    https://www.bipm.org/documents/20126/2071204/JCGM_101_2008_E.pdf
+    Core support: propagate the specified input distributions; evaluate output
+    coverage intervals and numerical stability. Simulation does not repair a
+    physically incorrect measurement equation or invented input distributions.
+
+S4  EA-4/02 M:2022, section 5 and Appendix E.
+    Relevance 3; type G. Relevant official text inspected.
+    https://european-accreditation.org/wp-content/uploads/2018/10/EA-4-02.pdf
+    Core support: effective DOF and output-distribution assumptions matter for
+    expanded uncertainty. Its approximately 95.45% convention must be stated when
+    used. This project is not thereby an accredited calibration laboratory.
+
+S5  OIML R 60-1:2021, load-cell metrological and technical requirements.
+    Relevance 3; type G. Official document inspected for terminology/scope.
+    https://www.oiml.org/en/files/pdf_r/r060-1-e21.pdf
+    Core support: load-cell error mechanisms include creep, hysteresis, zero return
+    and temperature effects. Borrowing terminology does not establish compliance
+    with a load-cell classification or supply this cell's uncertainty numbers.
+
+S6  Cantrell, C. A. (2008), Technical Note: Review of methods for linear
+    least-squares fitting of data and application to atmospheric chemistry problems.
+    Atmospheric Chemistry and Physics 8, 5477–5487. Relevance 3; type M.
+    Published article and relevant PDF passages inspected; DOI 10.5194/acp-8-5477-2008.
+    https://acp.copernicus.org/articles/8/5477/2008/
+    Core support: estimator choice depends on uncertainty assumptions and scale;
+    its example comparisons do not validate our load cell or campaign estimator.
+
+S7  Yadav, A.; Singh, N. K. (2019), Effects of accelerometer mass on natural
+    frequency of a magnesium alloy cantilever beam. Vibroengineering Procedia 29,
+    207–212. Relevance 3; evidence B. Publisher article inspected.
+    https://www.extrica.com/article/21114
+    DOI 10.21595/vp.2019.21114. Supports position-dependent mass loading. Different
+    specimen/material/instrumentation; no direct numerical transfer to our mast.
+
+S8  Wang, Y.; Ma, Y.; Hong, J.; Battiato, G.; Firrone, C. M. (2021), A Novel
+    Test Rig for the Basic Nonlinear Characterization of Bolted Joints.
+    Applied Sciences 11(12), 5613. Relevance 2; evidence B.
+    https://www.mdpi.com/2076-3417/11/12/5613
+    DOI 10.3390/app11125613. Publisher-indexed abstract and methods/result excerpts
+    inspected; direct page open failed. Use only the demonstrated qualitative
+    preload/excitation dependence, not uninspected detailed formulas.
+
+S9  JCGM 106:2012, uncertainty in conformity assessment, section 8.
+    Relevance 3; type G/M. Relevant official text inspected.
+    https://www.bipm.org/documents/20126/2071204/JCGM_106_2012_E.pdf
+    Core support: acceptance rules and associated risk depend on uncertainty;
+    guard bands are one available choice, not a mandatory new project threshold.
+
+Limits and evidence strength
+============================
+
+The strongest findings here are source-level defects reproduced with synthetic
+counterexamples and metrology guidance whose applicability is direct. The two
+structural experiments support mechanisms, not this mast's frequency, joint
+stiffness, sensor noise or calibration capability. The exact cause and magnitude
+of the modal discrepancy remain unresolved. No real calibration or physical
+validation is established by this review. Publisher records consulted showed no
+retraction notice for the selected papers; a comprehensive corrections/retraction
+audit of the existing 126-entry bibliography was not performed. Paywalled clause
+content and search snippets alone were not treated as verified requirements.

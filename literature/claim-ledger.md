@@ -20,18 +20,28 @@ threshold or a protocol; see [README](README.md) for why.
   ISO 7626-5:2019 is the standard the frozen procedure would have to be written against.
 - **Confidence: moderate** for the nominal tube as modelled; **none** as a statement about hardware.
 
-### M2. The 13.5 % gap between the 330.1 Hz hand calc and the 285.5 Hz FEA is expected physics, not a modelling defect
+### M2. The cause of the 13.5 % gap between the 330.1 Hz hand calc and the 285.5 Hz FEA is UNRESOLVED
 
-- **Support:** Four separately cited mechanisms ([§3](03-structural-dynamics-and-modal-testing.md)): root
-  flexibility (Perkins 1966; Laura et al. 1975), tip-mass rotary inertia and axial extent (Bhat & Wagner
-  1976; To 1982), shear deformation and rotary inertia (Timoshenko 1921; Han et al. 1999; Cowper 1966 for
-  the thin-walled-tube shear coefficient). Rayleigh being an upper bound makes the FE value's **direction**
-  correct.
-- **Counter-evidence or gaps:** The repo has **not attributed** the 13.5 % among these mechanisms; it only
-  records that it falls inside a ±15 % band. A fifth mechanism, local shell ovalisation at the clamp, cannot
-  be represented by a 1D beam model at all and is uncited.
-- **Confidence: moderate-to-high** that the gap is expected. **Low** on any specific split between causes,
-  because none has been computed.
+**Revised 2026-09-24 after a source audit.** The earlier version of this claim said the gap was
+"expected physics, not a modelling defect" and attributed it to four mechanisms. That attribution was
+wrong in two places and is withdrawn.
+
+- **Support for the mechanisms existing at all:** the entries in
+  [§3](03-structural-dynamics-and-modal-testing.md) are real and correctly describe shear deformation,
+  rotary inertia, tip-mass extent and root flexibility as things that shift a cantilever's frequency.
+- **Counter-evidence, from the model itself** ([audit](../docs/design/MODAL_MODEL_AUDIT.md)):
+  **root flexibility cannot act between these two models** — the hand calculation assumes a built-in
+  root and the FE deck fixes all three translations at the root node set, so both are rigid.
+  **Tip-mass rotary inertia and axial extent are not in the model either**: the deck carries a
+  one-node translational `*MASS`. Separately, the mass is attached to the **nearest material node**,
+  which on a hollow section is about 8.5 mm off-axis, not at the section centre — an eccentric
+  single-node attachment that is a modelling defect in its own right.
+- **Confidence: the cause is unresolved.** Mechanisms that can still act are shear and rotary inertia
+  of the tube, 1D beam versus 3D solid kinematics, the eccentric attachment, and local behaviour at the
+  constrained root. None has been quantified. A controlled one-at-a-time comparison is required before
+  any cause is named.
+- **Status of the number:** 285.5 Hz stays the output of its recorded model, not a verified physical
+  target. It is not re-run or overwritten by this correction.
 
 ### M3. Excluding the peak root von Mises stress as a singularity is correct practice
 
@@ -94,9 +104,15 @@ threshold or a protocol; see [README](README.md) for why.
 - **Support:** `docs/CAD_MEASUREMENT_CONTRACT.md` arithmetic; framework from JCGM 100 (GUM) and NIST TN 1297
   ([§4](04-measurement-uncertainty-and-calibration.md)).
 - **Counter-evidence or gaps:** Three problems. **(a)** EA-4/02 §5 requires effective degrees of freedom and a
-  t-based coverage factor for a five-point fit rather than an automatic k=2. **(b)** Both axes carry
-  uncertainty, so ordinary least squares **biases the slope low**; York (1966, 2004) is the right estimator
-  and also supplies the slope standard error the gate needs. **(c)** No standard governs cantilever compliance
+  t-based coverage factor for a five-point fit rather than an automatic k=2. **(b)** Both axes carry uncertainty.
+  Classical attenuation then biases an ordinary-least-squares slope toward zero **under that specific
+  error model**, and York (1966, 2004) supplies both an estimator that avoids it and the slope standard
+  error the gate needs. This is a conditional statement, not a universal one: Cantrell (2008) compares
+  regimes where bivariate fitting matters against regimes where simpler fitting is satisfactory, and the
+  practical size of the effect depends on the error model and magnitude. **Measured in this repo:** at
+  the NAU7802's expected count noise the two estimators agree to within 0.1 %; the difference only
+  appears once count uncertainty is a real fraction of the count spread. Shared gain errors are a
+  different failure mode that neither estimator removes. **(c)** No standard governs cantilever compliance
   testing at this scale and no published sub-30 µm uncertainty budget was found, so the plan must be composed
   rather than cited.
 - **Confidence: low** that the current method as written would satisfy a metrologist, **moderate** that the
@@ -110,6 +126,11 @@ threshold or a protocol; see [README](README.md) for why.
   a value near 1 is compatible with visible curvature. Asuero et al. (2006) concur. The recommended
   replacement is lack-of-fit versus pure-error decomposition, **which requires replicates at each load point**
   and therefore changes the test matrix, not just the arithmetic.
+- **Scope of the objection (added 2026-09-24):** the cited sources discourage R² *as the calibration
+  quality metric*. They do not make R² meaningless as one diagnostic among several, and the campaign's
+  R² gate sits alongside hysteresis and U95 gates rather than alone. The replacement also needs valid
+  within-condition replicates; the protocol's repeated load/unload cycles may already supply them, with
+  ascending and descending treated separately. Additional repeats are conditional, not automatic.
 - **Confidence: high that this gate is weak as specified.** It is frozen in
   [`design.md`](../docs/specs/mast-physical-validation/design.md); changing it is a prospective owner decision.
 

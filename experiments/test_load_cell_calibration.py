@@ -26,7 +26,7 @@ def blockers(result):
 class RecoveryTests(unittest.TestCase):
     def test_recovers_the_known_affine_mapping(self):
         r = run("known_affine")
-        self.assertEqual(r["verdict"], "CALIBRATION_USABLE", blockers(r))
+        self.assertEqual(r["failed_conditions"], [], blockers(r))
         self.assertAlmostEqual(r["fit"]["slope_N_per_count"], B_TRUE, delta=B_TRUE * 0.005)
         self.assertAlmostEqual(r["fit"]["intercept_N"], A_TRUE, delta=0.02)
         # the fitted slope must sit inside its own stated standard error of the truth
@@ -40,6 +40,25 @@ class RecoveryTests(unittest.TestCase):
             self.assertTrue(u["in_calibrated_range"], u)
             self.assertGreater(u["U95_N"], 0)
 
+    def test_only_a_reviewed_record_with_held_out_points_is_usable(self):
+        """Every required condition must pass. An unreviewed record with nothing held out is not
+        usable however well it fits: that was the defect this replaces."""
+        plain = run("known_affine")
+        self.assertEqual(plain["verdict"], "CALIBRATION_INCOMPLETE")
+        self.assertEqual(set(plain["unevaluable_conditions"]), {"held_out_scored", "reviewed"})
+        full = run("known_affine_reviewed")
+        self.assertEqual(full["verdict"], "CALIBRATION_USABLE", blockers(full))
+        self.assertEqual((full["failed_conditions"], full["unevaluable_conditions"]), ([], []))
+
+    def test_held_out_points_do_not_move_the_coefficients(self):
+        import load_cell_calibration as _lc
+        rec = _lc.load(FIX / "known_affine_reviewed.json")
+        with_ho = _lc.analyse(rec)["fit"]["slope_N_per_count"]
+        rec_no = dict(rec); rec_no.pop("verification_points")
+        self.assertAlmostEqual(with_ho, _lc.analyse(rec_no)["fit"]["slope_N_per_count"], places=15)
+        self.assertEqual(with_ho, with_ho)
+        self.assertGreater(_lc.analyse(rec)["held_out"]["n"], 0)
+
     def test_coverage_factor_is_t_based_not_assumed_two(self):
         self.assertAlmostEqual(lc.coverage_factor(3), 3.182)   # small sample: far above 2
         self.assertAlmostEqual(lc.coverage_factor(10), 2.228)
@@ -52,7 +71,7 @@ class RecoveryTests(unittest.TestCase):
         blob = json.dumps(run("known_affine")).lower()
         self.assertNotIn("r_squared", blob)
         self.assertNotIn("r2", blob)
-        self.assertIn("lack_of_fit_f", blob)
+        self.assertIn("lack_of_fit_statistic", blob)
 
     @staticmethod
     def _ols(x, y):
@@ -183,16 +202,19 @@ class LabellingTests(unittest.TestCase):
             with self.subTest(fixture=f.name):
                 self.assertEqual(rec["source_kind"], "synthetic")
                 self.assertIn("SOFTWARE CHECK", rec["label"])
-                self.assertEqual(rec["reviewer_state"], "unreviewed")
+                if rec["reviewer_state"] != "unreviewed":
+                    # a fixture may carry a reviewed state only to exercise the usable path,
+                    # and must then say in its own label that the review is synthetic
+                    self.assertIn("SYNTHETIC", rec["label"])
 
     def test_a_usable_verdict_does_not_claim_campaign_readiness(self):
-        r = run("known_affine")
+        r = run("known_affine_reviewed")
         self.assertIn("not campaign readiness", r["verdict_note"])
 
     def test_cli_exit_codes(self):
         script = str(Path(__file__).resolve().parents[1] / "experiments/load_cell_calibration.py")
         with tempfile.TemporaryDirectory() as d:
-            ok = subprocess.run([sys.executable, script, "--input", str(FIX / "known_affine.json"),
+            ok = subprocess.run([sys.executable, script, "--input", str(FIX / "known_affine_reviewed.json"),
                                  "--output", d], capture_output=True, text=True)
             self.assertEqual(ok.returncode, 0, ok.stderr)
             self.assertTrue((Path(d) / "analysis.json").exists())

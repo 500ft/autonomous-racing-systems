@@ -31,7 +31,9 @@
   "root_quantization_mm": 0.0002886751345948129,
   "repeatability_mm": 0.0005,
   "residual_root_rotation_mm": 0.0004082482904638631,
-  "force_relative": 0.005,
+  "force_gain_relative": 0.003,
+  "force_readout_relative": 0.004,
+  "uncorrected_root_rotation_mm_per_n": 0.0,
   "root_rotation_sd_rad": 4.082482904638631e-06
  },
  "unknown_terms": [

@@ -79,11 +79,13 @@ def terms(cfg: dict) -> dict:
     theta = rotation_sd_rad(res, cfg.get("root_station_spacing_mm"))
     lh = cfg.get("load_height_mm")
     return {
-        "tip_quantization_mm": q,
+        "tip_quantization_mm": q,          # reported; applied in the trial as real rounding, not noise
         "root_quantization_mm": q,
         "repeatability_mm": cfg.get("repeatability_mm"),
         "residual_root_rotation_mm": (None if theta is None or lh is None else theta * lh),
-        "force_relative": cfg.get("force_relative_standard_uncertainty"),
+        "force_gain_relative": cfg.get("force_gain_relative_standard_uncertainty"),
+        "force_readout_relative": cfg.get("force_readout_relative_standard_uncertainty"),
+        "uncorrected_root_rotation_mm_per_n": cfg.get("uncorrected_root_rotation_mm_per_n"),
         "root_rotation_sd_rad": theta,
     }
 
@@ -100,22 +102,38 @@ def unknown_terms(t: dict, cfg: dict) -> list:
 # --------------------------------------------------------------------------- monte carlo
 
 
+def _quantize(value, resolution_mm):
+    """Indicators read in steps. Rounding is what they actually do; Gaussian noise of the same SD is
+    a different distribution and hides the fact that a shared offset does not average away."""
+    return value if not resolution_mm else round(value / resolution_mm) * resolution_mm
+
+
 def _trial_slope(rng, compliance_true, t, cfg):
-    """One synthetic campaign on one axis, fitted with the real campaign estimator."""
+    """One synthetic campaign on one axis, fitted with the real campaign estimator.
+
+    Error scope is explicit, because it decides what repetition can and cannot fix:
+
+      * **Shared across the whole campaign** (drawn once): the force channel's calibration gain and
+        the uncorrected part of root rotation. Repeating readings does not reduce either.
+      * **Per reading**: readout noise, repeatability, and the residual of the root-rotation
+        correction. These do average down with more cycles.
+
+    There is one latent applied force per observation. The recorded force is that same force seen
+    through the force channel's errors, not an independent draw around the nominal level."""
+    gain = rng.gauss(0.0, t["force_gain_relative"] or 0.0)          # shared: one calibration, one campaign
+    rot = t["uncorrected_root_rotation_mm_per_n"] or 0.0            # shared: systematic, load-dependent
+    res = cfg.get("indicator_resolution_mm")
     pts = []
     for _ in range(CYCLES):
         for _d in DIRECTIONS:
             for level in LOAD_LEVELS_N:
-                u_f = t["force_relative"] * level
-                f_true = level + rng.gauss(0.0, u_f)
-                f_measured = level + rng.gauss(0.0, u_f)   # the recorded force, independently in error
-                d_true = compliance_true * f_true
-                tip = (d_true
-                       + rng.gauss(0.0, t["tip_quantization_mm"])
-                       + rng.gauss(0.0, t["repeatability_mm"])
-                       + rng.gauss(0.0, t["residual_root_rotation_mm"]))
-                fixture = (rng.gauss(0.0, t["root_quantization_mm"])
-                           + rng.gauss(0.0, t["repeatability_mm"]))
+                f_true = level                                       # one latent applied force
+                f_measured = f_true * (1.0 + gain) + rng.gauss(0.0, (t["force_readout_relative"] or 0.0) * f_true)
+                d_true = compliance_true * f_true + rot * f_true      # rotation adds apparent compliance
+                tip = _quantize(d_true
+                                + rng.gauss(0.0, t["repeatability_mm"])
+                                + rng.gauss(0.0, t["residual_root_rotation_mm"]), res)
+                fixture = _quantize(rng.gauss(0.0, t["repeatability_mm"]), res)
                 pts.append((f_measured, tip - fixture))
     slope, _intercept, r2 = _linear_fit(pts)
     return slope, r2
@@ -130,14 +148,25 @@ def screen_axis(compliance_true, t, cfg, trials, seed):
         if r2 is not None:
             r2s.append(r2)
     u = statistics.stdev(slopes)
+    mean = statistics.fmean(slopes)
+    ordered = sorted(slopes)
+    lo = ordered[max(0, int(0.025 * len(ordered)) - 1)]
+    hi = ordered[min(len(ordered) - 1, int(0.975 * len(ordered)))]
     u95 = 1.96 * u                      # coverage over the Monte Carlo distribution of the estimator
-    return dict(mean_fitted_compliance_mm_per_n=statistics.fmean(slopes),
+    return dict(mean_fitted_compliance_mm_per_n=mean,
+                true_compliance_mm_per_n=compliance_true,
+                # A shared error shifts every reading the same way, so it shows up here and not in the SD.
+                bias_mm_per_n=mean - compliance_true,
+                relative_bias=(mean - compliance_true) / compliance_true,
                 u_fitted_compliance_mm_per_n=u, U95_mm_per_n=u95,
+                interval_2p5_mm_per_n=lo, interval_97p5_mm_per_n=hi,
                 relative_U95=u95 / compliance_true,
                 passes_relative_u95_gate=bool(u95 / compliance_true <= MAX_RELATIVE_U95),
                 median_r_squared=(statistics.median(r2s) if r2s else None),
                 passes_r_squared_gate=bool(r2s and statistics.median(r2s) >= MIN_R_SQUARED),
-                trials=trials)
+                trials=trials,
+                note="relative_U95 describes scatter only. A shared error appears in relative_bias, "
+                     "which no number of repeats reduces.")
 
 
 def rank_terms(compliance_true, t, cfg, trials, seed):
@@ -146,8 +175,9 @@ def rank_terms(compliance_true, t, cfg, trials, seed):
     This is the point of the screen: it says what to go and measure next, instead of assuming that
     more ADC bits fix the largest error."""
     ranking = []
-    for name in ("tip_quantization_mm", "root_quantization_mm", "repeatability_mm",
-                 "residual_root_rotation_mm", "force_relative"):
+    for name in ("repeatability_mm", "residual_root_rotation_mm",
+                 "force_gain_relative", "force_readout_relative",
+                 "uncorrected_root_rotation_mm_per_n"):
         only = {k: (0.0 if k != name else v) for k, v in t.items() if k != "root_rotation_sd_rad"}
         only["root_rotation_sd_rad"] = t["root_rotation_sd_rad"]
         r = screen_axis(compliance_true, only, cfg, max(120, trials // 3), seed + 17)
@@ -189,7 +219,13 @@ NOMINAL = dict(
     root_station_spacing_mm=100.0,          # proposed; register row is pending
     load_height_mm=100.0,                   # equals mast length by design choice
     repeatability_mm=0.0005,                # ASSUMED reading repeatability, no record
-    force_relative_standard_uncertainty=0.005,   # ASSUMED 0.5 % of reading, no calibration
+    # Force error is split by scope. The gain is one number for the whole campaign and repetition
+    # cannot reduce it; the readout part is per reading and does average down.
+    force_gain_relative_standard_uncertainty=0.003,    # ASSUMED, no calibration record exists
+    force_readout_relative_standard_uncertainty=0.004,  # ASSUMED
+    # Rotation the root stations do NOT remove, as apparent compliance. Zero is a claim, not a default:
+    # it asserts the correction is perfect. Kept explicit so a screen cannot inherit it silently.
+    uncorrected_root_rotation_mm_per_n=0.0,
     fixture_stiffness_n_per_mm_x=None,      # UNKNOWN: no fixture design exists
     fixture_stiffness_n_per_mm_y=None,
     force_chain_cases=[
@@ -257,13 +293,67 @@ def run(cfg: dict = None, trials: int = DEFAULT_TRIALS, seed: int = 20260923) ->
     out["axes"] = {a: screen_axis(compliance_hand, t, cfg, trials, seed + i)
                    for i, a in enumerate(AXES)}
     out["dominant_terms"] = rank_terms(compliance_hand, t, cfg, trials, seed)
-    both = all(out["axes"][a]["passes_relative_u95_gate"] for a in AXES)
-    out["verdict"] = "PLAUSIBLE_PENDING_PHYSICAL_INPUTS" if both else "NOT_PLAUSIBLE_AS_CONFIGURED"
-    out["verdict_note"] = ("Plausible means the declared, largely ASSUMED terms would satisfy the "
-                           "frozen gate. It is not a measurement, not a fixture design, and not "
-                           "campaign readiness.")
+
+    out["gate_status"] = gate_status(out, cfg, k)
+    failed = sorted(g for g, s in out["gate_status"].items() if s["status"] == "fail")
+    unknown = sorted(g for g, s in out["gate_status"].items() if s["status"] in ("unknown", "not_evaluated"))
+    out["failed_gates"], out["unresolved_gates"] = failed, unknown
+    if failed:
+        out["verdict"] = "NOT_PLAUSIBLE_AS_CONFIGURED"
+    elif unknown:
+        out["verdict"] = "UNKNOWN"
+    else:
+        out["verdict"] = "PLAUSIBLE_PENDING_PHYSICAL_INPUTS"
+    out["verdict_note"] = ("Plausible means every declared gate passes on largely ASSUMED terms. It is "
+                           "not a measurement, not a fixture design, and not campaign readiness. A "
+                           "failed or unevaluated gate prevents this verdict; filling a field is not "
+                           "the same as satisfying it.")
     out["next_measurement"] = (out["dominant_terms"][0]["term"] if out["dominant_terms"] else None)
     return out
+
+
+def _gate(status, reason):
+    return dict(status=status, reason=reason)
+
+
+def gate_status(out, cfg, k_specimen) -> dict:
+    """Every requirement the overall verdict claims to cover, with its own status.
+
+    The defect this replaces: declared fixture stiffness and the R-squared result were computed and
+    displayed but never consulted, so a 1 N/mm fixture was reported plausible against a 7760 N/mm
+    requirement."""
+    g = {}
+    required = required_fixture_stiffness(k_specimen)
+    for axis in AXES:
+        declared = cfg.get(f"fixture_stiffness_n_per_mm_{axis}")
+        if declared is None:
+            g[f"fixture_stiffness_{axis}"] = _gate("unknown", "no fixture stiffness declared for this axis")
+        elif declared <= 0:
+            g[f"fixture_stiffness_{axis}"] = _gate("fail", f"declared {declared} N/mm is not positive")
+        else:
+            ok = declared >= required
+            g[f"fixture_stiffness_{axis}"] = _gate(
+                "pass" if ok else "fail",
+                f"declared {declared:.4g} N/mm against required {required:.4g} N/mm "
+                f"({FIXTURE_STIFFNESS_RATIO_MIN:g}x specimen {k_specimen:.4g} N/mm)")
+    for axis in AXES:
+        a = out["axes"][axis]
+        g[f"relative_u95_{axis}"] = _gate(
+            "pass" if a["passes_relative_u95_gate"] else "fail",
+            f"relative U95 {a['relative_U95']:.4g} against gate {MAX_RELATIVE_U95}")
+        g[f"r_squared_{axis}"] = _gate(
+            "not_evaluated" if a["median_r_squared"] is None else
+            ("pass" if a["passes_r_squared_gate"] else "fail"),
+            f"median simulated R^2 {a['median_r_squared']} against gate {MIN_R_SQUARED}")
+    ind = out["indicator_screen"]
+    g["indicator_resolution_and_counts"] = _gate(
+        "unknown" if ind["resolution_mm"] is None else ("pass" if ind["passes"] else "fail"),
+        f"resolution {ind['resolution_mm']} mm, {ind['counts_at_full_scale']} counts at full scale")
+    sp = cfg["specimen"]
+    bad = [n for n in ("length_mm", "od_mm", "wall_mm", "e_n_per_mm2") if not sp.get(n, 0) > 0]
+    g["specimen_dimensions_positive"] = _gate("pass" if not bad else "fail",
+                                              f"non-positive specimen values: {bad}" if bad else "all positive")
+    return g
 
 
 def main(argv=None):
