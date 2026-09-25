@@ -23,9 +23,14 @@ threshold or a protocol; see [README](README.md) for why.
   FE value only if both describe the same problem, and the [modal audit](../docs/design/MODAL_MODEL_AUDIT.md)
   shows they do not — the FE deck carries a one-node translational mass attached off-axis. The 285.5 Hz
   figure stands on its own model, not on an analytical bound around it.
-- **Confidence: moderate** for the nominal tube as modelled; **none** as a statement about hardware. The
-  margin over 200 Hz is comfortable enough that the withdrawn bracketing argument does not change the
-  pass/fail reading, but it is no longer offered as support.
+- **Scope of the number (sharpened 2026-09-25):** 285.5 Hz is the output of the **historical
+  off-axis single-node attachment model**, and that model's result exceeds 200 Hz. Withdrawing the
+  bracketing argument does not change that output — but it does not establish the margin either, and
+  **the corrected attachment model has not produced a result yet**. Until it does, the guard is cleared
+  by the historical model only. Do not read the comfortable historical margin as a property of the
+  corrected model.
+- **Confidence: moderate** for the nominal tube as modelled by the historical deck; **none** as a
+  statement about hardware, and **none** about what the corrected attachment model will give.
 
 ### M2. The cause of the 13.5 % gap between the 330.1 Hz hand calc and the 285.5 Hz FEA is UNRESOLVED
 
@@ -242,9 +247,14 @@ was a literature question — both were questions about what the model actually 
 The **measurement lane** is the best supported by standards and still the worst aligned to them. The
 conflicts recorded in M8 and M9 are conflicts with the **frozen protocol**, which is unchanged: it still
 gates on R² ≥ 0.99 and does not specify an errors-in-variables estimator or an effective-degrees-of-freedom
-coverage factor. What changed on 2026-09-24 is that the *new tooling* no longer repeats those mistakes and
-no longer returns a passing verdict while its own checks fail. Amending the protocol itself remains a
-prospective, owner-reviewed act.
+coverage factor. What changed on 2026-09-24 is narrower than "the new tooling no longer repeats those
+mistakes", which overstated it. **Repaired:** the tooling no longer returns a passing verdict while its
+own checks fail, it uses an errors-in-variables estimator, and it reports a coverage factor drawn from a
+Student-t table rather than assuming k = 2. **Still approximate:** `coverage_factor` reads a finite table
+through 30 degrees of freedom and then returns 1.960, and its input is the **fit's** degrees of freedom
+rather than an effective value derived per uncertainty component. That is closer to the guidance than a
+flat k = 2 and is not yet a Welch-Satterthwaite effective-DOF treatment. Amending the protocol itself
+remains a prospective, owner-reviewed act.
 
 The **vehicle lane** is the weakest and is unchanged by this round. Its headline comparative result, V2,
 still has no supporting citation and one credible contradicting one, and its identification result

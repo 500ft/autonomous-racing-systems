@@ -1,0 +1,480 @@
+AUTONOMOUS RACING SYSTEMS — SEPTEMBER 25 CLOSEOUT
+Critique and executable handoff for Claude
+Prepared 2026-09-25. Planning only; no implementation or merge performed.
+
+READ THIS FIRST
+==============
+
+Finish the bounded software/nominal-analysis package today. Define completion
+by artifacts and checks, not by making every open ledger row say closed.
+Purchased electronics do not establish calibration, fixture readiness or an
+as-built modal reference. Physical rows retain their existing evidence gates.
+
+This document supersedes the remaining-work ordering in the September 19–25
+plan and updates the September 24 critique against merged corrections. It does
+not supersede frozen acceptance thresholds or historical result provenance.
+Codex reviews and plans; Claude implements. Commands below are implementation
+instructions, not a record that this planning session ran those commands.
+
+Recommended order:
+  1. Finish the small consistency corrections around PR #41.
+  2. Produce a reproducible decision screen and the W3.2 input requests.
+  3. Attempt the tightly scoped three-case modal attachment investigation.
+  4. Write scoped W1.8 from the actual available results.
+  5. Freeze and verify the W4 reviewer packet LAST.
+
+Use one closeout PR with separate commits for W3.2, W1.8 and W4: these share
+the same evidence snapshot. Keep the modal code/results in a separate PR.
+PR #41 remains its own consistency change. Dependency maintenance is separate.
+Four documentation PRs would introduce unnecessary merge-order and hash churn.
+
+STATUS ACTUALLY INSPECTED
+========================
+
+Project main: fb7379f59890552802d218021b52b2d51bdc9226, including PR #40.
+PR #41: OPEN, MERGEABLE, CLEAN at
+  4a52b14c2ea2c1483e84bbc0add4bec8d9e89797.
+All seven reported checks were successful at inspection. Recheck after edits.
+
+The old September 24 examples of calibration checks not affecting the final
+verdict and fixture stiffness not participating in the screen were addressed
+by merged work. Do not reimplement those fixes from the old planning file.
+Residual limitations below were inspected in current source.
+
+Read the shared CAD briefing before geometry or host work:
+  500ft/engineering-audit -> docs/cad_agent_briefing.md
+Local copy inspected:
+  /Users/redhose/Developer/engineering-audit/docs/cad_agent_briefing.md
+Reusable host machinery belongs there; project geometry/evidence belongs here.
+The briefing distinguishes individually built parts from an assembly with mates
+and requires independent geometry, parameter-change and round-trip checks.
+Volume agreement alone cannot establish bolt positions, tolerances or dynamics.
+
+1. CORRECT THE DECISION, BEFORE CHOOSING AN INSTRUMENT
+===================================================
+
+The supplied plan is directionally right that R² is binding in these particular
+assumed scenarios. It overstates what that result establishes in four ways.
+
+A. A passing median is not campaign reliability.
+
+Read-only reproduction used current committed fixture_feasibility.py and its
+actual imported campaign estimator, loaded in memory without editing source.
+Nominal inputs were retained; only repeatability_mm changed. Each trial was a
+single-axis synthetic campaign of 30 points. Seed 20260925, 5,000 trials/case:
+
+  Assumed repeatability    Median R²     Fraction R² >= .99    Relative U95
+  0.5 micrometres          .986027       .1270                 .04510
+  0.3 micrometres          .992519       .8602                 .03288
+
+Monte Carlo standard errors of these pass fractions are about .00471 and
+.00490. They describe simulation sampling precision, NOT confidence that the
+assumed physical model is correct. These are single-axis R² pass fractions,
+not probabilities of satisfying every gate on both axes.
+
+At the original seed 20260923 and 400 trials, the same read-only calculation
+gave median R² .986064/.992660 and relative U95 .04606/.03422 respectively.
+Thus the quoted 4.3% maximum needs its exact input set, trial count, source
+revision and seed. It is not reproduced as a bound by this current setup.
+Do not dismiss the difference as a bug without comparing those inputs.
+
+Do not turn 0.3 micrometres into a purchase specification or a newly frozen
+acceptance threshold. It is one favourable assumed operating point with a
+substantial simulated rejection fraction. To estimate a two-axis result, draw
+shared calibration/environment errors once per campaign and independent channel
+errors at the appropriate scope. Multiplying independent per-axis probabilities
+would assume independence that the physical setup may not have.
+
+B. Resolution is not repeatability.
+
+The statement that a 1 micrometre indicator cannot have 0.3 micrometre reading
+repeatability is too categorical. JCGM defines resolution and repeatability
+separately [R1,R2]. A display can return the same rounded value repeatedly while
+concealing substantial error. Conversely, fine resolution does not prove low
+drift, hysteresis or uncertainty. Under a uniform quantization model, a 1
+micrometre step contributes 1/sqrt(12) = .289 micrometres standard uncertainty;
+this is a model contribution, not a manufacturer's repeatability specification.
+
+In this screen repeatability is added BEFORE rounding. Specify whether a
+supplier/bench repeatability value includes quantization before entering it;
+otherwise the same effect can be counted twice. Evaluate the complete installed
+chain: displacement sensor, mount, contact force, alignment, acquisition, drift,
+range, calibration and root correction. LVDT/capacitive are candidates, not
+automatically adequate or the only viable technologies.
+
+C. Low scatter does not establish low total error.
+
+screen_axis reports relative_U95 from slope scatter and separately reports
+relative_bias. A fixed load-dependent root-rotation error changes the slope and
+may leave an excellent R². The overall gate does not currently reject excessive
+bias. Zero uncorrected_root_rotation_mm_per_n is an explicit ideal assumption,
+not measured evidence. Do not describe the scatter-only result as a complete
+uncertainty budget or certify a physical chain from it.
+
+D. The existing ranking answers a narrower question than W3.2 needs.
+
+rank_terms sorts uncertainty with one term active at a time. Quantization stays
+active through cfg even when its reported term is zeroed. A deterministic
+rotation bias can rank low because the metric is scatter. The ranking is not
+an additive variance decomposition and does not rank R² rejection risk.
+Rank feasible interventions using changes in gate risk, bias and uncertainty,
+with effort/access recorded, rather than copying dominant_terms[0].
+
+2. TODAY'S EXECUTION PACKAGES AND ACCEPTANCE
+==========================================
+
+T0 — Refresh, preserve work, finish #41. Budget 20–30 minutes.
+----------------------------------------------------------------
+Claude:
+  - Fetch current refs and inspect worktree status before branching. This local
+    checkout has untracked planning files; preserve them. Use an isolated
+    worktree if implementation needs a different base.
+  - Recheck #41's diff and exact-head checks. The observed green status is not
+    a substitute for checks on a subsequent amended commit.
+  - Qualify M1 in literature/claim-ledger.md: the HISTORICAL off-axis model
+    produced 285.5 Hz and exceeds 200 Hz. The corrected attachment model has
+    not established its result yet. Withdrawal of a bracketing argument does
+    not itself change the old output, but neither proves the new margin.
+  - Qualify the measurement-lane summary's claim that new tooling no longer
+    repeats all effective-DOF/coverage mistakes. Current coverage_factor uses
+    a finite table through 30 then 1.960; its input is fit DOF, not a derived
+    effective DOF for every uncertainty component. Record what was repaired
+    and what remains approximate. Do not turn this wording fix into a new
+    calibration framework today.
+  - Run the checks relevant to #41, including its inventory consistency and
+    negative controls, plus required CI. Follow the normal merge workflow.
+Done: corrected claims agree across documents; checks pass at the merged head;
+record the merge SHA. No historical FEA output is regenerated by this task.
+
+T1 — W3.2 decision screen and three input requests. Budget 60–90 minutes.
+-----------------------------------------------------------------------
+Inputs: current cad/fixture_feasibility.py, actual estimator, frozen protocol,
+parameter register, purchased-equipment inventory. Use fresh output paths.
+
+Produce evidence/week-2026-09-19/decision_screen/ containing:
+  scenarios.json       Full configs, evidence states, revision, seeds, trials.
+  results.json         Metrics and explicit scope per scenario.
+  reproduction.txt     Exact executable command/environment and rationale.
+  input_requests.md    The three concrete evidence bundles below.
+
+Implementation method:
+  1. Reproduce the existing nominal UNKNOWN result. Preserve that as the
+     authoritative missing-input state; assumed 8,000 N/mm stiffness cases
+     are separate scenarios, never replacements for the nominal artifact.
+  2. Reproduce 0.5 and 0.3 micrometre repeatability with the above seed/config.
+     Report median and lower/upper quantiles of R², per-axis pass fraction,
+     binomial interval, relative slope bias, U95 and empirical slope interval.
+     Choose and record a campaign-level dependence model before a joint result.
+  3. Make a small sensitivity table: repeatability .2/.3/.5 micrometres;
+     resolution .5/1 micrometre; root-station spacing 40/100 mm. These are
+     deliberately assumed alternatives, not register fills or approved designs.
+     Start with 1,000 trials/case; refine decision-boundary cases to at least
+     5,000 and report sampling uncertainty. Seeds fixed; no selection of the
+     most favourable seed. Preserve load levels and three-cycle design.
+  4. Vary a specified residual rotation-compliance bias separately. Use zero
+     and a documented adverse scenario, e.g. 0.00025 mm/N, explicitly synthetic.
+     Show why low U95/high R² need not imply an accurate compliance estimate.
+  5. Compare interventions at common settings: finer resolution, improved
+     repeatability, wider station spacing. Report effects separately, including
+     practical feasibility and missing evidence. Do not invent a dollar ROI.
+  6. Keep hysteresis and FEA-agreement gates visible as not evaluated where
+     the screen does not simulate them. gate_status currently covers a subset
+     of imported/declared campaign requirements. Either make scope explicit in
+     outputs or add not_evaluated entries; never claim all campaign gates pass.
+  7. Any changed decision code gets targeted negative-control checks: missing
+     inputs, below-target stiffness, passing median with appreciable rejections,
+     and large systematic bias. Reuse existing tests/helpers; avoid a new engine.
+
+W3.2's three input bundles (rank AFTER the intervention results):
+
+  Bundle A — Installed displacement/root-motion chain.
+    Request model/serial, range, resolution, mounting sketch, tip/root station
+    coordinates and units, acquisition method and calibration source. For a
+    later bench study request repeated unrounded raw readings if available,
+    timestamps, dwell, load direction, zero-return data and environmental notes.
+    Format: CSV readings + JSON/YAML metadata + vendor/calibration source path.
+    Unlocks: replace assumed repeatability/rotation terms; determine whether a
+    candidate can observe the intended displacement. No purchase necessary to
+    complete today's request/specification. Nominal hand signal is ~25.77 um
+    at 20 N, ~5.15 um at 4 N; keep the separate FEA compliance value distinct.
+
+  Bundle B — Force-chain reference and calibration evidence.
+    Request installed cell/ADC IDs, reference masses and their uncertainties,
+    mounting/orientation, gravity value/basis, zero/creep/drift and ascending/
+    descending raw readings per the existing calibration protocol.
+    Format: existing calibration record schema + source certificates + raw CSV.
+    Unlocks: replace shared gain/readout assumptions and evaluate E3. The 5 kg
+    cell is only a candidate; the 1 kg cell cannot cover the 20 N campaign.
+
+  Bundle C — Mechanical interfaces and fixture geometry/evidence.
+    Request the six pending register values with coordinates, units, tolerance,
+    source and acquisition route: engagement, both pitches, optical offset,
+    load height and station spacing. Include bolt coordinates, indicator
+    positions, targets and stiffness evidence required by the current contract.
+    Format: drawing/revision or part number plus actual drawing, dimensioned
+    sketch and register mapping; later inspection/test records where required.
+    Unlocks: specific contract fields and geometry/fixture tasks. One part
+    number starts intake; it does not resolve every interface or certify fit.
+    Respect design_then_inspect/vendor_drawing/measurement routes. A proposed
+    nominal dimension can advance design without masquerading as inspected data.
+
+Done: three actionable requests with expected source format, mapped fields,
+decision unlocked and observed sensitivity; missing physical values remain
+UNKNOWN. W3.2 requests can be complete while the requested inputs are absent.
+
+T2 — Prospective protocol amendment. Budget 30–45 minutes, proposal only.
+-----------------------------------------------------------------------
+Create docs/decisions/compliance-adequacy-proposal.md (or the existing equivalent).
+Keep R² >= .99 as the current frozen rule. Record the existing result alongside
+any proposed rule; never retroactively turn a failed campaign into a pass.
+
+Specify the measurable adequacy criteria, rather than simply replacing R² by
+another p-value. NIST supports residual diagnostics and lack-of-fit assessment,
+not certification from R² alone [R3,R4]. Non-rejection of lack of fit does not
+prove adequacy; low power can hide an unacceptable departure.
+
+Proposal must include:
+  - Measurand, estimator, force/displacement error assumptions and correlations.
+  - An engineering tolerance for consequential nonlinear departure and bias,
+    proposed with rationale and left unapproved until reviewed; no invented
+    owner acceptance value. Keep uncertainty/hysteresis/FEA requirements separate.
+  - Residual-vs-force, direction and time diagnostics; pure-error replication
+    appropriate to cycle/direction; check rather than assume independent errors.
+  - Synthetic linear null and deliberately nonlinear/hysteretic/drifting
+    alternatives; false-rejection and detection-power estimates at the stated
+    sample design and practical tolerance, with Monte Carlo precision reported.
+  - Adaptation of the E3 ideas to compliance, not blind reuse of its result.
+    Current LOF_NULL_DRAWS=300 at alpha=.01 yields p steps of 1/301 and about
+    three expected tail counts near the cutoff. A close call needs more draws
+    and a declared numerical stopping rule or an indeterminate result; avoid
+    seed-dependent decisions. Do not treat 300 as validated for every dataset.
+  - Reviewer/owner approval field and prospective effective version/date.
+
+Include an instrument comparison template covering installed uncertainty,
+repeatability definition, bandwidth for this STATIC task, contact/alignment,
+range, calibration and total acquisition cost. Pricing actual candidates is
+secondary and requires dated vendor sources. No selection/purchase is needed
+to finish the statistical proposal. Better metrology and better criteria are
+complementary; neither justifies ignoring the other.
+Done: reviewable proposal, existing rule unchanged, implementation tests scoped.
+
+T3 — Modal attachment investigation. Budget 2–3 hours after preflight.
+---------------------------------------------------------------------
+This is today's bounded technical attempt, not an automatic tomorrow carryover.
+Do not promise to resolve every source of the hand/FE discrepancy in this slot.
+
+Preflight (15 minutes): record actual Python/gmsh/CalculiX versions and binary
+paths, a solver smoke result, source revision, units and mesh controls. Toolchain
+installation notes do not prove the current environment executes successfully.
+Add/select a fresh output directory BEFORE running: the present script writes
+to runs/mast_fea. Preserve the committed 285.5 Hz files byte-for-byte.
+
+Implement in experiments/mast_fea.py with small explicit attachment modes.
+The hollow tube has no material node on its axis. The current closest-node
+selection attaches about 8.5 mm from that axis; report actual selected coordinates.
+Use a declared, solver-supported reference/coupling model, verifying its syntax
+against the installed CalculiX documentation. Do not invent rotational inertia
+or use unconstrained mass DOFs. Inspect the generated deck, not just its comment.
+
+Required comparison:
+  A. Legacy eccentric single-node attachment, reproduced to a new directory.
+  B. Eccentric mass with the new attachment/coupling representation.
+  C. Centred mass with the SAME representation and coupled surface as B.
+
+Keep the mesh, material, fixed root, tube dimensions and 0.175 kg mass unchanged
+within the comparison. B-C isolates position within the chosen attachment model;
+A-B measures the attachment-model change. A-C alone changes two things and must
+not be called the eccentricity effect. Report any remaining DOF/model differences.
+A rigid ring/end coupling is an idealization, not an as-built bracket validation.
+
+Evidence under runs/mast_modal_attachment_20260925/:
+  - Input decks, mesh identity, stdout/stderr, return codes, solver outputs,
+    parsed first six modes and attachment coordinates/constraint definitions.
+  - Verify total added mass, constrained-root set and absence of unintended
+    mechanisms/extra restraints. A free artificial reference rotation can
+    create spurious near-zero modes; first eigenvalue is not automatically bending.
+  - Match bending shapes/pairs across cases. Near-degenerate orthogonal modes
+    may swap index; do not infer a large effect from sorted labels alone.
+  - Record differences in Hz and percent and the exact comparison denominator.
+    If selecting a new nominal result, repeat a final mesh refinement and use
+    the existing declared convergence rule. A new coupling invalidates automatic
+    reuse of old convergence evidence for the new result.
+  - Test the geometric/deck invariant: central reference is on-axis, correct
+    mass and surface set are used, historical mode reproduces legacy attachment.
+  - Retain the original hand value and historical FE value with their provenance.
+    If the model still disagrees, state that. Do not tune physics to get 330 Hz.
+
+Explicit follow-ons, only if the attachment cases finish early: shear effects,
+distributed tube inertia and compliant-root sensitivity. Vary one declared
+factor at a time. Distributed tube mass already exists through solid density;
+do not add it a second time. A compliant root is a different boundary model;
+the current fixed-root model does not contain clamp flexibility as a cause.
+
+Done for attachment subtask: A/B/C, invariant checks, mode identification and
+effect sizes are reviewable; mesh evidence supports any adopted new headline.
+Not done automatically: complete causal explanation, assembly modal validation,
+physical frequency freeze or RR-S12. If preflight/solver fails, preserve the
+failure and exact next action; a failed attempt is not closure of the model task.
+
+T4 — Scoped W1.8 nominal report. Budget 45–60 minutes.
+-----------------------------------------------------
+Write docs/W1_8_NOMINAL_REPORT.md or update its existing equivalent. Lead with
+the precise scope: frozen nominal tube and assumed static measurement chain.
+Include a short claim/evidence/limitation table:
+  - Tube geometry/material and independent hand calculation.
+  - Historical static/modal results with their model-specific provenance.
+  - New modal attachment comparison only if actually completed and checked.
+  - Default feasibility UNKNOWN; clearly labelled assumed sensitivity results.
+  - Which electronics/software tests passed, and what they do not establish.
+  - Remaining interface, calibration, host/device and independent-review inputs.
+
+The report can be complete as a scoped deliverable while W1.8's broader original
+acceptance remains partial. Do not silently rename a full package into a nominal
+report and close the original requirement. Record the scope decision explicitly.
+No assembly, fabricated fixture, inspected register, campaign or hardware-safe
+frequency claim follows from the nominal tube report.
+Done: every quantitative claim traces to an artifact/configuration; limitations
+are next to the claims, and scoped completion versus parent status is explicit.
+
+T5 — W4 reviewer packet and final freeze. Budget 60–90 minutes.
+---------------------------------------------------------------
+Prepare last, after the preceding results settle:
+  evidence/week-2026-09-19/README.md
+  evidence/week-2026-09-19/manifest.json
+  REVIEW_READY.md (or existing canonical location; avoid duplicate status files)
+
+Manifest requirements:
+  - Analysis source commit(s), protocol version, input/output paths and SHA-256.
+  - Relative paths, artifact role and evidence kind (software/synthetic/nominal/
+    host/device/measured/review); commands with working directory and environment.
+  - Exact invocation, seeds/config hashes, exit codes, log paths and timestamp
+    for executed checks. Historical results have their historical source SHA.
+  - Separate expected refusal, unexpected failure, not executed and pass.
+    An UNKNOWN screen's expected nonzero exit is not a software crash or a pass.
+  - Named not-executed items: physical device operation, real calibration,
+    inspected CAD release, compliance campaign, physical modal campaign and
+    independent review. Host toggle verification has its own status.
+
+Freeze protocol:
+  1. Commit analysis inputs/code and record that SHA.
+  2. Run the listed checks/results against those exact inputs in a clean context.
+  3. Add reports, logs and manifest as the evidence commit. Hash all listed files
+     after their final edits. Exclude manifest itself from its own hash set;
+     state that exclusion. Do not attempt to embed a commit's own final SHA in
+     a file that changes that same commit.
+  4. Validate every listed hash, path and referenced command/log. Include a
+     negative-control check that changing an artifact fails verification if a
+     verifier is introduced. Avoid building a new artifact platform.
+  5. Record required CI results at the final PR head. If any inputs change,
+     rerun affected analyses and regenerate dependent evidence before approval.
+     Keep external CI/merge attestations distinct from the hashed run artifacts.
+
+Done: another session can locate and reproduce the included software results;
+all evidence states are honest; no stale hash, phantom execution or unresolved
+internal contradiction. REVIEW_READY means ready for review, not reviewed.
+
+3. MAINTENANCE AND PHYSICAL FOLLOW-UP
+====================================
+
+Dependencies (timebox 20–30 minutes; do not delay evidence freeze):
+  NumPy 2.5.3 and SciPy 1.18.1 both declare Python >=3.12 [R5,R6]. The current
+  evidence CI installs Python 3.10. Do not merge those upgrades into this closure.
+  Prefer a separate documented compatibility disposition for #37 and #34,
+  with targeted deferred version ranges and a Python-upgrade follow-up trigger.
+  Closing a bot PR and preventing recurrence are separate decisions. Avoid
+  ignoring all future releases/security work, and note SciPy's incompatible
+  release is a MINOR version: a major-only ignore rule would not solve it.
+  For #36 rosbags, refresh/rebase then require existing telemetry/evidence tests
+  and CI. Rebase alone does not establish compatibility. Keep this separate
+  from today's numerical/environment snapshot.
+
+Host, device and bench work are separate dependencies:
+  - cad/solidworks/unattended.py reads the preference back after setting it.
+    A real host result with applied=true supports that specific toggle, not
+    general unattended reliability. Also record completion past dimension
+    creation, geometry checks and restoration of the previous preference.
+  - Read engineering-audit/docs/host_setup.md before changing host setup.
+    Check actual interactive-session state; old memory of auto-login is not
+    proof it is currently missing or the only usable setup. A run in an active
+    session does not prove recovery after reboot. No automatic login change
+    or host contact is needed to finish the software reviewer packet.
+  - Firmware compilation/replay does not establish board execution. A later
+    owner bench run needs device IDs, firmware revision, acquisition log and
+    observed transport/error behaviour, not merely a successful import.
+  - E3 needs real reference/calibration records. RR-S12 needs the inspected
+    as-built reference, uncertainty and approved band; RR-S02/S09 need their
+    records and named reviewer. Assign a responsible ROLE and next evidence
+    request when the person's name is unavailable; never invent a reviewer.
+
+Controller sweep and Stanley baseline stay outside this day's closure. Record
+the plant-parameter pass-through dependency and a restart trigger in the next
+week's backlog. Do not add a controller experiment just to improve the count
+of closed tasks. Branch housekeeping remains optional after evidence freeze.
+
+4. END-OF-DAY ACCEPTANCE AND HANDOFF TO THE OWNER
+===============================================
+
+Expected sequence is roughly 6–9 focused hours plus CI/solver latency; it is a
+capacity estimate, not a guarantee. If fewer hours remain, finish T0/T1/T2/T4/T5
+and report T3 separately with its true state. Protect the final packet's hour;
+stop adding optional physics variants before that point. No clean result is
+guaranteed by a timebox, and a red check remains red.
+
+Return a compact table with one row per work package:
+  task | implemented/merged status | evidence path | source SHA | checks |
+  remaining blocker | responsible role | exact next input/action
+
+Close W3.2 when requests/analysis are delivered. Close W4's preparation when the
+packet verifies. Mark scoped W1.8 complete only under its explicit scope. Close
+the attachment implementation only if its own acceptance is met. Preserve the
+parent physical gates and full-model follow-ups. No ledger promotion may rely
+on a planning document, purchased item or a software-only check.
+
+READ-ONLY REPRODUCTION NOTE
+===========================
+
+The numerical critique above used this procedure, not a solver or device run:
+load experiments/mast_physical_validation.py and cad/fixture_feasibility.py
+from the inspected main SHA using git show and Python module objects; set
+__file__ and sys.modules for imports; disable bytecode writing. For each case:
+
+  cfg = dict(fixture.NOMINAL, repeatability_mm=value)
+  terms = fixture.terms(cfg)
+  compliance = 1 / fixture.specimen_stiffness_n_per_mm()
+  rng = random.Random(seed)
+  samples = [fixture._trial_slope(rng, compliance, terms, cfg)
+             for _ in range(trials)]
+
+Report median R²; count R² >= fixture.MIN_R_SQUARED divided by trials;
+1.96 * sample standard deviation of slopes / compliance. A full scenario runner
+is an implementation deliverable of T1, not something this review claims to
+have added. The reproduction bypasses the top-level UNKNOWN refusal solely to
+inspect conditional single-axis sensitivity; it does not change that refusal.
+
+PRIMARY SOURCES AND APPLICABILITY
+=================================
+
+R1 JCGM VIM, resolution, section 4.14:
+   https://jcgm.bipm.org/vim/en/4.14.html
+R2 JCGM VIM, measurement repeatability, section 2.21:
+   https://jcgm.bipm.org/vim/en/2.21.html
+   These define distinct metrology concepts; neither certifies an instrument.
+
+R3 NIST/SEMATECH, model validation and residual analysis:
+   https://www.itl.nist.gov/div898/handbook/pmd/section4/pmd44.htm
+R4 NIST/SEMATECH, lack-of-fit testing with replication:
+   https://www.itl.nist.gov/div898/handbook/pmd/section4/pmd446.htm
+   Support diagnostics beyond R² and a declared test model. They do not approve
+   transplanting a classical F test into heteroscedastic/correlated EIV data.
+
+R5 NumPy 2.5.3 release metadata, checked 2026-09-25:
+   https://pypi.org/project/numpy/2.5.3/
+R6 SciPy 1.18.1 release metadata, checked 2026-09-25:
+   https://pypi.org/project/scipy/1.18.1/
+   Requires-Python >=3.12; compatibility observation, not a security assessment.
+
+The September 24 critique contains the broader GUM, Monte Carlo, conformity and
+structural literature register. Its numerical failure examples refer to older
+revisions. This document's current-source observations and synthetic calculations
+are project-specific evidence, not claims that published papers measured this
+mast. No fabricated citation or assumed physical measurement fills a blocker.
