@@ -95,6 +95,37 @@ re-scoped W1.2–W1.5 onto the existing native SOLIDWORKS branch. Checked agains
   the Sep 21 plan revision.
 - No device connected, no calibration, no register or ledger change.
 
+## Day 6 record (Sep 24, critique corrections)
+
+Owner critique `docs/LITERATURE_CRITIQUE_2026-09-24.txt` found five defects in work delivered earlier
+this week. **Every one was reproduced before being fixed** (PR #40), and all five were correct. The
+common cause of the two worst was the same: a diagnostic that was computed but never consulted.
+
+| # | Defect, as reproduced | Correction |
+|---|---|---|
+| P0-A | Adding `20000·m²` to the counts returned `LACK_OF_FIT_SIGNIFICANT` **and** `CALIBRATION_USABLE` with no blockers. Removing the zero readings and `u_g` also left it usable. | An explicit conditions map now drives the verdict; every required condition must pass. Zeros and gravity uncertainty must be measured or declared negligible with a stated basis. Held-out points required and scored. |
+| P0-A | A fixed `F = 5` cutoff described as a significance test. | Replaced by a parametric bootstrap under the fitted model with a declared alpha. A classical F quantile would also have been wrong: this is a weighted errors-in-variables fit, not the fixed-x homoscedastic model that test assumes. Pure error now pools within a (level, direction) cell, so hysteresis is a reported direction effect rather than absorbed noise. |
+| P0-B2 | 1 N/mm and 8000 N/mm fixtures both returned `PLAUSIBLE` against a 7759.84 N/mm requirement, and a failed R² gate did not prevent it. | A `gate_status` map (pass/fail/unknown/not_evaluated) drives the verdict. Declaring a value is no longer the same as satisfying it. |
+| P0-B1 | Nearly every error was an independent per-reading draw, so a calibration gain error averaged away and root motion could only appear as noise. | One latent applied force per observation; force error split into a shared campaign gain against per-reading readout; quantization as real rounding; an explicit uncorrected-root-rotation term. Bias and interval endpoints reported alongside the SD. |
+| P1-A | Claim M2 attributed the 330.1 → 285.5 Hz gap to root flexibility and tip-mass rotary inertia. | Neither is in either model: both decks fix the root, and the FE deck carries a one-node translational mass attached to the nearest material node, about 8.5 mm off-axis on a hollow section. Cause **unresolved**; recorded in [MODAL_MODEL_AUDIT.md](design/MODAL_MODEL_AUDIT.md) with no solver run. |
+| P1-B | Several literature conclusions outran their sources. | The ordinary-least-squares objection is now conditional per Cantrell; accelerometer placement is a tradeoff rather than a near-root rule; Rayleigh bracketing requires model equivalence; "measured not assumed" became "synthetic sensitivity result"; "no standard exists" became "none located in this scoped search". |
+
+**Two findings came out of enforcing the gates, neither of them bugs.** The assumed 0.5 µm repeatability
+yields median R² 0.986 against the frozen 0.99 gate, so the nominal configuration is now reported as
+NOT_PLAUSIBLE and needs an owner decision: either that assumption is too pessimistic or the campaign needs
+better indicators than the protocol assumes. And the eccentric single-node mass attachment is a modelling
+defect worth fixing in its own right, not merely an explanation.
+
+**Follow-up the same day (this change).** Three consistency defects introduced by those corrections:
+claim M1 still leaned on the bracketing argument that §3 had just retracted; the evidence-strength summary
+did not reflect M2's withdrawal; and the evidence inventory covered none of the new artifacts. All three
+are fixed, and `cad/nominal_inventory.py` gained three stale-record checks — each verified to fire when
+broken — so the modal claim, its domain file and the audit cannot drift apart again silently. That drift
+is how the original error survived review.
+
+**Deferred, needing owner input rather than code:** the stage-two controlled modal comparison (a solver
+run with a recorded environment), and the R² decision above.
+
 ## Day 5 record (Sep 23, W3.1 + unattended host)
 
 **W3.1 fixture feasibility screen.** `cad/fixture_feasibility.py`, `cad/tests/test_fixture_feasibility.py`

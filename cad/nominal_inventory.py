@@ -43,10 +43,27 @@ HEADLINES = [
     ("deck_height_limit", "0.138", "m", "runs/mast_tolerance_stack/summary.txt", "NOMINAL DESIGN"),
     ("specimen_stiffness", "775.98", "N/mm", "docs/CAD_MEASUREMENT_CONTRACT.md", "NOMINAL DESIGN"),
     ("fixture_stiffness_min", "7,759.84", "N/mm", "docs/CAD_MEASUREMENT_CONTRACT.md", "NOMINAL DESIGN"),
+    # Feasibility screen (W3.1). Its own recomputation of the contract arithmetic, plus the verdict it
+    # reaches on the currently declared terms. SOFTWARE CHECK: no fixture exists and nothing is measured.
+    ("screen_specimen_stiffness", "775.9836594264038", "N/mm",
+     "runs/mast_fixture_feasibility/nominal_screen.json", "SOFTWARE CHECK"),
+    ("screen_required_fixture_stiffness", "7759.8365942640385", "N/mm",
+     "runs/mast_fixture_feasibility/nominal_screen.json", "SOFTWARE CHECK"),
+    ("screen_ideal_deflection_at_4N", "0.0051547477210496205", "mm",
+     "runs/mast_fixture_feasibility/nominal_screen.json", "SOFTWARE CHECK"),
+    ("screen_verdict", "UNKNOWN", "1",
+     "runs/mast_fixture_feasibility/nominal_screen.json", "SOFTWARE CHECK"),
+    # Modal model definition, from the audit rather than from a solve.
+    ("modal_mass_attachment", "nearest existing material node", "1",
+     "docs/design/MODAL_MODEL_AUDIT.md", "MODEL ASSUMPTION"),
+    ("modal_gap_cause", "unresolved", "1", "docs/design/MODAL_MODEL_AUDIT.md", "MODEL ASSUMPTION"),
 ]
 ARTIFACTS = sorted({h[3] for h in HEADLINES} | {
     "evidence/task-2026-09-09/cad-out/mast_tube.step", "evidence/task-2026-09-09/cad-out/geometry.json",
     "docs/design/FEA_SETUP.md", "cad/roboracer/fixture-contract.json", "cad/roboracer/input-requests.csv",
+    # Tools whose output the headline numbers above depend on, so a silent edit shows up as drift.
+    "cad/fixture_feasibility.py", "experiments/load_cell_calibration.py",
+    "experiments/mast_fea.py", "literature/claim-ledger.md",
 })
 
 # The two stale-record checks named in W0.2 / W1.1.
@@ -54,6 +71,15 @@ STALE_CHECKS = {
     "hand_calc_summary_labels_rejected_baseline": lambda: "REJECTED BASELINE" in _read("runs/mast_hand_calc/summary.txt"),
     "fea_setup_current_before_superseded": lambda: (t := _read("docs/design/FEA_SETUP.md")).index("Current result (0.175 kg") < t.index("SUPERSEDED"),
     "design_doc_selected_moment_is_F_times_h": lambda: "12.88 N·m" in _read("docs/design/16_mechanical_design_analysis.md"),
+    # Added 2026-09-24. The modal claim was corrected after an audit found that two of the mechanisms it
+    # named are absent from the model. These three keep the claim, the domain file and the audit from
+    # drifting back out of agreement, which is how the error survived review the first time.
+    "claim_M2_says_cause_unresolved":
+        lambda: "the 285.5 Hz FEA is UNRESOLVED" in _read("literature/claim-ledger.md"),
+    "claim_M1_no_longer_asserts_bracketing":
+        lambda: "That argument is withdrawn here" in _read("literature/claim-ledger.md"),
+    "section3_carries_the_superseded_note":
+        lambda: "Superseded in part" in _read("literature/03-structural-dynamics-and-modal-testing.md"),
 }
 
 
