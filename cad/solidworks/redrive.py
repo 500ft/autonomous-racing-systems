@@ -22,6 +22,8 @@ SW_DOC_PART = 1
 SW_SOLID_BODY = 0
 VOLUME_TOLERANCE_REL = 1e-6
 
+PARTS_DIR = r"C:\Users\admin\Desktop\Projects\autonomous-racing-systems"
+
 VARIABLE = "ClampEngagement"
 NEW_VALUE_MM = 40.0
 
@@ -65,7 +67,8 @@ def main():
         unattended_saved, RESULT["unattended"] = unattended.begin(sw)
 
         for name in ("mast_tube_stock", "support_sleeve", "root_clamp"):
-            path = os.path.join(work_dir, "%s.sldprt" % name)
+            parts_dir = PARTS_DIR if os.path.isdir(PARTS_DIR) else work_dir
+            path = os.path.join(parts_dir, "%s.sldprt" % name)
             # Open latency on this host is unstable and a failure is not
             # reproducible, so the open is retried rather than trusted once.
             doc, last_error = None, None

@@ -105,6 +105,13 @@ python3 run_host.py redrive.py redrive_result.json 700         # prove it is par
 `run_host.py` needs the same host config as engineering-audit's cadloop
 (`CADLOOP_HOST_CONFIG`, default `~/.config/sw_pc_credentials.json`).
 
+Authored parts are written to the owner's per-repo project folder on the host,
+`C:\Users\admin\Desktop\Projects\autonomous-racing-systems` (`PARTS_DIR` in
+`author_mast_assembly.py` and `redrive.py`), so the CAD sits with the rest of this
+project's models rather than in the pipeline's scratch directory. If that folder is
+absent the scripts fall back to the work directory, so the pipeline still runs on a
+host that has not been organised this way.
+
 ## Unattended host (no monitor, no operator)
 
 The host has no display and nobody to click a dialog, so a modal prompt is a hang. `sw.Visible = False`

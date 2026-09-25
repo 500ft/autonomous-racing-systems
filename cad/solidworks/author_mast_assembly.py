@@ -25,6 +25,9 @@ SW_DEFAULT_PART_TEMPLATE = 69
 SW_THROUGH_ALL = 1
 SW_START_SKETCH_PLANE = 0
 FALLBACK_PART_TEMPLATE = r"C:\ProgramData\SolidWorks\SOLIDWORKS 2024\templates\Part.prtdot"
+# Deliverables land in the owner's per-repo project folder; the work_dir stays
+# the pipeline's scratch area so scripts and JSON do not clutter it.
+PARTS_DIR = r"C:\Users\admin\Desktop\Projects\autonomous-racing-systems"
 VOLUME_TOLERANCE_REL = 1e-6
 MM = 0.001  # the SOLIDWORKS API works in metres
 
@@ -348,8 +351,9 @@ def finish_part(part, name, work_dir, density, expected, warning_flag):
         "accepted": accepted,
     }
 
-    sldprt = os.path.join(work_dir, "%s.sldprt" % name)
-    step = os.path.join(work_dir, "%s.step" % name)
+    parts_dir = PARTS_DIR if os.path.isdir(PARTS_DIR) else work_dir
+    sldprt = os.path.join(parts_dir, "%s.sldprt" % name)
+    step = os.path.join(parts_dir, "%s.step" % name)
     part.SaveAs3(sldprt, 0, 0)
     part.ClearSelection2(True)
     part.SaveAs3(step, 0, 0)
@@ -359,7 +363,7 @@ def finish_part(part, name, work_dir, density, expected, warning_flag):
     part.ShowNamedView2("*Isometric", 7)
     part.ViewZoomtofit2()
     part.GraphicsRedraw2()
-    preview = os.path.join(work_dir, "%s.bmp" % name)
+    preview = os.path.join(parts_dir, "%s.bmp" % name)
     part.SaveBMP(preview, 1000, 750)
     record["preview_written"] = os.path.exists(preview)
 

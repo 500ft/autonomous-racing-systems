@@ -13,9 +13,9 @@
       ],
       "rebuilt": true,
       "volume_before_mm3": 11769.191478510773,
-      "volume_after_mm3": 12205.087459196353,
+      "volume_after_mm3": 12205.087459196351,
       "oracle_after_mm3": 12205.08745919634,
-      "error_rel": 1.043247405427393e-15,
+      "error_rel": 8.942120617949084e-16,
       "n_solids": 1,
       "accepted": true
     },
@@ -43,9 +43,9 @@
       ],
       "rebuilt": true,
       "volume_before_mm3": 70582.72919191429,
-      "volume_after_mm3": 81076.51954730172,
+      "volume_after_mm3": 81076.51954730171,
       "oracle_after_mm3": 81076.51954730174,
-      "error_rel": 1.7948371870942191e-16,
+      "error_rel": 3.5896743741884383e-16,
       "n_solids": 1,
       "accepted": true
     }
