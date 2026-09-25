@@ -241,7 +241,10 @@ class LabellingAndCliTests(unittest.TestCase):
     def test_screen_is_labelled_and_claims_no_readiness(self):
         s = screened()
         self.assertIn("NOMINAL FEASIBILITY SCREEN ONLY", s["label"])
-        self.assertEqual(s["verdict"], "PLAUSIBLE_PENDING_PHYSICAL_INPUTS", s["failed_gates"])
+        # Since T1 the frozen hysteresis and FEA-agreement gates are declared not_evaluated, so the
+        # screen cannot reach PLAUSIBLE at all. That is deliberate: it never simulated them.
+        self.assertEqual(s["verdict"], "UNKNOWN")
+        self.assertEqual(s["failed_gates"], [])
         self.assertIn("not campaign readiness", s["verdict_note"])
         self.assertIn("not a measurement", s["verdict_note"])
 
@@ -268,6 +271,70 @@ class LabellingAndCliTests(unittest.TestCase):
                             "--assume-fixture-stiffness", "8000"], capture_output=True, text=True)
         self.assertEqual(p.returncode, 2, p.stdout[:400])
 
+
+
+class PassFractionAndScopeTests(unittest.TestCase):
+    """Closeout T1: a passing median is not campaign reliability, and unsimulated gates must say so."""
+
+    def test_r2_gate_reads_the_pass_fraction_not_the_median(self):
+        s = ff.run(cfg_with(repeatability_mm=3e-4), trials=400, seed=20260925)
+        a = s["axes"]["x"]
+        self.assertGreater(a["r2_q50"], 0.99)              # median passes
+        self.assertLess(a["r2_pass_fraction"], 0.95)       # yet campaigns are rejected often
+        self.assertFalse(a["passes_r_squared_gate"])       # so the gate must not pass
+        self.assertIn("r2_pass_fraction_gate", a)
+
+    def test_pass_fraction_reports_its_own_sampling_precision(self):
+        a = ff.run(cfg_with(repeatability_mm=5e-4), trials=400, seed=20260925)["axes"]["x"]
+        self.assertGreater(a["r2_pass_fraction_se"], 0.0)
+        self.assertLessEqual(a["r2_q05"], a["r2_q50"])
+        self.assertLessEqual(a["r2_q50"], a["r2_q95"])
+
+    def test_joint_two_axis_model_shares_the_campaign_gain(self):
+        cfg = cfg_with(repeatability_mm=3e-4)
+        t = ff.terms(cfg)
+        j = ff.screen_campaign(1.0 / ff.specimen_stiffness_n_per_mm(), t, cfg, 300, 20260925)
+        self.assertLessEqual(j["both_axes_r2_pass_fraction"], min(j["per_axis_pass_fraction"].values()))
+        self.assertIn("drawn once per campaign", j["dependence_model"])
+        self.assertNotIn("product", j)                     # independence is never assumed
+
+    def test_a_supplied_gain_is_used_rather_than_redrawn(self):
+        """Scope control: the caller can span both axes of one campaign with a single draw."""
+        import random
+        cfg = cfg_with(repeatability_mm=1e-12, indicator_resolution_mm=1e-9,
+                       force_readout_relative_standard_uncertainty=0.0,
+                       force_gain_relative_standard_uncertainty=0.02)
+        t = ff.terms(cfg)
+        c = 1.0 / ff.specimen_stiffness_n_per_mm()
+        same_a = ff._trial_slope(random.Random(1), c, t, cfg, gain=0.05)[0]
+        same_b = ff._trial_slope(random.Random(2), c, t, cfg, gain=0.05)[0]
+        other = ff._trial_slope(random.Random(1), c, t, cfg, gain=-0.05)[0]
+        # Two different rng streams at the SAME supplied gain agree far more closely than the same
+        # stream at a different gain: the supplied value is used, not redrawn. (They are not bitwise
+        # identical because the residual root-rotation term still consumes the stream.)
+        self.assertLess(abs(same_a - same_b), 1e-6 * abs(same_a))
+        self.assertGreater(abs(same_a - other), 1e-3 * abs(same_a))
+
+    def test_unsimulated_campaign_gates_are_declared_not_evaluated(self):
+        g = screened()["gate_status"]
+        self.assertEqual(g["hysteresis"]["status"], "not_evaluated")
+        self.assertEqual(g["fea_agreement"]["status"], "not_evaluated")
+        self.assertIn("does not simulate", g["hysteresis"]["reason"])
+
+    def test_unsimulated_gates_keep_the_verdict_short_of_plausible(self):
+        """Regression: the screen must not report PLAUSIBLE while frozen gates are unevaluated."""
+        s = screened()
+        self.assertEqual(s["verdict"], "UNKNOWN")
+        self.assertIn("hysteresis", s["unresolved_gates"])
+        self.assertIn("fea_agreement", s["unresolved_gates"])
+
+    def test_systematic_rotation_passes_both_numerical_gates_while_badly_biased(self):
+        s = ff.run(cfg_with(repeatability_mm=3e-4, uncorrected_root_rotation_mm_per_n=0.00025),
+                   trials=300, seed=20260925)
+        a = s["axes"]["x"]
+        self.assertGreater(a["r2_q50"], 0.99)
+        self.assertLess(a["relative_U95"], 0.10)
+        self.assertGreater(a["relative_bias"], 0.15)
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,9 +1,9 @@
 {
- "source_commit": "4a52b14c2ea2c1483e84bbc0add4bec8d9e89797",
+ "source_commit": "ad68465aa42754e771d604e54caeb58908ad35ff",
  "label": "SOFTWARE CHECK: traceability inventory, not validation",
  "artifacts": {
   "cad/contract.json": "b884c770a85219edf27cf9b31053ede01f35137f3bc985d3d50e405d46e26e46",
-  "cad/fixture_feasibility.py": "71ed3689e4467274fb380f9c1eefdfecda4612be14c719c9b9d0331e0ad52194",
+  "cad/fixture_feasibility.py": "aa6bcb8f7eddfdc7923c47dfea2314e1f5cce723773f034cca9e0ff63e9f19a7",
   "cad/roboracer/fixture-contract.json": "61349f814195278c9ccfdf304d521431c5fd20ba1ce233968d118e2373341080",
   "cad/roboracer/input-requests.csv": "a68e204f05d4ce6ab5e0a52d4a81e86da4a50d2eea43935483006f82631db810",
   "cad/roboracer/parameters.csv": "1c4e547374946515800cf2df2ad93102c0fd2c2e29da1ffa83de6e9dc065e303",
