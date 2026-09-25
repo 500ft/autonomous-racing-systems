@@ -1,5 +1,5 @@
 {
- "source_commit": "4a52b14c2ea2c1483e84bbc0add4bec8d9e89797",
+ "source_commit": "ad68465aa42754e771d604e54caeb58908ad35ff",
  "label": "SOFTWARE CHECK: traceability inventory, not validation",
  "artifacts": {
   "cad/contract.json": "b884c770a85219edf27cf9b31053ede01f35137f3bc985d3d50e405d46e26e46",
@@ -10,12 +10,12 @@
   "docs/CAD_MEASUREMENT_CONTRACT.md": "c4c3b2e6fabbb2eef08521e19ae936ea2656e5e2181e88a6edc0986344d5a66c",
   "docs/design/16_mechanical_design_analysis.md": "afe59ce56375fa90ebd07d0c558b05d0b593ae92cf2305273aaa242baeb12873",
   "docs/design/FEA_SETUP.md": "3786f28bb78eb14426bbb2e44720b36bcdaf9b0f8bc4496342d6f4e0d8a2d3c9",
-  "docs/design/MODAL_MODEL_AUDIT.md": "3eff080133a3cd9cff2933dbda0baeb8df82674db6988972efd257f07d9f28fb",
+  "docs/design/MODAL_MODEL_AUDIT.md": "7685607df3f463aed2bd91c9e047fa8ceb3549175da560372e05547910f07ae6",
   "evidence/task-2026-09-09/cad-out/geometry.json": "e84d225426ab8e039820d27892426176570daa057dfabf25366771bdfc72ff82",
   "evidence/task-2026-09-09/cad-out/mast_tube.step": "a1e74213ed2bb1604106e7239f25622dbb884f3b43e72bf5d23b8f0a3166486e",
   "experiments/load_cell_calibration.py": "0b01df8ac3010cd71822955166888338a23a701dfc87579f1b707fbe6ee88010",
-  "experiments/mast_fea.py": "1ac78fdd0d27a14e3253f8f745bd18a1263882c17c85bfa104567441537bdb32",
-  "literature/claim-ledger.md": "b76eb32b49779a374202427872ef45c573cfc4f7444995080400a98f7daec3de",
+  "experiments/mast_fea.py": "08133721d95bfc664542e18bd3fd0786ff5a4e73fb095ff9eb577f1b49770b39",
+  "literature/claim-ledger.md": "6ff1e8c89d49ac46969e5eadff957ed09c4cc1221b1eeec0f3badfc4d9fc20a2",
   "runs/mast_fea/fea_summary.txt": "35506c3527951676ed6c9dc421c6a7d78308447cb0e3e9f9417104c6e93f2876",
   "runs/mast_fea/mesh_convergence.txt": "cac22eac5159ba40d057d6bb5bfd5effe6449fcc1ed09b370bd924c25884c485",
   "runs/mast_fixture_feasibility/nominal_screen.json": "fa4ec3aed438b95b74ffc5c9ace26a600c6b6d4eb9845ea717cc0bc994864786",
@@ -228,11 +228,18 @@
    "label": "MODEL ASSUMPTION"
   },
   {
-   "quantity": "modal_gap_cause",
-   "value": "unresolved",
+   "quantity": "modal_gap_dominant_cause",
+   "value": "attachment model",
    "unit": "1",
    "source": "docs/design/MODAL_MODEL_AUDIT.md",
-   "label": "MODEL ASSUMPTION"
+   "label": "SIMULATION OUTPUT"
+  },
+  {
+   "quantity": "modal_legacy_reproduced_hz",
+   "value": "285.5",
+   "unit": "Hz",
+   "source": "docs/design/MODAL_MODEL_AUDIT.md",
+   "label": "SIMULATION OUTPUT"
   }
  ],
  "owner_pending": [
@@ -265,7 +272,9 @@
   "hand_calc_summary_labels_rejected_baseline": true,
   "fea_setup_current_before_superseded": true,
   "design_doc_selected_moment_is_F_times_h": true,
-  "claim_M2_says_cause_unresolved": true,
+  "claim_M2_names_the_attachment_artifact": true,
+  "claim_M2_adopts_no_new_frequency": true,
+  "modal_audit_records_stage_2": true,
   "claim_M1_no_longer_asserts_bracketing": true,
   "section3_carries_the_superseded_note": true
  },

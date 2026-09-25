@@ -32,7 +32,7 @@ threshold or a protocol; see [README](README.md) for why.
 - **Confidence: moderate** for the nominal tube as modelled by the historical deck; **none** as a
   statement about hardware, and **none** about what the corrected attachment model will give.
 
-### M2. The cause of the 13.5 % gap between the 330.1 Hz hand calc and the 285.5 Hz FEA is UNRESOLVED
+### M2. The 13.5 % hand-vs-FEA gap was mostly a tip-mass ATTACHMENT artifact, not physics
 
 **Revised 2026-09-24 after a source audit.** The earlier version of this claim said the gap was
 "expected physics, not a modelling defect" and attributed it to four mechanisms. That attribution was
@@ -48,7 +48,19 @@ wrong in two places and is withdrawn.
   one-node translational `*MASS`. Separately, the mass is attached to the **nearest material node**,
   which on a hollow section is about 8.5 mm off-axis, not at the section centre — an eccentric
   single-node attachment that is a modelling defect in its own right.
-- **Confidence: the cause is unresolved.** Mechanisms that can still act are shear and rotary inertia
+- **Largely resolved 2026-09-25 by a three-case solver comparison**
+  ([audit](../docs/design/MODAL_MODEL_AUDIT.md), `runs/mast_modal_attachment_20260925/`). Holding the
+  mesh, material, root constraint and tip mass fixed and changing only the attachment definition:
+  the **attachment model** accounts for **+10.97 %** (single-node → rigidly coupled to the tip plane,
+  position unchanged) and the **off-axis position** for only **+1.27 %**. The legacy case reproduces
+  the committed 285.5 Hz. Against the 330.1 Hz hand calculation the corrected centred model sits at
+  **-2.79 %**, where the legacy model sat at −13.5 %. So most of the original gap was an artifact of
+  attaching the mass to one wall node, not physics, and the residual is the size that shear and
+  3D-versus-beam kinematics would be expected to produce. Comparing legacy against centred alone
+  changes two things and is not the eccentricity effect.
+- **Still open:** the residual -2.79 % is not itself attributed, and **no number is adopted** — a new
+  coupling invalidates reuse of the existing mesh-convergence evidence. Mechanisms that can still act
+  are shear and rotary inertia
   of the tube, 1D beam versus 3D solid kinematics, the eccentric attachment, and local behaviour at the
   constrained root. None has been quantified. A controlled one-at-a-time comparison is required before
   any cause is named.
