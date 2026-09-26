@@ -1,8 +1,8 @@
 {
  "schema": "week-manifest/1",
  "week": "2026-09-19..25",
- "generated": "2026-09-25T16:46:27-0400",
- "analysis_source_commit": "b5061bc2bdb1aaa544c4d33d0fa1d48dfd456f8a",
+ "generated": "2026-09-26T01:50:43-0400",
+ "analysis_source_commit": "f0c0c3339f4efb198c5ff88bff3bb9262d82493c",
  "working_directory": "repository root",
  "environment": "python3 (stdlib) unless a check states otherwise",
  "self_exclusion": "evidence/week-2026-09-19/manifest.json is excluded from its own hash set; a file cannot contain the hash of a version of itself that includes that hash",
@@ -20,8 +20,8 @@
    "evidence_kind": "software"
   },
   "cad/nominal_inventory.py": {
-   "sha256": "c9975a327f5949f4ae15ae0340f17e07b6d49218eb05d133cb443648f41ac559",
-   "bytes": 8477,
+   "sha256": "be72bce405a25479582c0b461bb08a0a85587f533e504c34347f679524277290",
+   "bytes": 9142,
    "role": "analysis source",
    "evidence_kind": "software"
   },
@@ -80,8 +80,8 @@
    "evidence_kind": "nominal"
   },
   "docs/design/MODAL_MODEL_AUDIT.md": {
-   "sha256": "3eff080133a3cd9cff2933dbda0baeb8df82674db6988972efd257f07d9f28fb",
-   "bytes": 4570,
+   "sha256": "7685607df3f463aed2bd91c9e047fa8ceb3549175da560372e05547910f07ae6",
+   "bytes": 7319,
    "role": "model audit",
    "evidence_kind": "source inspection + simulation"
   },
@@ -110,8 +110,8 @@
    "evidence_kind": "documentation"
   },
   "runs/nominal_package_inventory/inventory.json": {
-   "sha256": "ddf47993d311cee001d3ab07d56bf2bcacd003ff10f405d54cf7d05c0a1e7fc2",
-   "bytes": 8189,
+   "sha256": "31b40b97be73fe585154e97dfcbc465c80f21163ffd3f3e5da034fd133632ca6",
+   "bytes": 8469,
    "role": "traceability inventory",
    "evidence_kind": "software check"
   },
