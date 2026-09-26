@@ -9,11 +9,18 @@ authors would raise one, so an unattended run blocks forever at the first dimens
 no output. Disabling it makes SOLIDWORKS accept the value the API supplies, which is what the caller
 already passes to `AddDimension2` — the dimension is not guessed, the confirmation click is removed.
 
-STATUS: NOT HOST-VERIFIED. The toggle identifier below is cross-checked against three independent
-sources, one of which read it out of `swconst.tlb` directly, but no run on this project's host has
-confirmed it yet. That is why every toggle is **read back after writing** and the outcome recorded in
-the result JSON: the first real run proves or disproves it instead of assuming. If `applied` comes
-back false, the run journal says so and the operator can clear the option by hand once.
+STATUS: HOST-VERIFIED 2026-09-26, on this project's host, by the scaffold work in
+`500ft/engineering-audit → cadloop/scaffold/`. The identifier is correct and the failure it predicts
+is real. Two authoring runs had died at `AddDimension2` with "The remote procedure call failed" and a
+diagnostic probe had hung outright; reading preference 10 returned **true**, which is exactly the modal
+Modify box described above. Writing it false read back false (`{"preference_id": 10, "target": false,
+"was": true, "now": false, "applied": true}`) and the runs completed. So the symptom of this toggle
+being on is not only a silent hang — it also surfaces as an RPC failure, which looks like a transport
+problem and is not one.
+
+The read-back is kept regardless. It is what produced that evidence, and a host whose settings are
+changed by hand can drift back. If `applied` comes back false, the run journal says so and the
+operator can clear the option by hand once.
 
 Scope limit, stated rather than implied: this disables the prompts named below and nothing else. It is
 not a general "suppress every dialog" switch, and no such switch is claimed to exist. A dialog raised
