@@ -1,0 +1,746 @@
+{
+ "label": "MODAL ATTACHMENT COMPARISON: solver output of three declared model definitions. No physical measurement, no adopted headline frequency, no RR-S12 progress.",
+ "schema": "modal-attachment-study/1",
+ "environment": {
+  "python": "3.11.8",
+  "platform": "macOS-14.7.3-arm64-arm-64bit",
+  "ccx_path": "/Users/redhose/ENTER/envs/fea/bin/ccx",
+  "ccx_version": "This is Version 2.23",
+  "gmsh": "4.15.2",
+  "source_commit": "4df2f8233c5d4b90a0b4aff801ebf8a2954db011",
+  "generated": "2026-09-25T16:28:52-0400"
+ },
+ "mesh": {
+  "mesh_size_m": 0.0012,
+  "nodes": 58232,
+  "c3d10": 28985,
+  "root_nodes": 474,
+  "tip_plane_nodes": 474,
+  "legacy_mass_node": 18,
+  "legacy_mass_node_coords_m": [
+   -0.003184156044035244,
+   0.007881062763817696,
+   0.1
+  ]
+ },
+ "cases": {
+  "legacy": {
+   "attachment": {
+    "attachment": "legacy",
+    "mass_node": 18,
+    "mass_node_coords_m": [
+     -0.003184156044035244,
+     0.007881062763817696,
+     0.1
+    ],
+    "radial_offset_m": 0.008499999999999999,
+    "legacy_node_radial_offset_m": 0.008499999999999999,
+    "rigid_coupled_to_tip_plane": false,
+    "tip_plane_nodes": 474,
+    "added_mass_kg": 0.175,
+    "root_constraint": "NROOT, 1, 3 (all three translations fixed)",
+    "note": "rigid tip coupling is an idealization, not an as-built bracket"
+   },
+   "status": "ok",
+   "solve_seconds": 17.8,
+   "tables": {
+    "frequencies_hz": [
+     285.5111,
+     301.3343,
+     1009.279,
+     3660.38,
+     4238.295,
+     8008.052
+    ],
+    "participation": {
+     "1": [
+      -0.1644921,
+      0.3972158,
+      -0.02918821,
+      -0.03954226,
+      -0.01637265,
+      3.039233e-05
+     ],
+     "2": [
+      0.3989866,
+      0.1651522,
+      -0.0009685287,
+      -0.0163347,
+      0.03944129,
+      -0.003517652
+     ],
+     "3": [
+      0.008935127,
+      -0.02451447,
+      -0.4189398,
+      -0.0006879903,
+      -0.0003639439,
+      4.482654e-06
+     ],
+     "4": [
+      -0.02721945,
+      0.06694248,
+      0.03610665,
+      -0.002693771,
+      -0.001095502,
+      -1.608238e-06
+     ],
+     "5": [
+      0.06112643,
+      0.0247044,
+      -0.001205268,
+      -0.0008907592,
+      0.002197146,
+      0.0007926268
+     ],
+     "6": [
+      -0.03306883,
+      -0.01329931,
+      0.0001883335,
+      0.000257404,
+      -0.0006397424,
+      0.001078393
+     ]
+    },
+    "effective_modal_mass": {
+     "1": [
+      0.02705764,
+      0.1577804,
+      0.0008519518,
+      0.00156359,
+      0.0002680635,
+      9.236938e-10
+     ],
+     "2": [
+      0.1591903,
+      0.02727524,
+      9.380478e-07,
+      0.0002668225,
+      0.001555615,
+      1.237388e-05
+     ],
+     "3": [
+      7.983649e-05,
+      0.0006009591,
+      0.1755106,
+      4.733307e-07,
+      1.324552e-07,
+      2.009419e-11
+     ],
+     "4": [
+      0.0007408986,
+      0.004481296,
+      0.00130369,
+      7.256404e-06,
+      1.200124e-06,
+      2.586431e-12
+     ],
+     "5": [
+      0.00373644,
+      0.0006103072,
+      1.45267e-06,
+      7.93452e-07,
+      4.827451e-06,
+      6.282573e-07
+     ],
+     "6": [
+      0.001093548,
+      0.0001768718,
+      3.54695e-08,
+      6.625682e-08,
+      4.092704e-07,
+      1.162932e-06
+     ],
+     "TOTAL": [
+      0.1918986,
+      0.190925,
+      0.1776686,
+      0.001839002,
+      0.001830248,
+      1.416601e-05
+     ]
+    }
+   },
+   "identification": {
+    "modes": [
+     {
+      "mode": 1,
+      "hz": 285.5111,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.02705764,
+      "eff_mass_y_kg": 0.1577804,
+      "eff_mass_z_kg": 0.0008519518,
+      "transverse_over_axial": 216.958330271736
+     },
+     {
+      "mode": 2,
+      "hz": 301.3343,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.1591903,
+      "eff_mass_y_kg": 0.02727524,
+      "eff_mass_z_kg": 9.380478e-07,
+      "transverse_over_axial": 198780.4246222847
+     },
+     {
+      "mode": 3,
+      "hz": 1009.279,
+      "label": "axial",
+      "eff_mass_x_kg": 7.983649e-05,
+      "eff_mass_y_kg": 0.0006009591,
+      "eff_mass_z_kg": 0.1755106,
+      "transverse_over_axial": 0.003878942867268416
+     },
+     {
+      "mode": 4,
+      "hz": 3660.38,
+      "label": "mixed",
+      "eff_mass_x_kg": 0.0007408986,
+      "eff_mass_y_kg": 0.004481296,
+      "eff_mass_z_kg": 0.00130369,
+      "transverse_over_axial": 4.005702736079897
+     },
+     {
+      "mode": 5,
+      "hz": 4238.295,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.00373644,
+      "eff_mass_y_kg": 0.0006103072,
+      "eff_mass_z_kg": 1.45267e-06,
+      "transverse_over_axial": 2992.24682825418
+     },
+     {
+      "mode": 6,
+      "hz": 8008.052,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.001093548,
+      "eff_mass_y_kg": 0.0001768718,
+      "eff_mass_z_kg": 3.54695e-08,
+      "transverse_over_axial": 35817.24580273192
+     }
+    ],
+    "bending_pair_hz": [
+     285.5111,
+     301.3343
+    ],
+    "first_bending_hz": 285.5111,
+    "first_bending_mode_index": 1,
+    "near_zero_modes": [],
+    "note": "the first bending mode is chosen by effective modal mass, not by index; a near-degenerate orthogonal pair can swap order between cases"
+   },
+   "checks": {
+    "added_mass_kg": 0.175,
+    "total_effective_mass_x_kg": 0.1918986,
+    "root_nodes_constrained": 474,
+    "near_zero_modes": [],
+    "no_spurious_mechanism": true
+   },
+   "files": {
+    ".inp": "runs/mast_modal_attachment_20260925/legacy.inp",
+    ".dat": "runs/mast_modal_attachment_20260925/legacy.dat",
+    ".ccx.log": "runs/mast_modal_attachment_20260925/legacy.ccx.log"
+   }
+  },
+  "coupled_eccentric": {
+   "attachment": {
+    "attachment": "coupled_eccentric",
+    "mass_node": 58233,
+    "mass_node_coords_m": [
+     -0.003184156044035244,
+     0.007881062763817696,
+     0.1
+    ],
+    "radial_offset_m": 0.008499999999999999,
+    "legacy_node_radial_offset_m": 0.008499999999999999,
+    "rigid_coupled_to_tip_plane": true,
+    "tip_plane_nodes": 474,
+    "added_mass_kg": 0.175,
+    "root_constraint": "NROOT, 1, 3 (all three translations fixed)",
+    "note": "rigid tip coupling is an idealization, not an as-built bracket"
+   },
+   "status": "ok",
+   "solve_seconds": 17.5,
+   "tables": {
+    "frequencies_hz": [
+     316.8406,
+     318.6401,
+     2382.88,
+     5529.466,
+     6902.86,
+     8120.516
+    ],
+    "participation": {
+     "1": [
+      0.4012975,
+      0.1616413,
+      5.395395e-05,
+      -0.01596049,
+      0.03962536,
+      -0.003509217
+     ],
+     "2": [
+      0.1605566,
+      -0.3986205,
+      0.04977953,
+      0.03974169,
+      0.01600764,
+      3.730524e-06
+     ],
+     "3": [
+      0.02313193,
+      -0.05725228,
+      -0.4248773,
+      0.001665751,
+      0.0006730248,
+      -2.081202e-09
+     ],
+     "4": [
+      0.06123494,
+      0.024738,
+      5.387409e-06,
+      -0.0006800826,
+      0.001683323,
+      0.001057951
+     ],
+     "5": [
+      0.02780192,
+      -0.0688149,
+      0.07606057,
+      0.001578464,
+      0.0006376844,
+      -5.735456e-08
+     ],
+     "6": [
+      0.04715552,
+      0.01905411,
+      -7.054966e-06,
+      -0.0003643773,
+      0.0009016497,
+      -0.0008890287
+     ]
+    },
+    "effective_modal_mass": {
+     "1": [
+      0.1610397,
+      0.02612792,
+      2.911029e-09,
+      0.0002547373,
+      0.001570169,
+      1.23146e-05
+     ],
+     "2": [
+      0.02577841,
+      0.1588983,
+      0.002478002,
+      0.001579402,
+      0.0002562445,
+      1.391681e-11
+     ],
+     "3": [
+      0.000535086,
+      0.003277824,
+      0.1805207,
+      2.774725e-06,
+      4.529624e-07,
+      4.3314e-18
+     ],
+     "4": [
+      0.003749718,
+      0.0006119689,
+      2.902418e-11,
+      4.625123e-07,
+      2.833576e-06,
+      1.119259e-06
+     ],
+     "5": [
+      0.0007729469,
+      0.004735491,
+      0.005785211,
+      2.491548e-06,
+      4.066414e-07,
+      3.289546e-15
+     ],
+     "6": [
+      0.002223643,
+      0.0003630591,
+      4.977255e-11,
+      1.327708e-07,
+      8.129722e-07,
+      7.90372e-07
+     ],
+     "TOTAL": [
+      0.1940995,
+      0.1940146,
+      0.1887839,
+      0.00184,
+      0.00183092,
+      1.422425e-05
+     ]
+    }
+   },
+   "identification": {
+    "modes": [
+     {
+      "mode": 1,
+      "hz": 316.8406,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.1610397,
+      "eff_mass_y_kg": 0.02612792,
+      "eff_mass_z_kg": 2.911029e-09,
+      "transverse_over_axial": 64296034.15149763
+     },
+     {
+      "mode": 2,
+      "hz": 318.6401,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.02577841,
+      "eff_mass_y_kg": 0.1588983,
+      "eff_mass_z_kg": 0.002478002,
+      "transverse_over_axial": 74.52645720221372
+     },
+     {
+      "mode": 3,
+      "hz": 2382.88,
+      "label": "axial",
+      "eff_mass_x_kg": 0.000535086,
+      "eff_mass_y_kg": 0.003277824,
+      "eff_mass_z_kg": 0.1805207,
+      "transverse_over_axial": 0.021121732853905395
+     },
+     {
+      "mode": 4,
+      "hz": 5529.466,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.003749718,
+      "eff_mass_y_kg": 0.0006119689,
+      "eff_mass_z_kg": 2.902418e-11,
+      "transverse_over_axial": 150277696.04515958
+     },
+     {
+      "mode": 5,
+      "hz": 6902.86,
+      "label": "mixed",
+      "eff_mass_x_kg": 0.0007729469,
+      "eff_mass_y_kg": 0.004735491,
+      "eff_mass_z_kg": 0.005785211,
+      "transverse_over_axial": 0.9521585124552933
+     },
+     {
+      "mode": 6,
+      "hz": 8120.516,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.002223643,
+      "eff_mass_y_kg": 0.0003630591,
+      "eff_mass_z_kg": 4.977255e-11,
+      "transverse_over_axial": 51970455.60253593
+     }
+    ],
+    "bending_pair_hz": [
+     316.8406,
+     318.6401
+    ],
+    "first_bending_hz": 316.8406,
+    "first_bending_mode_index": 1,
+    "near_zero_modes": [],
+    "note": "the first bending mode is chosen by effective modal mass, not by index; a near-degenerate orthogonal pair can swap order between cases"
+   },
+   "checks": {
+    "added_mass_kg": 0.175,
+    "total_effective_mass_x_kg": 0.1940995,
+    "root_nodes_constrained": 474,
+    "near_zero_modes": [],
+    "no_spurious_mechanism": true
+   },
+   "files": {
+    ".inp": "runs/mast_modal_attachment_20260925/coupled_eccentric.inp",
+    ".dat": "runs/mast_modal_attachment_20260925/coupled_eccentric.dat",
+    ".ccx.log": "runs/mast_modal_attachment_20260925/coupled_eccentric.ccx.log"
+   }
+  },
+  "coupled_centred": {
+   "attachment": {
+    "attachment": "coupled_centred",
+    "mass_node": 58233,
+    "mass_node_coords_m": [
+     0.0,
+     0.0,
+     0.1
+    ],
+    "radial_offset_m": 0.0,
+    "legacy_node_radial_offset_m": 0.008499999999999999,
+    "rigid_coupled_to_tip_plane": true,
+    "tip_plane_nodes": 474,
+    "added_mass_kg": 0.175,
+    "root_constraint": "NROOT, 1, 3 (all three translations fixed)",
+    "note": "rigid tip coupling is an idealization, not an as-built bracket"
+   },
+   "status": "ok",
+   "solve_seconds": 17.2,
+   "tables": {
+    "frequencies_hz": [
+     320.8747,
+     320.8787,
+     2894.104,
+     6474.382,
+     6474.477,
+     7743.317
+    ],
+    "participation": {
+     "1": [
+      -0.415954,
+      0.1196915,
+      -4.6768e-07,
+      -0.01181486,
+      -0.0410592,
+      -7.63035e-10
+     ],
+     "2": [
+      0.1196914,
+      0.4159539,
+      9.691036e-08,
+      -0.0410592,
+      0.01181486,
+      7.577672e-09
+     ],
+     "3": [
+      1.622029e-08,
+      2.098429e-08,
+      0.4368565,
+      -5.202191e-09,
+      -4.227342e-08,
+      -8.882094e-12
+     ],
+     "4": [
+      -0.07805996,
+      0.02336078,
+      1.647397e-06,
+      -0.0005500274,
+      -0.001837953,
+      -4.958571e-11
+     ],
+     "5": [
+      0.02336071,
+      0.07805974,
+      -4.175024e-07,
+      -0.001838007,
+      0.0005500425,
+      -7.69112e-10
+     ],
+     "6": [
+      5.815311e-09,
+      5.197849e-09,
+      3.379628e-06,
+      6.62421e-11,
+      -1.213313e-10,
+      0.001278505
+     ]
+    },
+    "effective_modal_mass": {
+     "1": [
+      0.1730178,
+      0.01432605,
+      2.187246e-13,
+      0.0001395909,
+      0.001685858,
+      5.822224e-19
+     ],
+     "2": [
+      0.01432604,
+      0.1730176,
+      9.391619e-15,
+      0.001685858,
+      0.0001395909,
+      5.742112e-17
+     ],
+     "3": [
+      2.630979e-16,
+      4.403403e-16,
+      0.1908436,
+      2.706279e-17,
+      1.787042e-15,
+      7.889159e-23
+     ],
+     "4": [
+      0.006093358,
+      0.000545726,
+      2.713917e-12,
+      3.025301e-07,
+      3.37807e-06,
+      2.458743e-21
+     ],
+     "5": [
+      0.0005457229,
+      0.006093323,
+      1.743082e-13,
+      3.378269e-06,
+      3.025468e-07,
+      5.915333e-19
+     ],
+     "6": [
+      3.381784e-17,
+      2.701764e-17,
+      1.142188e-11,
+      4.388016e-21,
+      1.472129e-20,
+      1.634575e-06
+     ],
+     "TOTAL": [
+      0.1939829,
+      0.1939827,
+      0.1908436,
+      0.001829129,
+      0.001829129,
+      1.634575e-06
+     ]
+    }
+   },
+   "identification": {
+    "modes": [
+     {
+      "mode": 1,
+      "hz": 320.8747,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.1730178,
+      "eff_mass_y_kg": 0.01432605,
+      "eff_mass_z_kg": 2.187246e-13,
+      "transverse_over_axial": 856528483764.5149
+     },
+     {
+      "mode": 2,
+      "hz": 320.8787,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.01432604,
+      "eff_mass_y_kg": 0.1730176,
+      "eff_mass_z_kg": 9.391619e-15,
+      "transverse_over_axial": 19947959984322.19
+     },
+     {
+      "mode": 3,
+      "hz": 2894.104,
+      "label": "axial",
+      "eff_mass_x_kg": 2.630979e-16,
+      "eff_mass_y_kg": 4.403403e-16,
+      "eff_mass_z_kg": 0.1908436,
+      "transverse_over_axial": 3.685940738908719e-15
+     },
+     {
+      "mode": 4,
+      "hz": 6474.382,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.006093358,
+      "eff_mass_y_kg": 0.000545726,
+      "eff_mass_z_kg": 2.713917e-12,
+      "transverse_over_axial": 2446310627.775278
+     },
+     {
+      "mode": 5,
+      "hz": 6474.477,
+      "label": "transverse_bending",
+      "eff_mass_x_kg": 0.0005457229,
+      "eff_mass_y_kg": 0.006093323,
+      "eff_mass_z_kg": 1.743082e-13,
+      "transverse_over_axial": 38087972338.650734
+     },
+     {
+      "mode": 6,
+      "hz": 7743.317,
+      "label": "axial",
+      "eff_mass_x_kg": 3.381784e-17,
+      "eff_mass_y_kg": 2.701764e-17,
+      "eff_mass_z_kg": 1.142188e-11,
+      "transverse_over_axial": 5.326223003568588e-06
+     }
+    ],
+    "bending_pair_hz": [
+     320.8747,
+     320.8787
+    ],
+    "first_bending_hz": 320.8747,
+    "first_bending_mode_index": 1,
+    "near_zero_modes": [],
+    "note": "the first bending mode is chosen by effective modal mass, not by index; a near-degenerate orthogonal pair can swap order between cases"
+   },
+   "checks": {
+    "added_mass_kg": 0.175,
+    "total_effective_mass_x_kg": 0.1939829,
+    "root_nodes_constrained": 474,
+    "near_zero_modes": [],
+    "no_spurious_mechanism": true
+   },
+   "files": {
+    ".inp": "runs/mast_modal_attachment_20260925/coupled_centred.inp",
+    ".dat": "runs/mast_modal_attachment_20260925/coupled_centred.dat",
+    ".ccx.log": "runs/mast_modal_attachment_20260925/coupled_centred.ccx.log"
+   }
+  }
+ },
+ "comparisons": [
+  {
+   "comparison": "legacy -> coupled_eccentric",
+   "isolates": "the attachment model, position held fixed",
+   "from_hz": 285.5111,
+   "to_hz": 316.8406,
+   "delta_hz": 31.329499999999996,
+   "percent": 10.973128540361477,
+   "denominator": "percent is relative to legacy = 285.5111 Hz"
+  },
+  {
+   "comparison": "coupled_eccentric -> coupled_centred",
+   "isolates": "position, attachment model held fixed",
+   "from_hz": 316.8406,
+   "to_hz": 320.8747,
+   "delta_hz": 4.034100000000024,
+   "percent": 1.2732269791182138,
+   "denominator": "percent is relative to coupled_eccentric = 316.8406 Hz"
+  }
+ ],
+ "confounded_comparison": {
+  "comparison": "legacy -> coupled_centred",
+  "isolates": "TWO changes at once",
+  "from_hz": 285.5111,
+  "to_hz": 320.8747,
+  "delta_hz": 35.36360000000002,
+  "percent": 12.386068352508893,
+  "denominator": "percent is relative to legacy = 285.5111 Hz",
+  "warning": "This is NOT the eccentricity effect: it changes both the attachment model and the position. Reported only so it cannot be mistaken for one of them."
+ },
+ "historical_reference": {
+  "committed_fea_hz": 285.5,
+  "hand_calc_hz": 330.1,
+  "run_dir": "runs/mast_fea",
+  "note": "retained with its original provenance; this study neither regenerates nor replaces it"
+ },
+ "adoption": {
+  "adopted": false,
+  "reason": "a new coupling invalidates automatic reuse of the existing mesh-convergence evidence, so no number here may become a headline without its own refinement study"
+ },
+ "large_artifacts_not_committed": {
+  "files": {
+   "coupled_centred.frd": {
+    "sha256": "3a3c8e402a4d3f53a302d7da69c0c77d80dcf963e16a4eaec7a2b25ce156d696",
+    "bytes": 24241217
+   },
+   "coupled_centred.inp": {
+    "sha256": "9c6d93b34946f0ed62ce76ae2e3d094632393287b141bd94ddf71fba31d4cc7c",
+    "bytes": 5491652
+   },
+   "coupled_eccentric.frd": {
+    "sha256": "37612162f544abb90afa2eb510c1a4a9038103516ca22ec996a112dd8461adfa",
+    "bytes": 24241217
+   },
+   "coupled_eccentric.inp": {
+    "sha256": "19d8fdb0d0984c7ea962539e3064b7e4f8a4c198a2d9b9649e211e0656dec27a",
+    "bytes": 5491653
+   },
+   "legacy.frd": {
+    "sha256": "bdc2f096fef7e76d834555b9879ff0a33357e130a4b169db8583b899701b3b20",
+    "bytes": 24241217
+   },
+   "legacy.inp": {
+    "sha256": "34ac9fbcc7f9ff201bc91767a0b9d2efb260e6df1146c5ade8e57da5e75625c5",
+    "bytes": 5491529
+   }
+  },
+  "reason": "the input decks (5.5 MB each) and .frd results (24 MB each) are regenerable from this commit plus the recorded mesh size by running experiments/modal_attachment_study.py. Their SHA-256 values are recorded here so a regenerated run can be checked against them.",
+  "regenerate": "python3 experiments/modal_attachment_study.py --mesh-size 0.0012"
+ }
+}

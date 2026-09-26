@@ -256,26 +256,67 @@ def write_static_inp(mesh: Mesh, path: Path) -> None:
         f.write("*END STEP\n")
 
 
-def write_modal_inp(mesh: Mesh, path: Path) -> None:
-    """Modal case: root ENCASTRE + a point MASS element at the tip center node.
+ATTACHMENTS = ("legacy", "coupled_eccentric", "coupled_centred")
 
-    CalculiX MASS element: a one-node element whose *MASS card carries the
-    lumped LiDAR tip mass. The FREQUENCY step then returns the bending modes of
-    (tube + tip mass), directly comparable to the Rayleigh hand-calc f1.
+
+def write_modal_inp(mesh: Mesh, path: Path, attachment: str = "legacy") -> dict:
+    """Modal case: root ENCASTRE + the tip mass, attached one of three declared ways.
+
+    The tube is hollow, so there is NO material node on its axis. ``legacy`` therefore attaches the
+    mass to the closest existing node, roughly 8.5 mm off-axis on the inner wall -- the historical
+    model. The two coupled modes add one new node and tie it rigidly to the whole tip plane, so the
+    mass acts on the section rather than on one wall node:
+
+      legacy             single-node MASS on the off-axis wall node (historical; no coupling)
+      coupled_eccentric  MASS on a new node at the SAME off-axis position, rigid-coupled to the tip
+      coupled_centred    MASS on a new node ON the axis, rigid-coupled with the identical definition
+
+    ``coupled_eccentric`` minus ``legacy`` isolates the attachment-model change; ``coupled_centred``
+    minus ``coupled_eccentric`` isolates position within one attachment model. Comparing legacy
+    against centred alone changes two things at once and is not the eccentricity effect.
+
+    A rigid tip coupling is an idealization, not a validated as-built bracket. Returns the attachment
+    record so the caller can log what the deck actually contains.
     """
+    if attachment not in ATTACHMENTS:
+        raise ValueError("attachment must be one of %s" % (ATTACHMENTS,))
     mass_eid = len(mesh.c3d10) + 1
+    x0, y0, z0 = mesh.nodes[mesh.tip_center_node]
+    radial_offset = math.hypot(x0, y0)
+    extra_nid = max(mesh.nodes) + 1
+    if attachment == "legacy":
+        mass_node, coords, coupled = mesh.tip_center_node, (x0, y0, z0), False
+    elif attachment == "coupled_eccentric":
+        mass_node, coords, coupled = extra_nid, (x0, y0, z0), True
+    else:
+        mass_node, coords, coupled = extra_nid, (0.0, 0.0, z0), True
+
     with path.open("w") as f:
         _write_common(mesh, f)
+        if coupled:
+            # One extra node carrying the mass, tied rigidly to the whole tip plane. No independent
+            # rotational reference node is declared: a free artificial rotation DOF would introduce
+            # spurious near-zero modes.
+            f.write("*NODE, NSET=NMASSREF\n")
+            f.write("%d, %.9e, %.9e, %.9e\n" % (mass_node, coords[0], coords[1], coords[2]))
+            f.write("*RIGID BODY, NSET=NTIPALL, REF NODE=%d\n" % mass_node)
         f.write("*ELEMENT, TYPE=MASS, ELSET=ETIPMASS\n")
-        f.write(f"{mass_eid}, {mesh.tip_center_node}\n")
+        f.write("%d, %d\n" % (mass_eid, mass_node))
         f.write("*MASS, ELSET=ETIPMASS\n")
-        f.write(f"{M_TIP:.6e}\n")
+        f.write("%.6e\n" % M_TIP)
         f.write("*STEP\n*FREQUENCY\n")
-        f.write("6\n")                                   # extract first 6 modes
+        f.write("6\n")
         f.write("*BOUNDARY\n")
         f.write("NROOT, 1, 3\n")
         f.write("*NODE FILE\nU\n")
         f.write("*END STEP\n")
+    return dict(attachment=attachment, mass_node=mass_node,
+                mass_node_coords_m=[coords[0], coords[1], coords[2]],
+                radial_offset_m=(0.0 if attachment == "coupled_centred" else radial_offset),
+                legacy_node_radial_offset_m=radial_offset, rigid_coupled_to_tip_plane=coupled,
+                tip_plane_nodes=len(mesh.tip_nodes), added_mass_kg=M_TIP,
+                root_constraint="NROOT, 1, 3 (all three translations fixed)",
+                note="rigid tip coupling is an idealization, not an as-built bracket")
 
 
 # ---------------------------------------------------------------------------

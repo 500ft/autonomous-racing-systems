@@ -44,7 +44,52 @@ behaviour near the constrained root. Their relative sizes are unknown and are no
 The eccentric attachment is a **modelling defect worth fixing**, not merely an explanation: a centred
 mass coupled to the tip section is the model the hand calculation is comparable to.
 
-## Stage 2, not done here
+## Stage 2 result (2026-09-25) — run, and it largely answers the question
+
+Three declared model definitions, one mesh (58232 nodes, 28985 C3D10 at 0.0012 m), identical
+material, root constraint, tube dimensions and 0.175 kg tip mass. Only the attachment definition
+changed. Evidence: `runs/mast_modal_attachment_20260925/`, driver
+`experiments/modal_attachment_study.py`, CalculiX 2.23, gmsh 4.15.2, Python 3.11.8.
+
+| Case | Definition | First bending mode |
+|---|---|---|
+| **A** legacy | single-node mass on the off-axis wall node (historical deck) | **285.51 Hz** |
+| **B** coupled eccentric | same position, rigidly coupled to the tip plane | **316.84 Hz** |
+| **C** coupled centred | on the axis, identical coupling | **320.87 Hz** |
+
+Effects, each isolating one change:
+
+- **A → B, the attachment model: +31.33 Hz (+10.97 %)** relative to A.
+- **B → C, position: +4.03 Hz (+1.27 %)** relative to B.
+
+**The attachment model, not the eccentricity, was the dominant artifact.** It accounts for about nine
+times as much frequency as the off-axis position does. This is exactly why three cases were required:
+comparing A against C alone gives +12.39 % and would have been misread as "the eccentricity effect"
+while actually changing two things at once.
+
+An independent physical check supports the coupling doing what it claims: the orthogonal bending pair
+splits by **15.82 Hz** in the legacy case, where the mass hangs off one wall node, and by
+**0.004 Hz** in the centred case. A centred mass on an axisymmetric tube must give a degenerate
+pair, and it does.
+
+Invariants verified in all three cases: added mass 0.175 kg, 474 root nodes constrained, no near-zero
+modes, and the first bending mode identified from effective modal mass rather than from its index.
+
+### What this does and does not settle
+
+The legacy case reproduces the committed 285.5 Hz to 0.01 Hz, so the historical number is
+confirmed as the output of its recorded model. Against the 330.1 Hz hand calculation the corrected
+centred model sits at **-2.79 %**, where the legacy model sat at −13.5 %. So most of the original
+gap was a modelling artifact of the single-node attachment, and the residual is the small difference
+that shear, 3D-versus-beam kinematics and local root behaviour would be expected to produce.
+
+**No number here is adopted.** A new coupling invalidates automatic reuse of the existing
+mesh-convergence evidence, so promoting 320.87 Hz to a headline would need its own refinement study
+under the declared convergence rule first. The committed 285.5 Hz files were not regenerated and are
+byte-identical. A rigid tip coupling is still an idealization, not a validated as-built bracket, and
+none of this touches RR-S12 or any physical gate.
+
+## Stage 2 follow-ons, not done here
 
 A controlled comparison, budgeted as its own task with a recorded environment:
 

@@ -56,7 +56,10 @@ HEADLINES = [
     # Modal model definition, from the audit rather than from a solve.
     ("modal_mass_attachment", "nearest existing material node", "1",
      "docs/design/MODAL_MODEL_AUDIT.md", "MODEL ASSUMPTION"),
-    ("modal_gap_cause", "unresolved", "1", "docs/design/MODAL_MODEL_AUDIT.md", "MODEL ASSUMPTION"),
+    ("modal_gap_dominant_cause", "attachment model", "1",
+     "docs/design/MODAL_MODEL_AUDIT.md", "SIMULATION OUTPUT"),
+    ("modal_legacy_reproduced_hz", "285.5", "Hz",
+     "docs/design/MODAL_MODEL_AUDIT.md", "SIMULATION OUTPUT"),
 ]
 ARTIFACTS = sorted({h[3] for h in HEADLINES} | {
     "evidence/task-2026-09-09/cad-out/mast_tube.step", "evidence/task-2026-09-09/cad-out/geometry.json",
@@ -74,8 +77,15 @@ STALE_CHECKS = {
     # Added 2026-09-24. The modal claim was corrected after an audit found that two of the mechanisms it
     # named are absent from the model. These three keep the claim, the domain file and the audit from
     # drifting back out of agreement, which is how the error survived review the first time.
-    "claim_M2_says_cause_unresolved":
-        lambda: "the 285.5 Hz FEA is UNRESOLVED" in _read("literature/claim-ledger.md"),
+    # Updated 2026-09-25 after the three-case solver comparison resolved the attribution. The guard now
+    # protects the two things that must not drift: the cause is named as the ATTACHMENT model, and no
+    # frequency from that study is adopted as a headline without its own convergence evidence.
+    "claim_M2_names_the_attachment_artifact":
+        lambda: "ATTACHMENT artifact" in _read("literature/claim-ledger.md"),
+    "claim_M2_adopts_no_new_frequency":
+        lambda: "no number is adopted" in _read("literature/claim-ledger.md"),
+    "modal_audit_records_stage_2":
+        lambda: "Stage 2 result" in _read("docs/design/MODAL_MODEL_AUDIT.md"),
     "claim_M1_no_longer_asserts_bracketing":
         lambda: "That argument is withdrawn here" in _read("literature/claim-ledger.md"),
     "section3_carries_the_superseded_note":
