@@ -74,7 +74,7 @@ DELTA_MAN = DELTA_CRASH * F_MANEUVER / F_CRASH
 ELASTIC_TILT_DEG = math.degrees(1.5 * DELTA_MAN / H_MAST)
 CONTRIBUTORS.append(
     ("Elastic tilt @ 2g maneuvering (FEA-derived)", ELASTIC_TILT_DEG,
-     f"delta = {DELTA_MAN*1e3:.4f} mm from the validated static FEA, scaled to F = {F_MANEUVER:.1f} N"))
+     f"delta = {DELTA_MAN*1e3:.4f} mm from the committed static FEA, scaled to F = {F_MANEUVER:.1f} N"))
 
 # After the one-time scan-plane leveling procedure (shim the base; verify by
 # scanning a wall at two distances and equalizing return heights), everything

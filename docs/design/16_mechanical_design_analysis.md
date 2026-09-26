@@ -193,6 +193,77 @@ All three metrics move by <1.5% at the final refinement — an order of magnitud
 
 > Modes 1–2 are the two ~degenerate orthogonal bending modes of the axisymmetric tube (the small 285→301 Hz split is mesh asymmetry). The FE `f1` lands ~14% below the Rayleigh hand calc because the closed-form model assumes a perfectly rigid root and pure Euler–Bernoulli bending (neglecting shear and root flexibility) and so slightly over-predicts stiffness — the expected direction and magnitude. **Even at the higher-fidelity 285.5 Hz the design clears the ≥ 200 Hz guard (1.43×)** — the lighter firmed LiDAR improved the FE margin from 1.34× (0.20 kg) to 1.43× — so the frequency fix is robust. Baseline-vs-recommended comparison and reasoning: §3.2.
 
+### 6.1 Retrospective assessment — is the 200 Hz guard the right criterion? (audit F1)
+
+> **Added 2026-09-25 by [the engineering audit](../ENGINEERING_AUDIT.md). This is a retrospective
+> assessment of an existing threshold, not a recovery of the original reasoning, and it changes no
+> criterion.** Reproduce: `python3 experiments/drivetrain_excitation.py`.
+
+**Engineering question.** The guard is stated as: clear the 100 Hz control rate *and* "a plausible
+low-hundreds-Hz motor/drivetrain excitation band" by 2×, hence `f1 ≥ 200 Hz`. The control-rate half is a
+requirement and is satisfied. What frequency does this drivetrain actually produce?
+
+**Inputs** — every one already derived elsewhere in this repository; none introduced here.
+
+| Symbol | Value | Provenance | Source |
+|---|---|---|---|
+| `n_m` at 10 m/s | 20 600 rpm | calculated result | §14 §2 (1 744 rpm wheel × 11.82) |
+| `n_0` no-load, 3S | 38 850 rpm | calculated result | §14 §2 (3 500 kV × 11.1 V) |
+| `n_w` at 10 m/s | 1 744 rpm | calculated result | §14 §2 |
+| `v_max` | 10 m/s | requirement | the speed §14's table is derived at |
+| `f1` FEA | 285.5 Hz | calculated result | `runs/mast_fea/fea_summary.txt` |
+| guard | 200 Hz | **selected value** | §3.1 — the number under assessment |
+
+**Assumptions and validity limits.** First-order shaft frequency is `f = n/60`; that is exact. Whether
+it *excites* the mast depends on rotor unbalance, the motor→chassis→deck→mast transmission path, and
+damping. **None of those is recorded**, so this block bounds frequencies only, not amplitudes.
+
+**Model.** `f_shaft(v) = (n_m/60)·(v/v_max)`, linear in road speed. The crossing speed at which shaft
+order equals a target is `v_cross = v_max·f_target/(n_m/60)`.
+
+**Substitution.**
+`f_shaft(10) = (20 600/60)·1 = 343.3 Hz` · `f_shaft_no-load = 38 850/60 = 647.5 Hz` ·
+`v_cross(285.5) = 10·285.5/343.3 = 8.32 m/s` · `v_cross(200) = 10·200/343.3 = 5.83 m/s`
+
+**Unit check.** rpm ÷ 60 → rev/s = Hz. `v_max·Hz/Hz` → m/s. Both consistent.
+
+**Result.**
+
+| Quantity | Value |
+|---|---|
+| First-order shaft at 10 m/s | **343.3 Hz**, i.e. **1.20× above** the 285.5 Hz mode |
+| Wheel order at 10 m/s | 29.1 Hz |
+| Road speed where shaft order meets the FEA mode | **8.32 m/s** |
+| Road speed where shaft order crosses the 200 Hz guard | **5.83 m/s** |
+
+**Sensitivity.** All of it scales linearly with road speed, so the conclusion is not sensitive to a
+small speed error. It *is* sensitive to `f1`: at the 330.1 Hz hand value the crossing moves to 9.6 m/s,
+still inside the envelope.
+
+**What this shows.** The guard was justified as clearing an excitation band *upward* by 2×. This
+drivetrain's first-order shaft excitation sits **above** the mast mode at speed and **sweeps up through
+it at about 8.3 m/s**, inside the operating envelope. The reported "1.43× margin over 200 Hz" is a
+margin against a number that does not describe this drivetrain.
+
+**What this does not show.** That the mast is inadequate. A resonance swept through with low unbalance
+and ordinary damping may be entirely harmless. **No amplitude claim is made or implied.**
+
+**Decision.** None taken here. The criterion stands unchanged pending the missing inputs below.
+
+**Validation / next inputs.** Status: **unresolved**. Required before this becomes an excitation
+assessment rather than a frequency comparison:
+
+| Missing input | Unlocks | How |
+|---|---|---|
+| Motor pole pairs | commutation-order frequencies | datasheet, or count stator teeth and magnets |
+| Spur / pinion tooth counts | gear-mesh frequency | the part numbers already in §14's BOM |
+| Rotor unbalance class | whether first order carries energy | vendor spec, or a bench run |
+| Motor→deck transmission | mast-base input amplitude | bench measurement only; not calculable |
+
+Two honest routes once those exist: re-derive the guard from a real excitation spectrum, or restate it
+as a control-rate guard and record the drivetrain question as open. Widening the band to make the
+present design pass is not one of them.
+
 ## 7. Tolerance Stack → LiDAR Angular Error (REQUIRED)
 
 > **DONE — with a derived install requirement AND a derived deck-height requirement (updated 2026-07-07 for the chassis lock).** `experiments/mast_tolerance_stack.py` (raw: `runs/mast_tolerance_stack/summary.txt`). The UST-10LX scans a horizontal plane, so yaw misalignment is nulled by the software mount calibration; the physical stack that matters is the **tilt** of the scan plane. The requirement is derived from the sightline, both directions, at the 10 m guaranteed range (optical center **0.220 m** above floor = 0.100 m mast [LOCKED] + **0.120 m deck [ASSUMED, chassis-informed]**; wall 0.30 m [ASSUMED, conservative vs the common 0.33 m duct]): **governing bound = up-tilt wall clearance, θ ≤ 0.458°** (down-tilt floor-graze bound 1.260°).

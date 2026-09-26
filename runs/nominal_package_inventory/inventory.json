@@ -1,5 +1,5 @@
 {
- "source_commit": "4a52b14c2ea2c1483e84bbc0add4bec8d9e89797",
+ "source_commit": "ad68465aa42754e771d604e54caeb58908ad35ff",
  "label": "SOFTWARE CHECK: traceability inventory, not validation",
  "artifacts": {
   "cad/contract.json": "b884c770a85219edf27cf9b31053ede01f35137f3bc985d3d50e405d46e26e46",
@@ -8,7 +8,7 @@
   "cad/roboracer/input-requests.csv": "a68e204f05d4ce6ab5e0a52d4a81e86da4a50d2eea43935483006f82631db810",
   "cad/roboracer/parameters.csv": "1c4e547374946515800cf2df2ad93102c0fd2c2e29da1ffa83de6e9dc065e303",
   "docs/CAD_MEASUREMENT_CONTRACT.md": "c4c3b2e6fabbb2eef08521e19ae936ea2656e5e2181e88a6edc0986344d5a66c",
-  "docs/design/16_mechanical_design_analysis.md": "afe59ce56375fa90ebd07d0c558b05d0b593ae92cf2305273aaa242baeb12873",
+  "docs/design/16_mechanical_design_analysis.md": "1026c8fabebd2850294795aa8824a795d10439880cb174434d3191c6ead7028b",
   "docs/design/FEA_SETUP.md": "3786f28bb78eb14426bbb2e44720b36bcdaf9b0f8bc4496342d6f4e0d8a2d3c9",
   "docs/design/MODAL_MODEL_AUDIT.md": "3eff080133a3cd9cff2933dbda0baeb8df82674db6988972efd257f07d9f28fb",
   "evidence/task-2026-09-09/cad-out/geometry.json": "e84d225426ab8e039820d27892426176570daa057dfabf25366771bdfc72ff82",
