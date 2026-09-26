@@ -1,0 +1,95 @@
+{
+  "status": "ok",
+  "message": "every variable moved the geometry",
+  "cases": [
+    {
+      "variable": "ClampWidth",
+      "new_value_mm": 40.0,
+      "applied": "\"ClampWidth\"= 40mm",
+      "baseline_volume_mm3": 70582.72919191429,
+      "measured_volume_mm3": 63016.424743895055,
+      "n_solids": 1,
+      "delta_mm3": -7566.304448019233,
+      "drives_geometry": true
+    },
+    {
+      "variable": "ClampHeight",
+      "new_value_mm": 40.0,
+      "applied": "\"ClampHeight\"= 40mm",
+      "baseline_volume_mm3": 70582.72919191429,
+      "measured_volume_mm3": 49936.53248771208,
+      "n_solids": 1,
+      "delta_mm3": -20646.196704202208,
+      "drives_geometry": true
+    },
+    {
+      "variable": "ClampEngagement",
+      "new_value_mm": 40.0,
+      "applied": "\"ClampEngagement\"= 40mm",
+      "baseline_volume_mm3": 70582.72919191429,
+      "measured_volume_mm3": 81076.51954730174,
+      "n_solids": 1,
+      "delta_mm3": 10493.79035538745,
+      "drives_geometry": true
+    }
+  ],
+  "dimensions": [
+    {
+      "feature": "Sketch1",
+      "name": "D1@Sketch1",
+      "value_mm": 44.0,
+      "driven_state": 1
+    },
+    {
+      "feature": "Sketch1",
+      "name": "D2@Sketch1",
+      "value_mm": 56.0,
+      "driven_state": 1
+    },
+    {
+      "feature": "Boss-Extrude1",
+      "name": "D1@Boss-Extrude1",
+      "value_mm": 35.0,
+      "driven_state": 1
+    },
+    {
+      "feature": "Boss-Extrude1",
+      "name": "D1@Sketch1",
+      "value_mm": 44.0,
+      "driven_state": 1
+    },
+    {
+      "feature": "Boss-Extrude1",
+      "name": "D2@Sketch1",
+      "value_mm": 56.0,
+      "driven_state": 1
+    },
+    {
+      "feature": "Sketch2",
+      "name": "D1@Sketch2",
+      "value_mm": 20.10000000000001,
+      "driven_state": 1
+    },
+    {
+      "feature": "Cut-Extrude1",
+      "name": "D1@Sketch2",
+      "value_mm": 20.10000000000001,
+      "driven_state": 1
+    }
+  ],
+  "unattended": {
+    "input_dimension_value_on_create": {
+      "preference_id": 10,
+      "target": false,
+      "was": true,
+      "now": false,
+      "applied": true
+    }
+  },
+  "part_path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\root_clamp.sldprt",
+  "baseline_volume_mm3": 70582.72919191429,
+  "inert_variables": [],
+  "unattended_restored": {
+    "10": true
+  }
+}
