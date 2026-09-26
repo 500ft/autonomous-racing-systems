@@ -1,0 +1,63 @@
+W3.2 DECISION SCREEN — REPRODUCTION
+===================================
+
+Command (from the repository root, no arguments beyond the output path):
+
+    python3 cad/decision_screen.py --output evidence/week-2026-09-19/decision_screen
+
+Environment: python3 only, standard library. No solver, no device, no network. The screen imports the
+frozen campaign estimator (experiments/mast_physical_validation.py::_linear_fit) rather than
+reimplementing it, so a change to the campaign's own fitting code changes these numbers too.
+
+Determinism: seed 20260925 is fixed in the source. 1000 trials per grid point, 5000 for the
+decision-boundary and intervention cases. No seed was selected for a favourable outcome; the seed and
+trial count are recorded in scenarios.json next to every result.
+
+WHAT THIS IS
+------------
+A conditional sensitivity study over ASSUMED terms. Its purpose is to rank feasible interventions by
+how much they reduce campaign rejection risk, so the three input requests ask for the evidence that
+would actually change a decision.
+
+WHAT THIS IS NOT
+----------------
+Not a measurement. Not a purchase specification. Not an approved threshold. Not a complete uncertainty
+budget. Every physical term is assumed, no instrument has been characterised, and no fixture exists.
+
+The authoritative state of the project is scenario S0: the screen REFUSES with UNKNOWN because no
+fixture stiffness is declared on either axis. Every other scenario adds an assumed 8000 N/mm purely to
+make the axes simulable. None of them replaces S0.
+
+WHY PASS FRACTIONS REPLACED THE MEDIAN
+--------------------------------------
+A passing median is not campaign reliability. Reproduced here at 5000 trials:
+
+    assumed repeatability   median R^2   per-axis pass   both-axes pass
+    0.5 micrometres         0.986027     0.1270          0.0162
+    0.3 micrometres         0.992519     0.8602          0.7246
+
+At 0.3 um the median passes the frozen R^2 >= 0.99 rule while about one campaign in seven is rejected
+on a single axis, and rather more than one in four fails on at least one of the two. The screen now
+gates on the simulated pass fraction, not the median.
+
+The Monte Carlo standard errors are about 0.005. They express simulation sampling precision ONLY. They
+say nothing about whether the assumed physical model is correct.
+
+The two-axis figure is simulated with the shared force-calibration gain drawn ONCE per campaign and
+reused on both axes, with readout, repeatability and rounding drawn per channel. The product of the two
+per-axis fractions is deliberately not reported: that would assume an independence the setup does not
+have, since one calibration and one environment serve both axes.
+
+SCOPE OF THE SIMULATED GATES
+----------------------------
+scenarios.json records gate_scope. The screen simulates the fixture-stiffness, relative-U95, R^2,
+indicator and dimension gates. It marks the frozen hysteresis and FEA-agreement gates not_evaluated,
+because it does not simulate loading/unloading hysteresis and no as-built reference exists. Passing the
+simulated subset is NOT passing every campaign gate.
+
+THE RESULT THAT MATTERS MOST
+----------------------------
+Scenario S4_rotation_adverse applies a 0.00025 mm/N uncorrected, load-proportional root rotation,
+explicitly synthetic. It yields a 19.4 % slope bias while the median R^2 is 0.9947 and the relative U95
+is 3.3 %. Both frozen numerical gates pass and the answer is still 19 % wrong. Low scatter and good
+linearity do not establish an accurate compliance estimate, and no amount of repetition detects this.

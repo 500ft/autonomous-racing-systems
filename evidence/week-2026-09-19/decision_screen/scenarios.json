@@ -1,0 +1,767 @@
+{
+ "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+ "schema": "decision-screen/1",
+ "source_commit": "ad68465aa42754e771d604e54caeb58908ad35ff",
+ "seed": 20260925,
+ "python": "3.11.8",
+ "generated": "2026-09-25T16:17:13-0400",
+ "trials_default": 1000,
+ "trials_boundary": 5000,
+ "r2_pass_fraction_screen": 0.95,
+ "gate_scope": {
+  "fixture_stiffness_x": "pass",
+  "fixture_stiffness_y": "pass",
+  "relative_u95_x": "pass",
+  "r_squared_x": "fail",
+  "relative_u95_y": "pass",
+  "r_squared_y": "fail",
+  "indicator_resolution_and_counts": "pass",
+  "hysteresis": "not_evaluated",
+  "fea_agreement": "not_evaluated",
+  "specimen_dimensions_positive": "pass"
+ },
+ "gate_scope_note": "Gates marked not_evaluated are frozen campaign requirements this screen does not simulate. Passing the simulated subset is not passing every campaign gate.",
+ "scenarios": {
+  "S0_nominal_authoritative": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": null,
+    "fixture_stiffness_n_per_mm_y": null,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "authoritative nominal state",
+   "note": "no fixture exists, so fixture stiffness is UNKNOWN on both axes and the screen refuses"
+  },
+  "S1_repeatability_0p5um": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "reported repeatability case",
+   "evidence_state": "ASSUMED: no installed-performance record exists"
+  },
+  "S2_repeatability_0p3um": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "reported repeatability case",
+   "evidence_state": "ASSUMED: no installed-performance record exists"
+  },
+  "S3_rep0.2um_res0.5um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0002,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.2um_res0.5um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0002,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.2um_res1um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0002,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.2um_res1um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0002,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.3um_res0.5um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.3um_res0.5um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.3um_res1um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.3um_res1um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.5um_res0.5um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.5um_res0.5um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.5um_res1um_sp40mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S3_rep0.5um_res1um_sp100mm": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "sensitivity grid point",
+   "evidence_state": "ASSUMED alternative, not an approved design"
+  },
+  "S4_rotation_zero": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "rotation-bias case",
+   "evidence_state": "zero is an explicit IDEAL assumption; the adverse value is explicitly synthetic, not observed"
+  },
+  "S4_rotation_adverse": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.00025,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "rotation-bias case",
+   "evidence_state": "zero is an explicit IDEAL assumption; the adverse value is explicitly synthetic, not observed"
+  },
+  "I0_baseline": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "intervention comparison",
+   "changed": "none"
+  },
+  "I1_finer_resolution": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.0005,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "intervention comparison",
+   "changed": {
+    "indicator_resolution_mm": 0.0005
+   }
+  },
+  "I2_better_repeatability": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 40.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0003,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "intervention comparison",
+   "changed": {
+    "repeatability_mm": 0.0003
+   }
+  },
+  "I3_wider_station_spacing": {
+   "config": {
+    "label": "NOMINAL FEASIBILITY SCREEN ONLY: no measurement, no calibration, no campaign authorisation.",
+    "specimen": {
+     "e_n_per_mm2": 68900.0,
+     "length_mm": 100.0,
+     "od_mm": 20.0,
+     "wall_mm": 1.5,
+     "evidence_state": "design_choice / model_assumption per cad/roboracer/parameters.csv"
+    },
+    "indicator_resolution_mm": 0.001,
+    "root_station_spacing_mm": 100.0,
+    "load_height_mm": 100.0,
+    "repeatability_mm": 0.0005,
+    "force_gain_relative_standard_uncertainty": 0.003,
+    "force_readout_relative_standard_uncertainty": 0.004,
+    "uncorrected_root_rotation_mm_per_n": 0.0,
+    "fixture_stiffness_n_per_mm_x": 8000.0,
+    "fixture_stiffness_n_per_mm_y": 8000.0,
+    "force_chain_cases": [
+     {
+      "cell_id": "LC-5KG-01",
+      "capacity_N": 49.05,
+      "role": "primary candidate"
+     },
+     {
+      "cell_id": "LC-1KG-01",
+      "capacity_N": 9.81,
+      "role": "negative control at 20 N"
+     }
+    ]
+   },
+   "role": "intervention comparison",
+   "changed": {
+    "root_station_spacing_mm": 100.0
+   }
+  }
+ }
+}

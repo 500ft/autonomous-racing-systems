@@ -1,5 +1,23 @@
 # RoboRacer sprint review index — software candidate, partial project handoff
 
+## Week of 2026-09-19 — reviewer packet
+
+The canonical entry point for this week is [`evidence/week-2026-09-19/README.md`](../evidence/week-2026-09-19/README.md),
+with a hash manifest verifiable by `python3 scripts/build_week_manifest.py --verify`. **Ready for review,
+not reviewed.** No physical measurement, calibration, host run or campaign took place.
+
+Delivered: equipment inventory, acquisition format and host logger with replay, load-cell calibration
+tooling, the W3.2 decision screen and three input requests, a prospective compliance-adequacy proposal
+(unapproved), a three-case modal attachment study, and a scoped
+[W1.8 nominal report](W1_8_NOMINAL_REPORT.md).
+
+Two findings a reviewer should not miss: a passing median R² is not campaign reliability (at 0.3 µm
+assumed repeatability about one single-axis campaign in seven is still rejected), and both frozen
+numerical gates can pass while an uncorrected load-proportional root rotation leaves the fitted
+compliance 19.4 % wrong. Root-motion observability is a correctness requirement, not a refinement.
+
+All physical gates remain blocked: RR-CAD-02/04/05/06/07, RR-S02, RR-S09, RR-S12, RR-S13.
+
 ## Day-3 preparation — 2026-09-09
 
 Six request-sheet tests cover exact pending-row coverage, future rows, invalid units, a filled pending value, duplicates and snapshot drift. 28 CAD tests pass. The failed 174.7 Hz baseline is distinguished from the selected nominal 285.5 Hz FE result; static acceptance is not repurposed as a modal verdict.

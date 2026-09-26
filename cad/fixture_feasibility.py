@@ -37,6 +37,11 @@ DIRECTIONS = ("load", "unload")
 AXES = ("x", "y")
 DEFAULT_TRIALS = 400
 FIXTURE_STIFFNESS_RATIO_MIN = 10.0
+# A passing median R^2 is not campaign reliability: at 0.3 um repeatability the median passes while
+# roughly one simulated campaign in seven is rejected. The screen therefore gates on the simulated
+# pass FRACTION. This threshold is a screening choice for the simulation, NOT a frozen campaign
+# criterion and not an owner-approved acceptance value.
+R2_PASS_FRACTION_MIN = 0.95
 
 
 # --------------------------------------------------------------------------- specimen
@@ -108,7 +113,7 @@ def _quantize(value, resolution_mm):
     return value if not resolution_mm else round(value / resolution_mm) * resolution_mm
 
 
-def _trial_slope(rng, compliance_true, t, cfg):
+def _trial_slope(rng, compliance_true, t, cfg, gain=None):
     """One synthetic campaign on one axis, fitted with the real campaign estimator.
 
     Error scope is explicit, because it decides what repetition can and cannot fix:
@@ -120,7 +125,10 @@ def _trial_slope(rng, compliance_true, t, cfg):
 
     There is one latent applied force per observation. The recorded force is that same force seen
     through the force channel's errors, not an independent draw around the nominal level."""
-    gain = rng.gauss(0.0, t["force_gain_relative"] or 0.0)          # shared: one calibration, one campaign
+    # Shared across the campaign. The caller may pass a pre-drawn value so one draw can span both
+    # axes of a single campaign; drawing it here would make the axes wrongly independent.
+    if gain is None:
+        gain = rng.gauss(0.0, t["force_gain_relative"] or 0.0)
     rot = t["uncorrected_root_rotation_mm_per_n"] or 0.0            # shared: systematic, load-dependent
     res = cfg.get("indicator_resolution_mm")
     pts = []
@@ -153,7 +161,18 @@ def screen_axis(compliance_true, t, cfg, trials, seed):
     lo = ordered[max(0, int(0.025 * len(ordered)) - 1)]
     hi = ordered[min(len(ordered) - 1, int(0.975 * len(ordered)))]
     u95 = 1.96 * u                      # coverage over the Monte Carlo distribution of the estimator
+    r2_pass = sum(1 for v in r2s if v >= MIN_R_SQUARED)
+    n_r2 = len(r2s)
+    frac = (r2_pass / n_r2) if n_r2 else None
+    # Wald interval on the pass fraction: this is Monte Carlo sampling precision only. It says nothing
+    # about whether the assumed physical model is right.
+    se = (math.sqrt(frac * (1 - frac) / n_r2) if frac is not None and n_r2 else None)
+    r2_sorted = sorted(r2s)
     return dict(mean_fitted_compliance_mm_per_n=mean,
+                r2_pass_fraction=frac, r2_pass_fraction_se=se, r2_trials=n_r2,
+                r2_q05=(r2_sorted[int(0.05 * n_r2)] if n_r2 else None),
+                r2_q50=(statistics.median(r2s) if r2s else None),
+                r2_q95=(r2_sorted[min(n_r2 - 1, int(0.95 * n_r2))] if n_r2 else None),
                 true_compliance_mm_per_n=compliance_true,
                 # A shared error shifts every reading the same way, so it shows up here and not in the SD.
                 bias_mm_per_n=mean - compliance_true,
@@ -163,10 +182,39 @@ def screen_axis(compliance_true, t, cfg, trials, seed):
                 relative_U95=u95 / compliance_true,
                 passes_relative_u95_gate=bool(u95 / compliance_true <= MAX_RELATIVE_U95),
                 median_r_squared=(statistics.median(r2s) if r2s else None),
-                passes_r_squared_gate=bool(r2s and statistics.median(r2s) >= MIN_R_SQUARED),
+                passes_r_squared_gate=bool(frac is not None and frac >= R2_PASS_FRACTION_MIN),
+                r2_pass_fraction_gate=R2_PASS_FRACTION_MIN,
                 trials=trials,
                 note="relative_U95 describes scatter only. A shared error appears in relative_bias, "
                      "which no number of repeats reduces.")
+
+
+def screen_campaign(compliance_true, t, cfg, trials, seed):
+    """Joint two-axis result with the campaign-scope error drawn ONCE per campaign.
+
+    Multiplying two per-axis pass fractions would assume the axes are independent. They are not: one
+    calibration and one environment serve both, so the shared gain is drawn once per trial and reused
+    for both axes, while readout, repeatability and rounding are drawn per channel."""
+    rng = random.Random(seed)
+    both = 0
+    per_axis = {a: 0 for a in AXES}
+    for _ in range(trials):
+        gain = rng.gauss(0.0, t["force_gain_relative"] or 0.0)     # once per campaign, shared
+        ok = {}
+        for a in AXES:
+            _slope, r2 = _trial_slope(rng, compliance_true, t, cfg, gain=gain)
+            ok[a] = r2 is not None and r2 >= MIN_R_SQUARED
+            per_axis[a] += ok[a]
+        both += all(ok.values())
+    frac = both / trials
+    se = math.sqrt(frac * (1 - frac) / trials) if trials else None
+    return dict(both_axes_r2_pass_fraction=frac, both_axes_pass_fraction_se=se, trials=trials,
+                per_axis_pass_fraction={a: per_axis[a] / trials for a in AXES},
+                dependence_model="shared force-calibration gain drawn once per campaign and reused on "
+                                 "both axes; readout, repeatability and quantization drawn per channel",
+                note="Monte Carlo sampling precision only. It does not express confidence that the "
+                     "assumed physical model is correct, and the product of per-axis fractions is NOT "
+                     "reported because that would assume independence the setup does not have.")
 
 
 def rank_terms(compliance_true, t, cfg, trials, seed):
@@ -349,6 +397,14 @@ def gate_status(out, cfg, k_specimen) -> dict:
     g["indicator_resolution_and_counts"] = _gate(
         "unknown" if ind["resolution_mm"] is None else ("pass" if ind["passes"] else "fail"),
         f"resolution {ind['resolution_mm']} mm, {ind['counts_at_full_scale']} counts at full scale")
+    # Campaign gates this screen does not simulate. Listed so the report cannot imply that passing
+    # the simulated subset means passing every frozen requirement.
+    g["hysteresis"] = _gate("not_evaluated",
+                            f"frozen gate is <= {MAX_HYSTERESIS_FRACTION} of full scale; this screen "
+                            f"does not simulate loading/unloading hysteresis")
+    g["fea_agreement"] = _gate("not_evaluated",
+                               f"frozen gate is +/- {MAX_FEA_RELATIVE_ERROR} against the as-built FEA "
+                               f"prediction; no as-built reference exists")
     sp = cfg["specimen"]
     bad = [n for n in ("length_mm", "od_mm", "wall_mm", "e_n_per_mm2") if not sp.get(n, 0) > 0]
     g["specimen_dimensions_positive"] = _gate("pass" if not bad else "fail",
