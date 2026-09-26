@@ -82,3 +82,5 @@ evidence/item11/assets/
 runs/mast_fea/converge/
 !runs/mast_modal_attachment_20260925/*.dat
 !runs/mast_modal_attachment_20260925/*.ccx.log
+!runs/mast_assembly_20260926/
+!runs/mast_assembly_20260926/assembly_result.json
