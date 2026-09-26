@@ -1,0 +1,359 @@
+{
+ "status": "partial",
+ "message": "assembly document written with all components and mates, but placement does NOT match intent and per-component volumes could not be read. The document is NOT a verified assembly.",
+ "stages": [
+  {
+   "stage": "unattended",
+   "ok": true,
+   "detail": {
+    "input_dimension_value_on_create": {
+     "preference_id": 10,
+     "target": false,
+     "was": true,
+     "now": false,
+     "applied": true
+    }
+   }
+  },
+  {
+   "stage": "resolve_assembly_template",
+   "ok": true,
+   "detail": "C:\\ProgramData\\SolidWorks\\SOLIDWORKS 2024\\templates\\Assembly.ASMDOT"
+  },
+  {
+   "stage": "new_assembly",
+   "ok": true,
+   "detail": "Assem1"
+  },
+  {
+   "stage": "insert_mast_tube_stock",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "stage": "insert_support_sleeve",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "stage": "insert_root_clamp",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "stage": "rebuild_after_insert",
+   "ok": true,
+   "detail": {
+    "ok": true,
+    "form": "property"
+   }
+  },
+  {
+   "stage": "mate_Front_Plane",
+   "ok": true,
+   "detail": {
+    "plane": "Front Plane",
+    "type": "coincident",
+    "between": [
+     "mast_tube_stock-1",
+     "support_sleeve-1"
+    ],
+    "selected": true,
+    "created": true,
+    "error_status": 1
+   }
+  },
+  {
+   "stage": "mate_Top_Plane",
+   "ok": true,
+   "detail": {
+    "plane": "Top Plane",
+    "type": "coincident",
+    "between": [
+     "mast_tube_stock-1",
+     "support_sleeve-1"
+    ],
+    "selected": true,
+    "created": true,
+    "error_status": 1
+   }
+  },
+  {
+   "stage": "mate_Right_Plane",
+   "ok": true,
+   "detail": {
+    "plane": "Right Plane",
+    "type": "coincident",
+    "between": [
+     "mast_tube_stock-1",
+     "support_sleeve-1"
+    ],
+    "selected": true,
+    "created": true,
+    "error_status": 1
+   }
+  },
+  {
+   "stage": "save_outputs",
+   "ok": true,
+   "detail": {
+    "dir": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems",
+    "sldasm": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.sldasm",
+    "sldasm_bytes": 62356,
+    "step": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.step",
+    "step_bytes": 97903,
+    "preview": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.bmp",
+    "preview_written": true
+   }
+  }
+ ],
+ "components": {
+  "mast_tube_stock": {
+   "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_tube_stock.SLDPRT",
+   "intended_translation_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "opened": true,
+   "open_error": 0,
+   "reactivated_assembly": 0,
+   "api_used": "AddComponent4",
+   "attempts": [
+    {
+     "api": "AddComponent5",
+     "returned": false
+    },
+    {
+     "api": "AddComponent4",
+     "returned": true
+    }
+   ],
+   "inserted": true,
+   "name_in_assembly": "mast_tube_stock-1",
+   "transform_array": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -0.0675,
+    1.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "body_volume_mm3": null
+  },
+  "support_sleeve": {
+   "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\support_sleeve.SLDPRT",
+   "intended_translation_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "opened": true,
+   "open_error": 0,
+   "reactivated_assembly": 0,
+   "api_used": "AddComponent4",
+   "attempts": [
+    {
+     "api": "AddComponent5",
+     "returned": false
+    },
+    {
+     "api": "AddComponent4",
+     "returned": true
+    }
+   ],
+   "inserted": true,
+   "name_in_assembly": "support_sleeve-1",
+   "transform_array": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -0.0175,
+    1.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "body_volume_mm3": null
+  },
+  "root_clamp": {
+   "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\root_clamp.SLDPRT",
+   "intended_translation_mm": [
+    -22.0,
+    -22.0,
+    0.0
+   ],
+   "opened": true,
+   "open_error": 0,
+   "reactivated_assembly": 0,
+   "api_used": "AddComponent4",
+   "attempts": [
+    {
+     "api": "AddComponent5",
+     "returned": false
+    },
+    {
+     "api": "AddComponent4",
+     "returned": true
+    }
+   ],
+   "inserted": true,
+   "name_in_assembly": "root_clamp-1",
+   "transform_array": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    -0.044,
+    -0.05,
+    -0.0175,
+    1.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "body_volume_mm3": null
+  }
+ },
+ "mates": [
+  {
+   "plane": "Front Plane",
+   "type": "coincident",
+   "between": [
+    "mast_tube_stock-1",
+    "support_sleeve-1"
+   ],
+   "selected": true,
+   "created": true,
+   "error_status": 1
+  },
+  {
+   "plane": "Top Plane",
+   "type": "coincident",
+   "between": [
+    "mast_tube_stock-1",
+    "support_sleeve-1"
+   ],
+   "selected": true,
+   "created": true,
+   "error_status": 1
+  },
+  {
+   "plane": "Right Plane",
+   "type": "coincident",
+   "between": [
+    "mast_tube_stock-1",
+    "support_sleeve-1"
+   ],
+   "selected": true,
+   "created": true,
+   "error_status": 1
+  }
+ ],
+ "checks": {
+  "component_count": 3,
+  "component_count_expected": 3,
+  "per_component_volume_mm3": {
+   "mast_tube_stock": null,
+   "support_sleeve": null,
+   "root_clamp": null
+  },
+  "total_volume_mm3": null,
+  "free_length_mm": null,
+  "free_length_expected_mm": 100.0,
+  "free_length_status": "NOT MEASURED: component placement is unverified, so a free length cannot be derived from the assembly",
+  "placement_matches_intent": false,
+  "expected_bbox_mm": [
+   44.0,
+   56.0,
+   135.0
+  ],
+  "mates_created": 3,
+  "mates_attempted": 3,
+  "note": "component volumes are summed, not booleaned: assembly components do not subtract"
+ },
+ "unattended": {
+  "input_dimension_value_on_create": {
+   "preference_id": 10,
+   "target": false,
+   "was": true,
+   "now": false,
+   "applied": true
+  }
+ },
+ "template_preference_value": "C:\\Program Files\\SOLIDWORKS Corp\\SOLIDWORKS (2)\\lang\\english",
+ "assembly_title": "Assem1",
+ "placement": {
+  "mast_tube_stock": {
+   "intended_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "actual_mm": [
+    0.0,
+    0.0,
+    -67.5
+   ],
+   "matches_intent": false
+  },
+  "support_sleeve": {
+   "intended_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "actual_mm": [
+    0.0,
+    0.0,
+    -17.5
+   ],
+   "matches_intent": false
+  },
+  "root_clamp": {
+   "intended_mm": [
+    -22.0,
+    -22.0,
+    0.0
+   ],
+   "actual_mm": [
+    -44.0,
+    -50.0,
+    -17.5
+   ],
+   "matches_intent": false
+  }
+ },
+ "outputs": {
+  "dir": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems",
+  "sldasm": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.sldasm",
+  "sldasm_bytes": 62356,
+  "step": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.step",
+  "step_bytes": 97903,
+  "preview": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.bmp",
+  "preview_written": true
+ }
+}
