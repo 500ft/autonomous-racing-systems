@@ -92,6 +92,7 @@ versions intentionally differ.
 | [CAD inventory](docs/CAD_ITEMS.md) | See planned parts without confusing them with completed geometry |
 | [Review index](docs/REVIEW_READY.md) | Find verification records and unresolved gates |
 | [Literature](literature/README.md) | Check a claim against verified sources; start at the [claim ledger](literature/claim-ledger.md) |
+| [Learning pack](docs/learning/README.md) | Learn the project end to end: derivations, interview defence, operator's guide |
 
 ```text
 gym/          F1TENTH simulator package and dynamics
