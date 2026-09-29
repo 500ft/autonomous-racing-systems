@@ -32,6 +32,8 @@ jobs:
         python experiments/test_mast_physical_validation.py
         python experiments/test_cad_inputs.py
         python experiments/test_final_report.py
+        python experiments/test_dynamics_loader.py
+        python experiments/test_replay_metrics.py
     - name: Equipment acquisition tooling (replay only; no device, no pyserial)
       run: |
         python experiments/test_measurement_logger.py

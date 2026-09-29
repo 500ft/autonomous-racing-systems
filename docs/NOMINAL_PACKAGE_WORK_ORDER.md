@@ -1,7 +1,7 @@
 # Nominal CAD/FEA design package — work order (2026-09-16)
 
 > **Superseded in part on 2026-09-21** by [decision 0001](decisions/0001-shared-cad-workflow.md) and
-> the revised [week plan](WEEK_PLAN_2026-09-19_TO_25.txt): the clamp is not rebuilt in CadQuery.
+> the revised [week plan](https://github.com/500ft/autonomous-racing-systems/blob/57f04fb620654c9e2475ba340425d632f79b88ff/docs/WEEK_PLAN_2026-09-19_TO_25.txt): the clamp is not rebuilt in CadQuery.
 > C2 (root clamp) already exists natively on `cad/solidworks-mast-assembly` (PR #26) together with an
 > internal support sleeve the spec requires; C3–C6 remain proposals but are authored under
 > `cad/solidworks/` against `cad/solidworks/geometry.json`, not `cad/generate.py`. C1 and
@@ -9,7 +9,7 @@
 > part that does not inherit the 285.5 Hz result. The design considerations and acceptance ideas below
 > still apply; the file layout in the "outputs" table does not.
 
-Selected under [DAY4_PLAN.md](DAY4_PLAN.md) optional work. Scope: one reproducible package that
+Selected under [DAY4_PLAN.md](https://github.com/500ft/autonomous-racing-systems/blob/57f04fb620654c9e2475ba340425d632f79b88ff/docs/DAY4_PLAN.md) optional work. Scope: one reproducible package that
 reconciles what already exists for the LiDAR mast (register, generated tube, hand calc, FEA,
 tolerance stack) and adds the nominal clamp and bracket as **labelled design proposals**. It closes
 no ledger row (RR-CAD-02/04/05 stay blocked) and claims no as-built, inspected or physical result.

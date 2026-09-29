@@ -22,7 +22,7 @@ All physical gates remain blocked: RR-CAD-02/04/05/06/07, RR-S02, RR-S09, RR-S12
 
 Six request-sheet tests cover exact pending-row coverage, future rows, invalid units, a filled pending value, duplicates and snapshot drift. 28 CAD tests pass. The failed 174.7 Hz baseline is distinguished from the selected nominal 285.5 Hz FE result; static acceptance is not repurposed as a modal verdict.
 
-Review [DAY3_PLAN.md](DAY3_PLAN.md), [deliverable](../cad/roboracer/fixture-preparation.md), and [commands/evidence](../evidence/task-day3-2026-09-09/README.md). Base: `44491a62d4418294d14143466c757010b1694ba4`; new PR branch: `task/day-three-20260909`. No original Owner/External gate is closed. Final source identity is the PR head, reported in its delivery record rather than embedded circularly here.
+Review [DAY3_PLAN.md](https://github.com/500ft/autonomous-racing-systems/blob/57f04fb620654c9e2475ba340425d632f79b88ff/docs/DAY3_PLAN.md), [deliverable](../cad/roboracer/fixture-preparation.md), and [commands/evidence](../evidence/task-day3-2026-09-09/README.md). Base: `44491a62d4418294d14143466c757010b1694ba4`; new PR branch: `task/day-three-20260909`. No original Owner/External gate is closed. Final source identity is the PR head, reported in its delivery record rather than embedded circularly here.
 
 As-built dimensions, calibrated uncertainty and pre-load reference freeze still required.
 
@@ -46,7 +46,7 @@ and STEP round-trip metric checks are hardened with reproduced regressions.
 [RR-CAD-08 geometry-tooling handoff](../evidence/task-2026-09-09/README.md) adds a parameter-driven
 CadQuery generator, a reviewed geometry contract with 11 fail-closed tests, and a pinned
 toolchain. It regenerates model geometry from the register; it is not a fixture design, part or
-measurement. Geometry CI awaits the owner applying `ci-proposed/cad-geometry-workflow.patch`.
+measurement. Geometry CI runs in [`.github/workflows/cad-geometry.yml`](../.github/workflows/cad-geometry.yml).
 
 ## Follow-up — 2026-09-08
 
