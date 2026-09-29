@@ -124,15 +124,28 @@ first dimension with no error and no output. Disabling it makes SOLIDWORKS take 
 already passes; the dimension is not guessed, only the confirmation click is removed.
 
 The toggle is **read back after writing** and the outcome recorded under `"unattended"` in the result
-JSON, because the identifier is cross-checked against three independent sources but has not yet run on
-this host. Check that field on the next host run: `applied: true` means it worked. If it is false, the
-journal says why, and the fallback is to clear Tools > Options > General > "Input dimension value" once
-on the host by hand.
+JSON.
+
+**HOST-VERIFIED 2026-09-26.** A real host run returned
+`{"preference_id": 10, "was": true, "now": false, "applied": true}`. The prompt was **on** before the
+run, which would have hung an unattended session at the first dimension, and it was successfully
+disabled and then restored. That closes the open verification item; the toggle itself is confirmed for
+this host, which is narrower than general unattended reliability.
 
 Scope, stated rather than implied: this disables that prompt and nothing else. It is not a general
 suppress-all-dialogs switch and no such switch is claimed. A licence, template or graphics failure will
 still block, and `run_host.py`'s polling timeout is what catches that. A host with no monitor also needs
 its interactive session to stay logged in and unlocked for the COM server to start at all.
+
+## Assembly document
+
+`author_mast_assembly_doc.py` builds the assembly from the three authored parts, unattended, and writes
+`mast_assembly.SLDASM` / `.step` / `.bmp` to the same per-repo project folder as the parts.
+
+**Current status: PARTIAL, and the script says so.** Three components insert and three mates are
+created, and the STEP carries real geometry, but **component placement does not match intent** and
+per-component volumes could not be read back, so it is **not a verified assembly**. See
+`runs/mast_assembly_20260926/assembly_result.json`. The open item is placement, not insertion.
 
 ## Host API findings
 
@@ -147,3 +160,8 @@ were each paid for with a build iteration.
 | `swEndCondThroughAllBoth = 9` is rejected on this build. | Use `swEndCondThroughAll = 1` and control direction explicitly. |
 | A sketch edge placed exactly **tangent** to an existing feature edge is perturbed. | The slot originally met the bore tangentially and lost 2.579 mm³ against the oracle. Geometry that should intersect must be modelled intersecting, not touching. This was a real design error the gate caught: a tangent slot cannot flex a clamp. |
 | `SelectByID2` for a `FACE` at exactly `x = 0` returned false, while selecting the coincident named `Right Plane` worked. | Prefer named planes over face-picking on a plane through the origin. |
+| **`AddComponent5` returns `None` and raises nothing**, even with the part opened silently and the assembly re-activated. `AddComponent4(path, config, x, y, z)` succeeds on the same inputs. | Use `AddComponent4`. A silent `None` from `AddComponent5` is not a missing file or an inactive document; do not spend host round-trips on those hypotheses. |
+| **`AddComponent4` ignored the supplied x/y/z** and placed every component at `z = -L/2` on its own extrusion depth. | Insertion coordinates are not placement. Position must be set afterwards (component transform, or mates with offsets) and then **read back and checked** — the script compares intended against `Transform2.ArrayData`. |
+| **`EditRebuild3` is a property**, not a method: calling it raises `TypeError: 'bool' object is not callable`. | Same trap as the `GetX` family. The helper accepts either form. |
+| `GetUserPreferenceStringValue(70)` returned the templates **directory**, not the assembly template, and a directory passes `os.path.exists`. | Require `os.path.isfile`. The assembly template on this host is `Assembly.ASMDOT` (not `Assem.asmdot`), under `SOLIDWORKS 2024\templates`; 2026 is also installed. |
+| `Component2.GetModelDoc2` and `GetBodies2` did not yield a body on an inserted component. | Per-component volume is still unread, so the assembly volume oracle is unverified. Recorded as an open item rather than skipped. |
