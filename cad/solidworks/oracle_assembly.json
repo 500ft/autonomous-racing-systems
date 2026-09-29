@@ -1,0 +1,77 @@
+{
+  "components": {
+    "mast_tube_stock": {
+      "translation_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "volume_mm3": 11769.191478510766,
+      "box_min_mm": [
+        -10.0,
+        -10.0,
+        0.0
+      ],
+      "box_max_mm": [
+        10.0,
+        10.0,
+        135.0
+      ]
+    },
+    "support_sleeve": {
+      "translation_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "volume_mm3": 5148.746382491268,
+      "box_min_mm": [
+        -8.475,
+        -8.475,
+        0.0
+      ],
+      "box_max_mm": [
+        8.475,
+        8.475,
+        35.0
+      ]
+    },
+    "root_clamp": {
+      "translation_mm": [
+        -22.0,
+        -22.0,
+        0.0
+      ],
+      "volume_mm3": 70582.72919191429,
+      "box_min_mm": [
+        -22.0,
+        -22.0,
+        0.0
+      ],
+      "box_max_mm": [
+        22.0,
+        34.0,
+        35.0
+      ]
+    }
+  },
+  "assembly": {
+    "box_min_mm": [
+      -22.0,
+      -22.0,
+      0.0
+    ],
+    "box_max_mm": [
+      22.0,
+      34.0,
+      135.0
+    ],
+    "bbox_mm": [
+      44.0,
+      56.0,
+      135.0
+    ],
+    "total_volume_mm3": 87500.66705291632
+  },
+  "free_length_mm": 100.0
+}

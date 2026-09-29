@@ -1,0 +1,898 @@
+{
+  "status": "ok",
+  "message": "host read-back checks passed and the STEP round trip matches the oracle",
+  "stages": [
+    {
+      "stage": "unattended",
+      "ok": true,
+      "detail": {
+        "input_dimension_value_on_create": {
+          "preference_id": 10,
+          "target": false,
+          "was": true,
+          "now": false,
+          "applied": true
+        }
+      }
+    },
+    {
+      "stage": "resolve_assembly_template",
+      "ok": true,
+      "detail": "C:\\ProgramData\\SolidWorks\\SOLIDWORKS 2024\\templates\\Assembly.ASMDOT"
+    },
+    {
+      "stage": "new_assembly",
+      "ok": true,
+      "detail": "Assem1"
+    },
+    {
+      "stage": "insert_mast_tube_stock",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "stage": "insert_support_sleeve",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "stage": "insert_root_clamp",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "stage": "rebuild_after_insert",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "form": "property"
+      }
+    },
+    {
+      "stage": "set_transform_mast_tube_stock",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "form": "setattr"
+      }
+    },
+    {
+      "stage": "set_transform_support_sleeve",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "form": "setattr"
+      }
+    },
+    {
+      "stage": "set_transform_root_clamp",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "form": "setattr"
+      }
+    },
+    {
+      "stage": "fix_tube",
+      "ok": true,
+      "detail": {
+        "selected": true
+      }
+    },
+    {
+      "stage": "mate_Front_Plane",
+      "ok": true,
+      "detail": {
+        "plane": "Front Plane",
+        "type": "coincident",
+        "between": [
+          "mast_tube_stock-1",
+          "support_sleeve-1"
+        ],
+        "selected": true,
+        "created": true,
+        "error_status": 1
+      }
+    },
+    {
+      "stage": "mate_Top_Plane",
+      "ok": true,
+      "detail": {
+        "plane": "Top Plane",
+        "type": "coincident",
+        "between": [
+          "mast_tube_stock-1",
+          "support_sleeve-1"
+        ],
+        "selected": true,
+        "created": true,
+        "error_status": 1
+      }
+    },
+    {
+      "stage": "mate_Right_Plane",
+      "ok": true,
+      "detail": {
+        "plane": "Right Plane",
+        "type": "coincident",
+        "between": [
+          "mast_tube_stock-1",
+          "support_sleeve-1"
+        ],
+        "selected": true,
+        "created": true,
+        "error_status": 1
+      }
+    },
+    {
+      "stage": "save_outputs",
+      "ok": true,
+      "detail": {
+        "dir": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems",
+        "sldasm": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.sldasm",
+        "sldasm_bytes": 63867,
+        "step": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.step",
+        "step_bytes": 98005,
+        "preview": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.bmp",
+        "preview_written": true
+      }
+    },
+    {
+      "stage": "reopen_sldasm",
+      "ok": true,
+      "detail": {
+        "error": 0,
+        "warning": 0
+      }
+    },
+    {
+      "stage": "parameter_change",
+      "ok": true,
+      "detail": {
+        "delta_ok": true,
+        "ok": true
+      }
+    }
+  ],
+  "components": {
+    "mast_tube_stock": {
+      "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_tube_stock.SLDPRT",
+      "intended_translation_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "opened": true,
+      "open_error": 0,
+      "reactivated_assembly": 0,
+      "api_used": "AddComponent4",
+      "attempts": [
+        {
+          "api": "AddComponent5",
+          "returned": false
+        },
+        {
+          "api": "AddComponent4",
+          "returned": true
+        }
+      ],
+      "inserted": true,
+      "name_in_assembly": "mast_tube_stock-1",
+      "transform_at_insert_mm": [
+        0.0,
+        0.0,
+        -67.5
+      ],
+      "set_transform": [
+        {
+          "ok": true,
+          "form": "setattr"
+        }
+      ]
+    },
+    "support_sleeve": {
+      "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\support_sleeve.SLDPRT",
+      "intended_translation_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "opened": true,
+      "open_error": 0,
+      "reactivated_assembly": 0,
+      "api_used": "AddComponent4",
+      "attempts": [
+        {
+          "api": "AddComponent5",
+          "returned": false
+        },
+        {
+          "api": "AddComponent4",
+          "returned": true
+        }
+      ],
+      "inserted": true,
+      "name_in_assembly": "support_sleeve-1",
+      "transform_at_insert_mm": [
+        0.0,
+        0.0,
+        -17.5
+      ],
+      "set_transform": [
+        {
+          "ok": true,
+          "form": "setattr"
+        }
+      ]
+    },
+    "root_clamp": {
+      "path": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\root_clamp.SLDPRT",
+      "intended_translation_mm": [
+        -22.0,
+        -22.0,
+        0.0
+      ],
+      "opened": true,
+      "open_error": 0,
+      "reactivated_assembly": 0,
+      "api_used": "AddComponent4",
+      "attempts": [
+        {
+          "api": "AddComponent5",
+          "returned": false
+        },
+        {
+          "api": "AddComponent4",
+          "returned": true
+        }
+      ],
+      "inserted": true,
+      "name_in_assembly": "root_clamp-1",
+      "transform_at_insert_mm": [
+        -44.0,
+        -50.0,
+        -17.5
+      ],
+      "set_transform": [
+        {
+          "ok": true,
+          "form": "setattr"
+        }
+      ]
+    }
+  },
+  "mates": [
+    {
+      "plane": "Front Plane",
+      "type": "coincident",
+      "between": [
+        "mast_tube_stock-1",
+        "support_sleeve-1"
+      ],
+      "selected": true,
+      "created": true,
+      "error_status": 1
+    },
+    {
+      "plane": "Top Plane",
+      "type": "coincident",
+      "between": [
+        "mast_tube_stock-1",
+        "support_sleeve-1"
+      ],
+      "selected": true,
+      "created": true,
+      "error_status": 1
+    },
+    {
+      "plane": "Right Plane",
+      "type": "coincident",
+      "between": [
+        "mast_tube_stock-1",
+        "support_sleeve-1"
+      ],
+      "selected": true,
+      "created": true,
+      "error_status": 1
+    }
+  ],
+  "checks": {
+    "components_inserted": true,
+    "mates_created": 3,
+    "mates_attempted": 3,
+    "in_memory_ok": true,
+    "reopened_ok": true,
+    "parameter_change_ok": true,
+    "files_written": true
+  },
+  "unattended": {
+    "input_dimension_value_on_create": {
+      "preference_id": 10,
+      "target": false,
+      "was": true,
+      "now": false,
+      "applied": true
+    }
+  },
+  "template_preference_value": "C:\\Program Files\\SOLIDWORKS Corp\\SOLIDWORKS (2)\\lang\\english",
+  "assembly_title": "Assem1",
+  "placement_after_mates": {
+    "mast_tube_stock": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "root_clamp": [
+      -22.0,
+      -22.0,
+      0.0
+    ],
+    "support_sleeve": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "placement_reset_needed": [],
+  "in_memory": {
+    "ok": true,
+    "components": {
+      "mast_tube_stock": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -10.0,
+          -10.0,
+          0.0
+        ],
+        "box_max_mm": [
+          10.0,
+          10.0,
+          135.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 11769.19147851077,
+        "volume_expected_mm3": 11769.191478510766,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      },
+      "support_sleeve": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -8.475,
+          -8.475,
+          0.0
+        ],
+        "box_max_mm": [
+          8.475,
+          8.475,
+          35.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 5148.746382491269,
+        "volume_expected_mm3": 5148.746382491268,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      },
+      "root_clamp": {
+        "translation_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "box_max_mm": [
+          22.0,
+          34.0,
+          35.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 70582.72919191429,
+        "volume_expected_mm3": 70582.72919191429,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      }
+    },
+    "assembly": {
+      "box_min_mm": [
+        -22.0,
+        -22.0,
+        0.0
+      ],
+      "box_max_mm": [
+        22.0,
+        34.0,
+        135.0
+      ],
+      "bbox_mm": [
+        44.0,
+        56.0,
+        135.0
+      ],
+      "bbox_expected_mm": [
+        44.0,
+        56.0,
+        135.0
+      ],
+      "ok": true
+    },
+    "total": {
+      "total_volume_mm3": 87500.66705291632,
+      "expected_mm3": 87500.66705291632,
+      "ok": true
+    },
+    "free_length": {
+      "free_length_mm": 100.0,
+      "expected_mm": 100.0,
+      "derived_from": "tube box_max z - clamp box_max z (read back)",
+      "ok": true
+    }
+  },
+  "outputs": {
+    "dir": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems",
+    "sldasm": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.sldasm",
+    "sldasm_bytes": 63867,
+    "step": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.step",
+    "step_bytes": 98005,
+    "preview": "C:\\Users\\admin\\Desktop\\Projects\\autonomous-racing-systems\\mast_assembly.bmp",
+    "preview_written": true
+  },
+  "reopened": {
+    "ok": true,
+    "components": {
+      "mast_tube_stock": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -10.0,
+          -10.0,
+          0.0
+        ],
+        "box_max_mm": [
+          10.0,
+          10.0,
+          135.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 11769.191478510773,
+        "volume_expected_mm3": 11769.191478510766,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      },
+      "support_sleeve": {
+        "translation_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -8.475,
+          -8.475,
+          0.0
+        ],
+        "box_max_mm": [
+          8.475,
+          8.475,
+          35.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 5148.746382491269,
+        "volume_expected_mm3": 5148.746382491268,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      },
+      "root_clamp": {
+        "translation_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "translation_expected_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "translation_ok": true,
+        "box_min_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "box_max_mm": [
+          22.0,
+          34.0,
+          35.0
+        ],
+        "box_ok": true,
+        "volume_mm3": 70582.72919191429,
+        "volume_expected_mm3": 70582.72919191429,
+        "volume_api": "ModelDoc2.GetBodies2",
+        "volume_ok": true
+      }
+    },
+    "assembly": {
+      "box_min_mm": [
+        -22.0,
+        -22.0,
+        0.0
+      ],
+      "box_max_mm": [
+        22.0,
+        34.0,
+        135.0
+      ],
+      "bbox_mm": [
+        44.0,
+        56.0,
+        135.0
+      ],
+      "bbox_expected_mm": [
+        44.0,
+        56.0,
+        135.0
+      ],
+      "ok": true
+    },
+    "total": {
+      "total_volume_mm3": 87500.66705291632,
+      "expected_mm3": 87500.66705291632,
+      "ok": true
+    },
+    "free_length": {
+      "free_length_mm": 100.0,
+      "expected_mm": 100.0,
+      "derived_from": "tube box_max z - clamp box_max z (read back)",
+      "ok": true
+    }
+  },
+  "parameter_change": {
+    "delta_mm": [
+      10.0,
+      5.0,
+      3.0
+    ],
+    "set_moved": {
+      "ok": true,
+      "form": "setattr"
+    },
+    "measured_delta_mm": [
+      10.0,
+      5.0,
+      3.0
+    ],
+    "delta_ok": true,
+    "moved_state": {
+      "ok": true,
+      "components": {
+        "mast_tube_stock": {
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_expected_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -10.0,
+            -10.0,
+            0.0
+          ],
+          "box_max_mm": [
+            10.0,
+            10.0,
+            135.0
+          ],
+          "box_ok": true,
+          "volume_mm3": 11769.19147851077,
+          "volume_expected_mm3": 11769.191478510766,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        },
+        "support_sleeve": {
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_expected_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -8.475,
+            -8.475,
+            0.0
+          ],
+          "box_max_mm": [
+            8.475,
+            8.475,
+            35.0
+          ],
+          "box_ok": true,
+          "volume_mm3": 5148.746382491269,
+          "volume_expected_mm3": 5148.746382491268,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        },
+        "root_clamp": {
+          "translation_mm": [
+            -12.0,
+            -17.0,
+            3.0
+          ],
+          "translation_expected_mm": [
+            -12.0,
+            -17.0,
+            3.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -12.0,
+            -17.0,
+            2.999999999999999
+          ],
+          "box_max_mm": [
+            32.0,
+            39.0,
+            38.00000000000001
+          ],
+          "box_ok": true,
+          "volume_mm3": 70582.72919191429,
+          "volume_expected_mm3": 70582.72919191429,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        }
+      },
+      "assembly": {
+        "box_min_mm": [
+          -12.0,
+          -17.0,
+          0.0
+        ],
+        "box_max_mm": [
+          32.0,
+          39.0,
+          135.0
+        ],
+        "bbox_mm": [
+          44.0,
+          56.0,
+          135.0
+        ],
+        "bbox_expected_mm": [
+          44.0,
+          56.0,
+          135.0
+        ],
+        "ok": true
+      },
+      "total": {
+        "total_volume_mm3": 87500.66705291632,
+        "expected_mm3": 87500.66705291632,
+        "ok": true
+      },
+      "free_length": {
+        "free_length_mm": 97.0,
+        "expected_mm": 100.0,
+        "derived_from": "tube box_max z - clamp box_max z (read back)",
+        "ok": null
+      }
+    },
+    "set_restored": {
+      "ok": true,
+      "form": "setattr"
+    },
+    "restored_state": {
+      "ok": true,
+      "components": {
+        "mast_tube_stock": {
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_expected_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -10.0,
+            -10.0,
+            0.0
+          ],
+          "box_max_mm": [
+            10.0,
+            10.0,
+            135.0
+          ],
+          "box_ok": true,
+          "volume_mm3": 11769.191478510773,
+          "volume_expected_mm3": 11769.191478510766,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        },
+        "support_sleeve": {
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_expected_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -8.475,
+            -8.475,
+            0.0
+          ],
+          "box_max_mm": [
+            8.475,
+            8.475,
+            35.0
+          ],
+          "box_ok": true,
+          "volume_mm3": 5148.746382491269,
+          "volume_expected_mm3": 5148.746382491268,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        },
+        "root_clamp": {
+          "translation_mm": [
+            -22.0,
+            -22.0,
+            0.0
+          ],
+          "translation_expected_mm": [
+            -22.0,
+            -22.0,
+            0.0
+          ],
+          "translation_ok": true,
+          "box_min_mm": [
+            -22.0,
+            -22.0,
+            0.0
+          ],
+          "box_max_mm": [
+            22.0,
+            34.0,
+            35.0
+          ],
+          "box_ok": true,
+          "volume_mm3": 70582.7291919143,
+          "volume_expected_mm3": 70582.72919191429,
+          "volume_api": "ModelDoc2.GetBodies2",
+          "volume_ok": true
+        }
+      },
+      "assembly": {
+        "box_min_mm": [
+          -22.0,
+          -22.0,
+          0.0
+        ],
+        "box_max_mm": [
+          22.0,
+          34.0,
+          135.0
+        ],
+        "bbox_mm": [
+          44.0,
+          56.0,
+          135.0
+        ],
+        "bbox_expected_mm": [
+          44.0,
+          56.0,
+          135.0
+        ],
+        "ok": true
+      },
+      "total": {
+        "total_volume_mm3": 87500.66705291634,
+        "expected_mm3": 87500.66705291632,
+        "ok": true
+      },
+      "free_length": {
+        "free_length_mm": 100.0,
+        "expected_mm": 100.0,
+        "derived_from": "tube box_max z - clamp box_max z (read back)",
+        "ok": true
+      }
+    },
+    "ok": true
+  },
+  "host_checks_ok": true,
+  "accepted": true,
+  "pending": [],
+  "step_roundtrip": {
+    "bbox_mm": [
+      44.0,
+      56.0,
+      135.0
+    ],
+    "bbox_expected_mm": [
+      44.0,
+      56.0,
+      135.0
+    ],
+    "bbox_ok": true,
+    "box_min_mm": [
+      -22.0,
+      -22.0,
+      0.0
+    ],
+    "box_min_ok": true,
+    "solid_volumes_mm3": [
+      5148.7463824912675,
+      11769.191478510758,
+      70582.72919191427
+    ],
+    "solid_volumes_expected_mm3": [
+      5148.746382491268,
+      11769.191478510766,
+      70582.72919191429
+    ],
+    "n_solids": 3,
+    "volumes_ok": true,
+    "total_volume_mm3": 87500.6670529163,
+    "total_volume_expected_mm3": 87500.66705291632,
+    "total_ok": true,
+    "ok": true
+  }
+}
