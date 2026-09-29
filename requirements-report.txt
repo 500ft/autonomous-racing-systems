@@ -3,5 +3,5 @@
 # Pin the build backend so the pip-only path works.
 setuptools<85
 wheel
-reportlab>=4.4,<6
+reportlab>=5.0.1,<6
 pypdf>=6.19.0,<7
