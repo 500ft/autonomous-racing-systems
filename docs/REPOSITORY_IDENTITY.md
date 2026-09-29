@@ -35,6 +35,10 @@ does not replace the authoritative protocol or task ledger.
 
 ## Visual provenance
 
+The README lead image, [`media/hero.jpg`](media/hero.jpg), is AI-generated
+concept art. Its race car and lidar arrangement are not a photograph or an
+engineering drawing of the project vehicle.
+
 [`media/project-overview.svg`](media/project-overview.svg) is an original,
 editable conceptual diagram created for the repository presentation. It contains
 no measured values, synthetic plots or purported hardware photographs.
