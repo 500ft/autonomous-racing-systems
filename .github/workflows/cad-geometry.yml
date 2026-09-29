@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # ledger_validator historical needs the base commit
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: cad-geometry
           python-version: "3.11"
