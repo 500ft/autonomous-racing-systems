@@ -89,9 +89,11 @@ class EndTests(unittest.TestCase):
 
 
 class HonestyTests(unittest.TestCase):
-    def test_module_declares_it_is_not_host_verified(self):
+    def test_module_declares_its_verification_status(self):
+        # Was "NOT HOST-VERIFIED" until the toggle was verified on the host on 2026-09-26 (#48).
+        # The guard is that the module states a status, not that the status stays pessimistic.
         text = (Path(unattended.__file__)).read_text()
-        self.assertIn("NOT HOST-VERIFIED", text)
+        self.assertIn("STATUS: HOST-VERIFIED", text)
         self.assertIn("read back", text)
 
     def test_module_does_not_claim_to_suppress_every_dialog(self):

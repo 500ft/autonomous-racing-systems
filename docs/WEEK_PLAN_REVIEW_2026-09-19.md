@@ -151,7 +151,9 @@ value"**, which raises a modal Modify box on every `AddDimension2` — an unatte
 first dimension with no error. `cad/solidworks/unattended.py` disables it (toggle id 10, cross-checked
 against three independent sources, one read from `swconst.tlb`) and restores the host afterwards. It is
 **NOT HOST-VERIFIED**, so the toggle is read back and the outcome recorded under `"unattended"` in the
-result JSON; the next host run proves or disproves it. `unattended.py` was added to `run_host.py`'s
+result JSON; the next host run proves or disproves it. *(Superseded 2026-09-26: the host run happened and
+the toggle is host-verified; see `cad/solidworks/unattended.py`. This paragraph records the state on
+2026-09-19 and is left as written.)* `unattended.py` was added to `run_host.py`'s
 upload list, without which the host-side import would fail. Ten offline tests against a fake COM object
 cover applied, already-off, raising, and silently-ignored writes plus restore.
 
