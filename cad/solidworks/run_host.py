@@ -19,7 +19,8 @@ HERE = Path(__file__).resolve().parent
 REMOTE_DIR = r"C:\RRMast"
 REMOTE_DIR_POSIX = REMOTE_DIR.replace("\\", "/")
 # unattended.py is imported by the host-side scripts, so it must travel with them.
-SUPPORT_FILES = ("geometry.json", "oracle.json", "oracle_redrive.json", "unattended.py")
+SUPPORT_FILES = ("geometry.json", "oracle.json", "oracle_redrive.json",
+                 "oracle_assembly.json", "unattended.py")
 POLL_S = 3
 LAUNCH_TIMEOUT_S = 20
 

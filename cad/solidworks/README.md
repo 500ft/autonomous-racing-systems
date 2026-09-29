@@ -142,10 +142,18 @@ its interactive session to stay logged in and unlocked for the COM server to sta
 `author_mast_assembly_doc.py` builds the assembly from the three authored parts, unattended, and writes
 `mast_assembly.SLDASM` / `.step` / `.bmp` to the same per-repo project folder as the parts.
 
-**Current status: PARTIAL, and the script says so.** Three components insert and three mates are
-created, and the STEP carries real geometry, but **component placement does not match intent** and
-per-component volumes could not be read back, so it is **not a verified assembly**. See
-`runs/mast_assembly_20260926/assembly_result.json`. The open item is placement, not insertion.
+Run it with `python3 run_host.py author_mast_assembly_doc.py assembly_result.json 900`, then check the
+retrieved STEP on the workstation with `python oracle_assembly.py --check-step mast_assembly.step --result
+assembly_result.json` (CadQuery). The host script never reports `ok`: it writes `partial` with
+`accepted: null` and the STEP check promotes it.
+
+`AddComponent4` centres each part's box on the given point instead of placing the part origin there, so
+placement is set through `Component2.Transform2` (edit the transform's `ArrayData`, assign it back;
+`IMathUtility.CreateTransform` fails on this build) and read back after mates, on the reopened `.sldasm`,
+and after a known move of `root_clamp`. Expected values come from `oracle_assembly.json`
+(CadQuery). Result: `runs/mast_assembly_20260929/assembly_result.json`. Volumes are read through the
+component's part doc (`GetBodies3` did not return bodies), so they confirm the part files, not a
+separate assembly-level measurement.
 
 ## Host API findings
 

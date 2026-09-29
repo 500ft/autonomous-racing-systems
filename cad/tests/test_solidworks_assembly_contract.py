@@ -76,6 +76,26 @@ class SolidworksAssemblyContract(unittest.TestCase):
             for axis, (got, want) in enumerate(zip(measured["bbox_mm"], expected["bbox_mm"])):
                 self.assertAlmostEqual(got, want, places=6, msg="%s bbox axis %d" % (name, axis))
 
+    def test_assembly_oracle_is_current_and_result_declares_its_status(self):
+        """oracle_assembly.json must match a regeneration; the recorded run may not claim `ok`
+        without accepted == True, and accepted needs every check plus the STEP round trip."""
+        try:
+            import cadquery  # noqa: F401
+        except ImportError:
+            self.skipTest("cadquery not installed")
+        sys.path.insert(0, str(SOLIDWORKS_DIR))
+        import oracle_assembly
+        fresh = oracle_assembly.expected(json.loads(GEOMETRY.read_text()))
+        committed = json.loads((SOLIDWORKS_DIR / "oracle_assembly.json").read_text())
+        self.assertEqual(fresh["assembly"]["bbox_mm"], committed["assembly"]["bbox_mm"])
+        self.assertAlmostEqual(fresh["assembly"]["total_volume_mm3"],
+                               committed["assembly"]["total_volume_mm3"], places=6)
+        res = json.loads((REPO / "runs" / "mast_assembly_20260929" / "assembly_result.json").read_text())
+        self.assertIn(res["status"], ("ok", "partial", "error"))
+        if res["status"] == "ok":
+            self.assertIs(res["accepted"], True)
+            self.assertTrue(res["host_checks_ok"] and res["step_roundtrip"]["ok"])
+
 
 if __name__ == "__main__":
     unittest.main()
