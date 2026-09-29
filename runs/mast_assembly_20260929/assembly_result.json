@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "message": "host read-back checks passed; STEP round trip not yet run, so the assembly is NOT accepted",
+  "message": "host read-back checks passed and the STEP round trip matches the oracle",
   "stages": [
     {
       "stage": "unattended",
@@ -859,9 +859,7 @@
   },
   "host_checks_ok": true,
   "accepted": true,
-  "pending": [
-    "step_roundtrip: run oracle_assembly.py --check-step on the retrieved STEP"
-  ],
+  "pending": [],
   "step_roundtrip": {
     "bbox_mm": [
       44.0,

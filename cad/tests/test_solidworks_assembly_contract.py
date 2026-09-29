@@ -95,6 +95,9 @@ class SolidworksAssemblyContract(unittest.TestCase):
         if res["status"] == "ok":
             self.assertIs(res["accepted"], True)
             self.assertTrue(res["host_checks_ok"] and res["step_roundtrip"]["ok"])
+            # An accepted record may not still carry the pre-check "not yet run / NOT accepted" text.
+            self.assertEqual(res["pending"], [])
+            self.assertNotIn("NOT accepted", res["message"])
 
 
 if __name__ == "__main__":

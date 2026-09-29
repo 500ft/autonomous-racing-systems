@@ -89,6 +89,13 @@ def main():
         host_ok = res.get("host_checks_ok") is True
         res["accepted"] = bool(host_ok and rt["ok"])
         res["status"] = "ok" if res["accepted"] else "partial"
+        # The host run writes a "STEP round trip not yet run" message and pending item; leaving them
+        # after this check made an accepted result file contradict itself.
+        res["pending"] = [] if res["accepted"] else ["step_roundtrip: failed, see step_roundtrip"]
+        res["message"] = ("host read-back checks passed and the STEP round trip matches the oracle"
+                          if res["accepted"] else
+                          "not accepted: %s" % ("host read-back checks FAILED" if not host_ok
+                                                else "STEP round trip disagrees with the oracle"))
         a.result.write_text(json.dumps(res, indent=2) + "\n")
     return 0 if rt["ok"] else 1
 
