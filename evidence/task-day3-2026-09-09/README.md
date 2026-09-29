@@ -7,7 +7,7 @@ Branch: `task/day-three-20260909`. Scope: Resolve mast fixture and metrology pre
 
 Six request-sheet tests cover exact pending-row coverage, future rows, invalid units, a filled pending value, duplicates and snapshot drift. 28 CAD tests pass. The failed 174.7 Hz baseline is distinguished from the selected nominal 285.5 Hz FE result; static acceptance is not repurposed as a modal verdict.
 
-See [plan](../../docs/DAY3_PLAN.md) and [primary deliverable](../../cad/roboracer/fixture-preparation.md). Status is maintained only in [SPRINT_TASKS.csv](../../docs/SPRINT_TASKS.csv); original research/CAD gates remain unchanged. Delivery is a new PR, not an automatic merge or scientific release.
+See [plan](https://github.com/500ft/autonomous-racing-systems/blob/57f04fb620654c9e2475ba340425d632f79b88ff/docs/DAY3_PLAN.md) and [primary deliverable](../../cad/roboracer/fixture-preparation.md). Status is maintained only in [SPRINT_TASKS.csv](../../docs/SPRINT_TASKS.csv); original research/CAD gates remain unchanged. Delivery is a new PR, not an automatic merge or scientific release.
 
 ## Verification and reproducibility
 

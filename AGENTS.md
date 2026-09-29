@@ -5,8 +5,7 @@
 - In this user's workflow, Codex prepares plans and detailed `.txt` handoffs;
   Claude implements them. Keep Codex work to planning unless the user explicitly
   changes that scope.
-- The current handoff is [the September 19–25 plan](docs/WEEK_PLAN_2026-09-19_TO_25.txt).
-  Inspect current branches and evidence before planning work that may already exist.
+- Inspect current branches and evidence before planning work that may already exist.
 
 ## CAD and FEA context
 
@@ -64,4 +63,4 @@ critical path below, or record an owner decision. If it does none, don't open it
 - Dependency updates arrive as Dependabot's grouped monthly PRs; don't hand-edit
   pins to chase them.
 
-**Critical path (2026-09-29):** Finish the mast CAD assembly -> fabricate the mast -> physical deflection test under the frozen protocol. Re-converging the coupled-mass FEA model is optional.
+**Critical path (2026-09-29):** Mast CAD assembly accepted (#55). Next: fabricate the mast -> physical deflection test under the frozen protocol. Re-converging the coupled-mass FEA model is optional.
