@@ -14,12 +14,6 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-    groups:
-      pip:
-        patterns: ["*"]
-    ignore:
-      # Deliberately pinned for the reproducible item-11 regression environment
-      # (Python 3.10); bumps to these were closed as unwanted.
-      - dependency-name: "numpy"
-      - dependency-name: "scipy"
-      - dependency-name: "gym"
+    # Security updates only. The pip pins define the frozen Python 3.10 item-11
+    # regression environment; version bumps break it (#34, #37, #53, #57).
+    open-pull-requests-limit: 0
