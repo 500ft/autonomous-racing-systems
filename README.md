@@ -12,9 +12,10 @@ F1TENTH-scale autonomous race car.
 [Quick start](#quick-start) · [Documentation](#documentation) ·
 [Contribute](CONTRIBUTING.md)
 
-![Conceptual overview of the modeling, control, telemetry, and mechanical evidence paths](docs/media/project-overview.svg)
+![Illustration of a sensor-equipped autonomous race car on a test track](docs/media/hero.jpg)
 
-*Project overview, not a photograph, CAD assembly, or physical test result.*
+*AI-generated concept illustration, not a photograph of the project vehicle,
+CAD assembly, or physical test result.*
 
 ## About
 
