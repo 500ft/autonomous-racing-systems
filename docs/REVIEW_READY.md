@@ -54,7 +54,7 @@ measurement. Geometry CI runs in [`.github/workflows/cad-geometry.yml`](../.gith
 one planning-input task, not a CAD model. Hardware/metrology owner gates remain
 open. Earlier sprint evidence below is historical and unchanged.
 
-Updated 2026-09-06. [Roadmap](SPRINT_ROADMAP.md), [authoritative ledger](SPRINT_TASKS.csv),
+Updated 2026-09-06. [Roadmap](https://github.com/500ft/autonomous-racing-systems/blob/f374eb8c8543a018b48685f76f8bf550391c0713/docs/SPRINT_ROADMAP.md), [authoritative ledger](SPRINT_TASKS.csv),
 [progress and runtime inventory](SPRINT_PROGRESS.md).
 
 ## Identity and scope
