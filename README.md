@@ -1,63 +1,72 @@
 # Autonomous Racing Systems
 
-Vehicle modeling, control, telemetry, and sensor-mount engineering for a
-F1TENTH-scale autonomous race car.
+Vehicle modelling, control and a LiDAR mast design for a 1/10-scale F1TENTH
+race car. The vehicle software runs in simulation. The mast has gone from a
+failed first design through FEA and CAD; building and load-testing it is the
+step that remains.
 
 [![CI](https://github.com/500ft/autonomous-racing-systems/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/500ft/autonomous-racing-systems/actions/workflows/ci.yml)
 [![Docker](https://github.com/500ft/autonomous-racing-systems/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/500ft/autonomous-racing-systems/actions/workflows/docker.yml)
-[![Evidence: simulation and nominal CAD](https://img.shields.io/badge/evidence-simulation%20%2B%20nominal%20CAD-465B70)](#evidence-snapshot)
+[![Evidence: simulation and nominal CAD](https://img.shields.io/badge/evidence-simulation%20%2B%20nominal%20CAD-465B70)](#results)
 [![License: MIT](https://img.shields.io/badge/license-MIT-276C6B)](LICENSE)
 
-[Start here](docs/START_HERE.md) · [Results](reports/final_report.md) ·
-[Quick start](#quick-start) · [Documentation](#documentation) ·
-[Contribute](CONTRIBUTING.md)
+[Results](#results) · [Roadmap](ROADMAP.md) · [Quick start](#quick-start) ·
+[Full report](reports/final_report.md) · [Contributing](CONTRIBUTING.md)
 
 ![Illustration of a sensor-equipped autonomous race car on a test track](docs/media/hero.jpg)
 
-*AI-generated concept illustration, not a photograph of the project vehicle,
-CAD assembly, or physical test result.*
+*Concept illustration (AI-generated). It is not the project car or its CAD.*
 
-## About
+## What's in the repository
 
-An autonomous vehicle needs more than a controller that completes one lap.
-Its models must explain the recorded motion, its telemetry must be usable by
-other tools, and its sensor mounting must meet a defensible mechanical design.
+**Vehicle software.** A dynamic bicycle model is fitted to telemetry from the
+F1TENTH Gym simulator and checked on a held-out segment. Pure pursuit, LQR and
+MPC controllers and an EKF are compared under the same scenarios, and a ROS 2
+bridge converts recorded bags into the same telemetry format the simulator
+writes.
 
-This repository connects those tasks in two engineering lanes:
+**LiDAR mast.** The mast holds the LiDAR above the car, and its first bending
+mode has to stay above 200 Hz: twice the 100 Hz control rate, clear of motor
+vibration. The first design, a 120 mm tube with a 16 mm outside diameter,
+reached 174.7 Hz by hand calculation and failed. The redesign is shorter and
+wider: 100 mm long, 20 mm OD, 1.5 mm wall, 6061-T6. It gives 330.1 Hz by hand
+and 285.5 Hz in FEA, with less than 1.5% change across three meshes.
 
-- **Vehicle systems:** dynamics replay, parameter identification, controller
-  comparisons, state estimation, and a shared Gym/ROS 2 telemetry format.
-- **Mechanical design:** a LiDAR-mast load case, hand calculations, finite
-  element analysis, nominal parametric CAD, and a physical-test contract.
+A later study looked at why the FEA came out 13.5% below the hand calculation.
+Most of the difference was how the model attached the tip mass: the original
+FEA input file hung it from a single node on the tube wall. Coupling it to the tip face
+at the centre gives 320.9 Hz, 2.8% from the hand value. That model has not been
+re-converged yet, so 285.5 Hz is still the reported number.
 
-The result is a reviewable analysis pipeline with source-linked reports, not
-a claim of a field-validated race car. The project retains its
-[F1TENTH/RoboRacer lineage](docs/upstream_roboracer_sources.md); package and ROS
-interface names are unchanged by the repository rename.
+The tube, support sleeve and root clamp are parametric SOLIDWORKS parts. The
+assembly was built unattended on the CAD host and checked against a separate
+CadQuery model: part placement, volumes, a move-and-restore test and a STEP
+round trip all match.
 
-## Evidence snapshot
+## Results
 
-| Engineering result | What the repository demonstrates | Source |
+| Result | Value | Source |
 | --- | --- | --- |
-| Vehicle identification | Dynamic bicycle-model fitting with a held-out telemetry segment; simulator data, not physical vehicle identification | [Identification study](reports/dynamic_parameter_identification.md) |
-| Control and estimation | Pure pursuit, LQR, MPC, and EKF comparisons under documented simulation scenarios | [Controllers](reports/controller_comparison.md), [EKF](reports/ekf_study.md) |
-| Telemetry integration | ROS 2 bag conversion with portable, simulator-backed regression captures | [Bridge evidence](evidence/item11/report.md) |
-| Mast redesign | Selected nominal FEA predicts a 285.5 Hz first mode; 174.7 Hz belongs to the rejected baseline hand model | [Mechanical analysis](docs/design/16_mechanical_design_analysis.md), [FEA output](runs/mast_fea/fea_summary.txt) |
-| Parametric geometry | A nominal mast tube regenerates from its parameter register and survives STEP round-trip checks | [Generator](cad/generate.py), [Geometry contract](cad/contract.json) |
-| Physical compliance | Test protocol and evidence evaluator exist; measured agreement has not been established | [Frozen protocol](docs/specs/mast-physical-validation/design.md) |
+| Mast first mode, original design (hand) | 174.7 Hz, below the 200 Hz limit | [Mechanical analysis](docs/design/16_mechanical_design_analysis.md) |
+| Mast first mode, redesign (hand) | 330.1 Hz | same |
+| Mast first mode, redesign (FEA) | 285.5 Hz, < 1.5% change over three meshes | [FEA output](runs/mast_fea/fea_summary.txt) |
+| Tip-mass attachment study | 285.5 Hz → 320.9 Hz with a coupled, centred mass | [Study record](runs/mast_modal_attachment_20260925/study.json) |
+| MPC solve time | 1.33 ms at the 95th percentile, inside the 10 ms control period | [MPC report](reports/mpc_controller.md) |
+| Controller comparison | Lap completion, cross-track error and steering effort for each controller | [Comparison](reports/controller_comparison.md) |
+| Model identification | Held-out yaw-rate error at numerical precision (see below) | [Identification study](reports/dynamic_parameter_identification.md) |
 
 ![Identified bicycle-model yaw-rate and slip-angle predictions against simulator telemetry, with the held-out segment marked](reports/figures/dynamic_parameter_fit.png)
 
-*Simulation result: the segment right of the dashed line is held out from the
-fit. Read the [study](reports/dynamic_parameter_identification.md) for the split
-and limitations; [figure lineage](docs/data-and-figures.md) identifies the inputs
-and generator. This is not independent physical-vehicle validation.*
+*Identified model against simulator telemetry; the segment right of the dashed
+line is held out. The simulator generates its data with the same model being
+fitted, so the near-zero error shows the fitting code works. It says nothing
+about how well the model matches a real car.
+[Figure inputs and generator](docs/data-and-figures.md).*
 
 ## Quick start
 
-For a bounded first check, use the portable report environment. This path
-does not launch ROS, drive a vehicle, or regenerate the full simulation study.
-Prerequisites: Git and **Python 3.10**, matching the portable CI workflow.
+This path uses the portable report environment and Python 3.10, the same as
+CI. It does not launch ROS or rerun the full simulation study.
 
 ```bash
 git clone https://github.com/500ft/autonomous-racing-systems.git
@@ -70,75 +79,69 @@ PYTHONPATH=gym python experiments/test_cad_inputs.py
 PYTHONPATH=gym python experiments/test_final_report.py
 ```
 
-Expected: both test commands finish with `OK`. They check registered design
-inputs and source-linked report content, including a temporary PDF build;
-they do not establish physical agreement or run the complete evidence suite.
+Both commands should finish with `OK`. They check the design inputs and the
+report, including a temporary PDF build.
 
-The [reproduction guide](docs/START_HERE.md#reproduce-by-environment) separates
-the full portable checks, legacy Gym experiments, ROS 2 integration, and pinned
-CadQuery environment. Keep these environments separate: their dependency
-versions intentionally differ.
+The [reproduction guide](docs/START_HERE.md#reproduce-by-environment) covers
+the full checks, the legacy Gym experiments, ROS 2 and the pinned CadQuery
+environment. Keep those environments separate; their dependency versions
+differ on purpose.
+
+## What's next
+
+Build the mast and load-test it. The [roadmap](ROADMAP.md) has the steps; the
+first is confirming the test hardware (load cell, 0.001 mm dial indicators,
+bench). The [test protocol](docs/specs/mast-physical-validation/design.md) is
+frozen: five loads on each axis, at least three load/unload cycles, and root
+motion measured so it can be subtracted.
+
+## Limits
+
+- Nothing has been built or measured. The mast results are hand calculations,
+  FEA and nominal CAD, and the material properties are handbook values for
+  6061-T6.
+- All vehicle results come from the simulator, not a physical car.
+- The ±15% agreement band in the test protocol applies to static stiffness. It
+  is not a pass criterion for a tap test.
 
 ## Documentation
 
-| Start with | Use it to |
+| Document | What it covers |
 | --- | --- |
-| [Reading and reproduction guide](docs/START_HERE.md) | Choose a recruiter, reviewer, or contributor route |
-| [Integrated report](reports/final_report.md) | Review the modeling, controls, estimation, and mast results |
-| [Data and figures](docs/data-and-figures.md) | Trace a figure back to its inputs and generator |
-| [Vehicle model](docs/vehicle_model.md) | Inspect equations and assumptions |
-| [Telemetry dictionary](docs/telemetry_data_dictionary.md) | Understand the shared data format |
-| [Parameter inventory](docs/parameter_inventory.md) | Distinguish configured, identified, and measured inputs |
-| [Fixture preparation](cad/roboracer/fixture-preparation.md) | Inspect the mast interface and metrology decisions |
-| [CAD inventory](docs/CAD_ITEMS.md) | See planned parts without confusing them with completed geometry |
-| [Review index](docs/REVIEW_READY.md) | Find verification records and unresolved gates |
-| [Literature](literature/README.md) | Check a claim against verified sources; start at the [claim ledger](literature/claim-ledger.md) |
+| [Reading and reproduction guide](docs/START_HERE.md) | Where to start, and how to rerun each part |
+| [Integrated report](reports/final_report.md) | Modelling, controls, estimation and mast results in one place |
+| [Data and figures](docs/data-and-figures.md) | Inputs and generator for each figure |
+| [Vehicle model](docs/vehicle_model.md) | Equations and assumptions |
+| [Telemetry dictionary](docs/telemetry_data_dictionary.md) | The shared data format |
+| [Parameter inventory](docs/parameter_inventory.md) | Which inputs are configured, identified or measured |
+| [Fixture preparation](cad/roboracer/fixture-preparation.md) | Mast interface and metrology decisions |
+| [CAD inventory](docs/CAD_ITEMS.md) | Planned parts and what exists |
+| [Literature](literature/README.md) | Sources checked against the project's claims, starting from the [claim ledger](literature/claim-ledger.md) |
 
 ```text
 gym/          F1TENTH simulator package and dynamics
-experiments/  replay, identification, control, telemetry, and mast checks
-reports/      engineering reports and result figures
-runs/         study inputs, generated metrics, and solver summaries
-ros2_ws/      f1tenth_modeling ROS 2 sidecar
-cad/          parameter-driven nominal geometry and contract tests
-evidence/     provenance and portable regression captures
-docs/         models, interfaces, test protocols, and reading guides
+experiments/  replay, identification, control, telemetry and mast checks
+reports/      engineering reports and figures
+runs/         study inputs, metrics and solver summaries
+ros2_ws/      f1tenth_modeling ROS 2 package
+cad/          parametric geometry and its tests
+evidence/     check records and regression captures
+docs/         models, interfaces, test protocols and guides
 ```
-
-## Next engineering gate
-
-The next mechanical result is **static mast compliance**, not another render.
-Resolve the actual mount, tip assembly, load height, and fixture observability;
-then freeze inspection-linked as-built predictions before applying campaign
-loads. The [measurement contract](docs/CAD_MEASUREMENT_CONTRACT.md) specifies
-fixture stiffness, root-motion observations, and uncertainty requirements.
-
-The existing ±15% static agreement band is **not** a modal tap-test criterion.
-Sensor/cable mass and the installed thermal mounting arrangement also need
-confirmation before the nominal FEA can represent the built assembly.
-
-Physical vehicle telemetry, a completed mounting fixture, and measured mast
-compliance remain outside the demonstrated results. Nominal STEP geometry
-does not close any of those gates. The [review index](docs/REVIEW_READY.md)
-and existing task ledger retain the detailed work status.
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing models, evidence, or
-generated outputs. A useful pull request identifies the affected contract,
-records its environment and checks, and links the result to its inputs.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing models, evidence or
+generated outputs. A useful pull request says which result it affects, which
+environment it ran in, and which checks passed. Open an
+[issue](https://github.com/500ft/autonomous-racing-systems/issues) for a
+reproducible bug or a scoped proposal.
 
-Use [issues](https://github.com/500ft/autonomous-racing-systems/issues) for a
-reproducible defect or a scoped engineering proposal. Do not substitute a
-simulation output for a pending physical measurement.
+## License and attribution
 
-## Attribution and license
-
-Released under the [MIT License](LICENSE), retaining the original simulator
-copyright notice. The [upstream source register](docs/upstream_roboracer_sources.md)
-records reference repositories, licenses, and revision pins.
-
-When citing this work, identify the repository revision and the particular
-report or dataset used; cite upstream work separately where applicable. The
-[repository identity note](docs/REPOSITORY_IDENTITY.md) explains historical names
-and preserves the distinction between project branding and software APIs.
+[MIT License](LICENSE), keeping the original simulator copyright notice. The
+[upstream source register](docs/upstream_roboracer_sources.md) lists the
+reference repositories, their licenses and pinned revisions. When citing,
+give the repository revision and the report or dataset used. The project was
+previously named RoboRacer; package and ROS interface names were not changed
+([identity note](docs/REPOSITORY_IDENTITY.md)).

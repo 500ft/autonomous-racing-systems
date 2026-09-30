@@ -7,7 +7,7 @@ shortest path to a useful review without requiring every environment or study.
 
 | Audience | Suggested route | What to look for |
 | --- | --- | --- |
-| Recruiter — about two minutes | [Evidence snapshot](../README.md#evidence-snapshot) → [integrated report](../reports/final_report.md) → [mechanical design](design/16_mechanical_design_analysis.md) | Model-to-data reasoning, control trade-offs, and design iteration |
+| Recruiter — about two minutes | [Results](../README.md#results) → [integrated report](../reports/final_report.md) → [mechanical design](design/16_mechanical_design_analysis.md) | Model-to-data reasoning, control trade-offs, and design iteration |
 | Technical reviewer | [Data and figures](data-and-figures.md) → one result and its raw inputs → [review index](REVIEW_READY.md) | Provenance, model assumptions, split boundaries, counterexamples, and limitations |
 | Contributor | [Contributing](../CONTRIBUTING.md) → environment below → relevant contract and tests | A bounded change whose evidence can be reproduced |
 
