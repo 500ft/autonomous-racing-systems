@@ -1,45 +1,47 @@
 # Start here — Autonomous Racing Systems
 
-The [README](../README.md) is the project overview. This guide identifies the
-shortest path to a useful review without requiring every environment or study.
+The [README](../README.md) is the overview and the [roadmap](../ROADMAP.md) is
+the plan. This guide is for reading the work quickly or rerunning part of it.
 
-## Choose a reading path
+## Reading paths
 
-| Audience | Suggested route | What to look for |
-| --- | --- | --- |
-| Recruiter — about two minutes | [Results](../README.md#results) → [integrated report](../reports/final_report.md) → [mechanical design](design/16_mechanical_design_analysis.md) | Model-to-data reasoning, control trade-offs, and design iteration |
-| Technical reviewer | [Data and figures](data-and-figures.md) → one result and its raw inputs → [review index](REVIEW_READY.md) | Provenance, model assumptions, split boundaries, counterexamples, and limitations |
-| Contributor | [Contributing](../CONTRIBUTING.md) → environment below → relevant contract and tests | A bounded change whose evidence can be reproduced |
+| If you have | Read |
+| --- | --- |
+| Two minutes | [README results](../README.md#results), then the [integrated report](../reports/final_report.md) |
+| Half an hour | The [mechanical design analysis](design/16_mechanical_design_analysis.md), then the [test protocol](specs/mast-physical-validation/design.md) |
+| A review to do | The [review index](REVIEW_READY.md), then one figure traced through [data and figures](data-and-figures.md) to its inputs |
+| A change to make | [CONTRIBUTING.md](../CONTRIBUTING.md), then the environment below that the change touches |
 
-## Read the two engineering lanes correctly
+## The two halves of the project
 
-The vehicle lane uses F1TENTH Gym telemetry and simulator-backed ROS 2 captures.
-A held-out segment tests prediction on that segment; it is not evidence of
-transfer to a real vehicle. See the [identification study](../reports/dynamic_parameter_identification.md),
-[controller comparison](../reports/controller_comparison.md), and
+**Vehicle software.** Everything runs on F1TENTH Gym telemetry and simulator
+captures. The identification study fits the same model the simulator uses, so
+its near-zero held-out error checks the fitting code, not a real car. See the
+[identification study](../reports/dynamic_parameter_identification.md),
+[controller comparison](../reports/controller_comparison.md) and
 [EKF study](../reports/ekf_study.md).
 
-The mechanical lane progresses from an idealized beam to FEA and a regenerable
-nominal tube. The selected 285.5 Hz FEA result and rejected 174.7 Hz hand-model
-baseline describe different designs. Neither is a measured modal frequency.
-The [fixture preparation](../cad/roboracer/fixture-preparation.md) explains the
-next interface and uncertainty work; the [physical protocol](specs/mast-physical-validation/design.md)
-currently concerns static compliance only.
+**LiDAR mast.** The design goes from a beam hand calculation to FEA to
+parametric CAD. The 174.7 Hz figure belongs to the rejected first design; the
+redesign gives 330.1 Hz by hand and 285.5 Hz in FEA. None of these is a
+measurement. The [fixture preparation](../cad/roboracer/fixture-preparation.md)
+covers the test interface and uncertainty; the
+[test protocol](specs/mast-physical-validation/design.md) covers static
+stiffness only.
 
-The [figure guide](data-and-figures.md) and
-[machine-readable manifest](figure-manifest.json) connect plots to generators
-and source artifacts. A test passing, a CAD export succeeding, and a physical
-validation verdict are different observations.
+[Data and figures](data-and-figures.md) and the
+[figure manifest](figure-manifest.json) link every plot to its generator and
+inputs.
 
 ## Reproduce by environment
 
-Run the following from the repository root unless a command explicitly changes
-directory. Do not combine the four environments into one installation.
+Run commands from the repository root. Keep the four environments separate;
+their dependency versions differ on purpose.
 
-### Portable evidence checks — Python 3.10
+### Portable checks — Python 3.10
 
-Use the [README setup](../README.md#quick-start), then run the same six commands
-listed in the [CI workflow](../.github/workflows/ci.yml):
+Set up as in the [README](../README.md#quick-start), then run the checks
+from the [CI workflow](../.github/workflows/ci.yml):
 
 ```bash
 PYTHONPATH=gym python experiments/test_rosbag_to_telemetry.py
@@ -50,16 +52,13 @@ PYTHONPATH=gym python experiments/test_cad_inputs.py
 PYTHONPATH=gym python experiments/test_final_report.py
 ```
 
-Expected: zero exit status from every command; unittest commands report `OK`.
-These checks exercise portable captures, invalid-input controls, campaign
-admission rules, and the report build. They do not require a running ROS graph,
-real vehicle, or physical test apparatus.
+Each should exit 0. They need no ROS install, vehicle or test rig.
 
-### Nominal CAD — separate pinned environment
+### CAD — pinned CadQuery environment
 
-The [CAD workflow](../.github/workflows/cad-geometry.yml) consumes
-[direct package constraints](../cad/requirements.lock). They are not a complete
-transitive, platform-specific environment lock. With Conda available:
+The [CAD workflow](../.github/workflows/cad-geometry.yml) uses the package
+pins in [cad/requirements.lock](../cad/requirements.lock). They pin direct
+packages only, not the full dependency tree. With Conda:
 
 ```bash
 conda create -n racing-cad -c conda-forge --strict-channel-priority --file cad/requirements.lock
@@ -69,27 +68,19 @@ python cad/generate.py --parameters cad/roboracer/parameters.csv --output /tmp/r
 python -m pytest cad/tests -q
 ```
 
-The generator writes `mast_tube.step` and `geometry.json` to the chosen output
-directory. The report records parameter and STEP hashes, tool versions, solid
-metrics, and STEP reimport metrics. Tests compare them with
-[the geometry contract](../cad/contract.json).
-
-This is nominal tube geometry, not an assembled fixture. Regeneration must not
-promote a design choice into a measured dimension. If a local Python environment
-crashes while pytest imports `readline`, the existing environment workaround is:
+The generator writes `mast_tube.step` and `geometry.json`, and the tests
+compare them with the [geometry contract](../cad/contract.json). If pytest
+crashes while importing `readline` on your machine, this works around it:
 
 ```bash
 python -c 'import sys,types; sys.modules["readline"]=types.ModuleType("readline"); import pytest; raise SystemExit(pytest.main(["cad/tests","-q"]))'
 ```
 
-Use that only for the import problem; it is not a substitute for correcting a
-failing geometry test or installing the registered toolchain.
-
 ### Legacy simulation — Python 3.9
 
-The [Gym environment](../environment.yml) preserves the older simulator stack.
-Use a separate checkout when regenerating committed results so comparisons are
-not mixed with unrelated edits.
+The [Gym environment](../environment.yml) keeps the older simulator stack.
+Regenerate results in a separate checkout so they aren't mixed with other
+edits.
 
 ```bash
 conda env create -f environment.yml
@@ -98,25 +89,21 @@ python -m pip install -e .
 ./run_all.sh
 ```
 
-This regenerates study artifacts and takes longer than the portable checks.
-Long MPC and robustness sweeps remain explicit opt-ins:
+The long MPC and robustness sweeps are opt-in:
 
 ```bash
 RUN_FULL_MPC=1 RUN_ROBUSTNESS=1 ./run_all.sh
 ```
 
-See [data and figures](data-and-figures.md) for a single-study command instead
-of rerunning the full chain. GUI rendering additionally requires OpenGL.
+[Data and figures](data-and-figures.md) gives single-study commands. GUI
+rendering needs OpenGL.
 
-### ROS 2 integration — platform-specific
+### ROS 2
 
-Read [Ubuntu Humble setup](ros2_verification_ubuntu_humble.md) or
-[RoboStack macOS setup](ros2_verification_robostack_macos.md) first. The sidecar is
-[`f1tenth_modeling`](../ros2_ws/src/f1tenth_modeling); its package name does not
-change with the repository title. The [telemetry dictionary](telemetry_data_dictionary.md)
-defines standard inputs and optional simulator enrichment.
-
-Build in the configured ROS environment:
+Follow the [Ubuntu Humble](ros2_verification_ubuntu_humble.md) or
+[RoboStack macOS](ros2_verification_robostack_macos.md) setup first. The
+package is [`f1tenth_modeling`](../ros2_ws/src/f1tenth_modeling), and the
+[telemetry dictionary](telemetry_data_dictionary.md) defines its data format.
 
 ```bash
 cd ros2_ws
@@ -124,23 +111,14 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-Do not launch excitation against a physical vehicle as a quickstart. Select
-the intended simulator or hardware context deliberately and follow the setup
-notes. Portable regression success does not verify a new ROS installation.
+Don't launch excitation against a physical vehicle as a first test; choose the
+simulator or hardware context on purpose.
 
-## Review and contribute
+## Before reusing or citing
 
-Choose one result, follow its lineage to the committed inputs, run the relevant
-checks, and state what your reproduction did and did not establish. Keep raw
-captures, parameter registers, and generated results distinguishable.
-
-The [review index](REVIEW_READY.md) and [existing task ledger](SPRINT_TASKS.csv)
-are the status sources; this guide does not maintain a competing checklist.
-Read the [upstream register](upstream_roboracer_sources.md),
-[license](../LICENSE), and [contribution rules](../CONTRIBUTING.md) before reusing
-code or changing an interface. Record the source commit in any external review
-or citation.
-
-## September 11 completion correction
-
-Read the [item-by-item correction](COMPLETION_RECONCILIATION.md) before interpreting a prepared protocol, software check, or search export as a completed research gate. It identifies actual deliverables and the remaining measurement, review, or source-reading work separately.
+Read the [upstream source register](upstream_roboracer_sources.md), the
+[license](../LICENSE) and [CONTRIBUTING.md](../CONTRIBUTING.md). Give the
+source commit in any review or citation. Task status is in the
+[CAD task ledger](CAD_TASKS.csv); the September 11
+[completion correction](COMPLETION_RECONCILIATION.md) explains which early
+deliverables were preparation rather than finished work.

@@ -35,19 +35,16 @@ does not replace the authoritative protocol or task ledger.
 
 ## Visual provenance
 
-The README lead image, [`media/hero.jpg`](media/hero.jpg), is AI-generated
-concept art. Its race car and lidar arrangement are not a photograph or an
-engineering drawing of the project vehicle.
+The README leads with the identification-fit plot,
+[`reports/figures/dynamic_parameter_fit.png`](../reports/figures/dynamic_parameter_fit.png).
+It is a simulation result; its generator and inputs are listed in
+[data and figures](data-and-figures.md). A render of the accepted mast assembly
+would be a better lead image once one exists.
 
-[`media/project-overview.svg`](media/project-overview.svg) is an original,
-editable conceptual diagram created for the repository presentation. It contains
-no measured values, synthetic plots or purported hardware photographs.
-Sources for its relationships: [Integrated report](../reports/final_report.md) and [figure provenance](data-and-figures.md).
-
-Each stage carries an explicit text label. Meaning does not depend on red/green
-color differences. The diagram has an SVG title and description; its caption and
-the adjacent README text state the evidence limits. Existing analytical figures
-retain their original files, generators and provenance contracts.
+[`media/project-overview.svg`](media/project-overview.svg) is an editable
+diagram of the project's two halves. It contains no measured values. Each stage
+has a text label, so the meaning doesn't depend on colour, and the SVG has a
+title and description for screen readers.
 
 ## Keeping navigation reproducible
 
