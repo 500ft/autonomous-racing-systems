@@ -13,9 +13,10 @@ step that remains.
 [Results](#results) · [Roadmap](ROADMAP.md) · [Quick start](#quick-start) ·
 [Full report](reports/final_report.md) · [Contributing](CONTRIBUTING.md)
 
-![Illustration of a sensor-equipped autonomous race car on a test track](docs/media/hero.jpg)
+![Identified bicycle-model yaw-rate and slip-angle predictions against simulator telemetry, with the held-out segment marked](reports/figures/dynamic_parameter_fit.png)
 
-*Concept illustration (AI-generated). It is not the project car or its CAD.*
+*Identified vehicle model against simulator telemetry; the segment right of the
+dashed line is held out. [Figure inputs](docs/data-and-figures.md).*
 
 ## What's in the repository
 
@@ -53,15 +54,7 @@ round trip all match.
 | Tip-mass attachment study | 285.5 Hz → 320.9 Hz with a coupled, centred mass | [Study record](runs/mast_modal_attachment_20260925/study.json) |
 | MPC solve time | 1.33 ms at the 95th percentile, inside the 10 ms control period | [MPC report](reports/mpc_controller.md) |
 | Controller comparison | Lap completion, cross-track error and steering effort for each controller | [Comparison](reports/controller_comparison.md) |
-| Model identification | Held-out yaw-rate error at numerical precision (see below) | [Identification study](reports/dynamic_parameter_identification.md) |
-
-![Identified bicycle-model yaw-rate and slip-angle predictions against simulator telemetry, with the held-out segment marked](reports/figures/dynamic_parameter_fit.png)
-
-*Identified model against simulator telemetry; the segment right of the dashed
-line is held out. The simulator generates its data with the same model being
-fitted, so the near-zero error shows the fitting code works. It says nothing
-about how well the model matches a real car.
-[Figure inputs and generator](docs/data-and-figures.md).*
+| Model identification | Held-out yaw-rate error at numerical precision. The simulator generates its data with the model being fitted, so this shows the fitting code works, not that the model matches a real car | [Identification study](reports/dynamic_parameter_identification.md) |
 
 ## Quick start
 
