@@ -1,0 +1,115 @@
+{
+  "doi": "10.5281/zenodo.12536536",
+  "record_revision": {
+    "id": 12536536,
+    "updated": "2024-09-06T19:20:25.837414+00:00"
+  },
+  "data_license": {
+    "id": "cc-by-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "evidence": "Zenodo API metadata.license.id"
+  },
+  "attribution": "Zengjie Zhang (creator/project leader), Giannis Badakis and Michalis Galanis (data collectors), Eindhoven University of Technology. Driving Data of a Real F1tenth Car.",
+  "modifications": "Bag decoded; timing aggregated; velocity rotated; command response fitted; motion-only derived samples plotted/exported. Derived data retain CC BY 4.0 attribution; analysis software follows repository MIT license.",
+  "download_cap_bytes": 2000000000,
+  "source_download_bytes": 85305992,
+  "retrievals": [
+    {
+      "name": "zenodo-record.json",
+      "url": "https://zenodo.org/api/records/12536536",
+      "bytes": 8157,
+      "sha256": "2e748701374fd86c7263583df2ae68585270254f536297242b4819363089d404",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "ReadMe.md",
+      "url": "https://zenodo.org/records/12536536/files/ReadMe.md?download=1",
+      "bytes": 3539,
+      "sha256": "09e1fe248de8e4744655b9de8735c78c1aea19bb0d013bcb88cb2fd020ac38fe",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "ex-hard-r2_2023-06-12-19-59-52.bag",
+      "url": "https://zenodo.org/api/records/12536536/files/ex-hard-r2_2023-06-12-19-59-52.bag/content",
+      "bytes": 84985680,
+      "sha256": "3ba7b5c13da68227bf8af27370e7205f142dca4ca3340c8b1b51feba70cc22ac",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "arxiv-2409.19356v1.html",
+      "url": "https://arxiv.org/html/2409.19356v1",
+      "bytes": 156646,
+      "sha256": "15fcfb387e573b5eb493f86ebdbdfa1106e4fc107d42fe758c5093807f907cff",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "steering-readme.md",
+      "url": "https://raw.githubusercontent.com/ZZY-Zhou/F1Tenth-Steering/main/README.md",
+      "bytes": 4730,
+      "sha256": "59f529fbee311c2f0477525e2caa7fd337b0a5a041c9523a8ebbbbb1cfa45b79",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "steering-drive.html",
+      "url": "https://drive.google.com/file/d/1Bm8yLOnflttyp_G9F4kwzO-0AuzmZX0w/view",
+      "bytes": 81702,
+      "sha256": "70a6eb81c319c09c2fe0f9fdd0b66c2b84358205d546dfe9aed4a1657f53e87a",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "ieee-landing.html",
+      "url": "https://ieee-dataport.org/documents/rosbag220240719110137-dataset",
+      "bytes": 60808,
+      "sha256": "cee4af633933c3379bae060afd979a003d98d7ad35bf35c8deadd88f28e8e8d1",
+      "retrieved_utc_date": "2026-10-04"
+    },
+    {
+      "name": "steering-readme-pinned.md",
+      "url": "https://raw.githubusercontent.com/ZZY-Zhou/F1Tenth-Steering/b8d727b0a4bc3601d3ea3a0dafdc1e2427a85d40/README.md",
+      "bytes": 4730,
+      "sha256": "59f529fbee311c2f0477525e2caa7fd337b0a5a041c9523a8ebbbbb1cfa45b79",
+      "retrieved_utc_date": "2026-10-04"
+    }
+  ],
+  "development_bag": {
+    "name": "ex-hard-r2_2023-06-12-19-59-52.bag",
+    "url": "https://zenodo.org/api/records/12536536/files/ex-hard-r2_2023-06-12-19-59-52.bag/content",
+    "bytes": 84985680,
+    "sha256": "3ba7b5c13da68227bf8af27370e7205f142dca4ca3340c8b1b51feba70cc22ac",
+    "retrieved_utc_date": "2026-10-04"
+  },
+  "unopened_bags": [
+    {
+      "name": "ex-easy-perception-r2_2023-06-12-20-46-30.bag",
+      "bytes": 88607811
+    },
+    {
+      "name": "ex-easy-r2_2023-06-12-20-57-09.bag",
+      "bytes": 112243361
+    },
+    {
+      "name": "ex-medium-perception-r1_2023-06-12-17-45-21.bag",
+      "bytes": 137204365
+    },
+    {
+      "name": "ex-easy-perception-r3_2023-06-12-20-49-43.bag",
+      "bytes": 100583743
+    },
+    {
+      "name": "ex-hard-perception-r2_2023-06-12-19-38-17.bag",
+      "bytes": 192694601
+    },
+    {
+      "name": "ex-hard-perception-r3_2023-06-12-19-43-41.bag",
+      "bytes": 155581791
+    },
+    {
+      "name": "ex-easy-r1_2023-06-12-20-54-23.bag",
+      "bytes": 101799027
+    },
+    {
+      "name": "ex-hard-r1_2023-06-12-19-50-37.bag",
+      "bytes": 92374784
+    }
+  ]
+}
