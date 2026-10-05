@@ -90,3 +90,6 @@ runs/mast_fea/converge/
 # Small public development derivatives; raw bag remains outside the repository.
 !runs/real_command_response/
 !runs/real_command_response/**
+# Executed metadata-only split qualification; no bag payloads.
+!runs/driving_split_qualification/
+!runs/driving_split_qualification/*.json

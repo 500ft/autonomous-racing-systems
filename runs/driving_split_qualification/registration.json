@@ -1,0 +1,41 @@
+{
+  "registered_utc": "2026-10-05T02:17:44.020649+00:00",
+  "base_commit": "56467d36d894ca0fe2203112a2e561272319567a",
+  "task": "Metadata split eligibility only; stop if a credible separate final set cannot be established",
+  "domain": {
+    "inputs": "Zenodo record metadata, its README, linked upstream README, and prior development exposure record",
+    "unit": "Whole acquisition unit with source-backed session/segment membership; whole bags alone do not establish this grouping",
+    "comparison": "Descriptive filename/checksum census and source-provenance review; no model-performance threshold",
+    "exclusions": "Bag payloads, training fits, lateral fitting and final scoring are excluded until split eligibility is resolved"
+  },
+  "metadata": {
+    "url": "https://zenodo.org/api/records/12536536",
+    "sha256": "73a7c32a65cbc18ee546949b4411d4c2ffa3781d73abfa61f881fe33cd06b3b8",
+    "bytes": 8157,
+    "retrieved_date": "2026-10-04"
+  },
+  "supporting_sources": [
+    {
+      "url": "https://zenodo.org/records/12536536/files/ReadMe.md?download=1",
+      "sha256": "09e1fe248de8e4744655b9de8735c78c1aea19bb0d013bcb88cb2fd020ac38fe",
+      "bytes": 3539,
+      "retrieved_date": "2026-10-04"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/zhang-zengjie/dl-vehicle-model/7d0fa15286d2bea830326427e225db550abd9190/README.md",
+      "sha256": "e525871cb600bfe05fdccfc123a725a326f9716ef8a22f72d2188d3d42e917f5",
+      "bytes": 2357,
+      "retrieved_date": "2026-10-04"
+    }
+  ],
+  "previous_exposure_source": "../real_command_response/source.json",
+  "code_sha256": "46bc0d8744fa1d54ef9726a2682565b6b5f4bc8315eb5106144c706a65aef002",
+  "source_review": {
+    "README": "Each bag is described as a continuous run. No session identifiers, segment-parent mapping, end times, or vehicle/surface/configuration changes are supplied.",
+    "upstream_README": "Links this dataset and explains loading/model use; supplies no file-to-acquisition-session mapping.",
+    "interpretation": "Same-date filenames are a shared-session risk, not proof of common session membership. Distinct whole-file MD5 values do not exclude overlapping segments.",
+    "decision": "No train/final roles assigned. Keep prior exposed bag as development; unopened bags remain unassigned together pending session provenance."
+  },
+  "registration_limit": "Metadata was inspected during prerequisite review before this registration. This record precedes the scripted census, not a blinded metadata decision. No additional bag outcomes have been opened.",
+  "downstream_protocol": "Frame/time/causal-gap policies, emergency handling, longitudinal/lateral targets and model selection are not registered or executed because split eligibility failed first."
+}
