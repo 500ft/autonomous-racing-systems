@@ -86,3 +86,7 @@ runs/mast_fea/converge/
 !runs/mast_assembly_20260926/assembly_result.json
 !runs/mast_assembly_20260929/
 !runs/mast_assembly_20260929/assembly_result.json
+
+# Small public development derivatives; raw bag remains outside the repository.
+!runs/real_command_response/
+!runs/real_command_response/**

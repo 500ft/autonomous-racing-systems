@@ -1,0 +1,42 @@
+{
+  "source_hashes": "source.json#/retrievals",
+  "zenodo_12536536": {
+    "decision": "Use the pinned development bag for command-response exploration",
+    "actual_inspection": "inventory.json",
+    "measured_steering": "None identified. Servo sensor topic exactly echoes the command sequence after an initial value.",
+    "imu": "No sensor_msgs/Imu topic or IMU fields in the recorded VESC definition",
+    "speed": "World-frame Vicon twist and pose permit rotation into the tracking frame; calibration unprovided",
+    "vesc": "Present; implausible voltage and fault codes preclude using it as calibrated wheel-speed evidence",
+    "mass_cg": "Not specified by README or metadata; no mass/CG topic identified",
+    "excitation": "Forward/reverse commands and turns, including emergency activity; descriptive ranges in result.json",
+    "data_license": "CC BY 4.0, from Zenodo API metadata"
+  },
+  "arxiv_2409_19356": {
+    "paper": "https://arxiv.org/html/2409.19356v1",
+    "code_revision": "b8d727b0a4bc3601d3ea3a0dafdc1e2427a85d40",
+    "code": "https://github.com/ZZY-Zhou/F1Tenth-Steering/tree/b8d727b0a4bc3601d3ea3a0dafdc1e2427a85d40",
+    "dataset_landing": "https://drive.google.com/file/d/1Bm8yLOnflttyp_G9F4kwzO-0AuzmZX0w/view",
+    "steering": "Paper calls labels steering angles but does not establish independently measured wheel angle versus servo command. README offers steering_angles.txt.",
+    "imu_speed_vesc": "Paper describes VESC MK6 with IMU, motor-encoder/IMU odometry and raw recording. Public processed layout lists LiDAR depth, event frames and steering labels; it does not establish released raw IMU, VESC or speed channels.",
+    "mass_cg": "Not established in inspected paper or README",
+    "excitation": "Autonomous MPA driving; sufficiency for tire identification unestablished",
+    "calibration": "Paper describes approximate cross-sensor extrinsics",
+    "data_license": "No reuse licence found in inspected README or Drive landing page. Paper's arXiv publication licence does not license dataset reuse.",
+    "code_license": "GitHub metadata license=null; no licence established",
+    "decision": "No dataset download; richer usable signals and data permission remain unverified. Published training/testing partition remains untouched."
+  },
+  "ieee_dataport": {
+    "doi": "10.21227/c710-by19",
+    "author": "Xiangrui Kong",
+    "landing": "https://ieee-dataport.org/documents/rosbag220240719110137-dataset",
+    "landing_retrieval": "HTTP 200 using curl; web extraction access failed",
+    "steering_vesc_mass_cg": "Not established by landing metadata; bag not inspected",
+    "imu_speed_commands": "Landing lists IMU and odometry plus stamped velocity commands; actual calibration and synchronized usable rates unverified",
+    "listed_duration_s": 2633.487071762,
+    "listed_message_counts": {"/imu/data": 627, "/odom_pub": 451, "/nn_cmd_vel_stamped": 148, "/cmd_vel": 0},
+    "excitation": "Operational driving session; vehicle scale, maneuver coverage and identification suitability unverified",
+    "data_license": "Landing JSON-LD states https://creativecommons.org/licenses/by/4.0/",
+    "access": "Landing says subscription required and login to access dataset files",
+    "decision": "Metadata only. No login, purchase or file download. Sparse listed channels do not establish a suitable high-rate identification record."
+  }
+}

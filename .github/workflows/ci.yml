@@ -30,6 +30,7 @@ jobs:
       run: |
         python experiments/test_rosbag_to_telemetry.py
         python experiments/test_bag_evidence.py
+        python experiments/test_real_command_response.py
         python experiments/validate_item11.py
         python experiments/test_mast_physical_validation.py
         python experiments/test_cad_inputs.py

@@ -1,0 +1,1115 @@
+{
+  "/cmd_vel": {
+    "types": [
+      "geometry_msgs/msg/Twist"
+    ],
+    "bag_time": {
+      "count": 9853,
+      "span_s": 113.694089713,
+      "mean_rate_hz": 86.65358089298729,
+      "interval_s": {
+        "min": 1.841e-06,
+        "p50": 0.010834960000000001,
+        "p95": 0.018861259799999995,
+        "max": 0.235218116
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.05417480000000001,
+      "gap_count": 46
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "ROS convention: linear m/s, angular rad/s; command mapping unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/commands/motor/speed": {
+    "types": [
+      "std_msgs/msg/Float64"
+    ],
+    "bag_time": {
+      "count": 9855,
+      "span_s": 113.706762794,
+      "mean_rate_hz": 86.66151210242676,
+      "interval_s": {
+        "min": 2.15e-06,
+        "p50": 0.010822709,
+        "p95": 0.01882046675,
+        "max": 0.236190536
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.054113545,
+      "gap_count": 45
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Unitless message; topic-specific conversion/calibration not supplied"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/commands/servo/position": {
+    "types": [
+      "std_msgs/msg/Float64"
+    ],
+    "bag_time": {
+      "count": 9855,
+      "span_s": 113.708372072,
+      "mean_rate_hz": 86.66028560993257,
+      "interval_s": {
+        "min": 2.169e-06,
+        "p50": 0.01085082,
+        "p95": 0.01852942495,
+        "max": 0.233263522
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.0542541,
+      "gap_count": 43
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Unitless message; topic-specific conversion/calibration not supplied"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/diagnostics": {
+    "types": [
+      "diagnostic_msgs/msg/DiagnosticArray"
+    ],
+    "bag_time": {
+      "count": 119,
+      "span_s": 118.542224135,
+      "mean_rate_hz": 0.9954258987550082,
+      "interval_s": {
+        "min": 0.863190846,
+        "p50": 1.0036793465,
+        "p95": 1.0109687313,
+        "max": 1.145849628
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 5.0183967325,
+      "gap_count": 0
+    },
+    "header_time": {
+      "count": 119,
+      "span_s": 118.542814696,
+      "mean_rate_hz": 0.9954209397052699,
+      "interval_s": {
+        "min": 1.000212844,
+        "p50": 1.0040514310000002,
+        "p95": 1.00953262065,
+        "max": 1.010382897
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 5.020257155000001,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": 63.633923262,
+      "p50": 63.773019874,
+      "p95": 63.7745130593,
+      "max": 63.775205346
+    },
+    "frames": [
+      ""
+    ],
+    "child_frames": [],
+    "units": [
+      "Status codes and text key/value diagnostics; no uniform units"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/emergency_action": {
+    "types": [
+      "geometry_msgs/msg/Twist"
+    ],
+    "bag_time": {
+      "count": 3605,
+      "span_s": 37.991811088,
+      "mean_rate_hz": 94.86254792255352,
+      "interval_s": {
+        "min": 1.761e-06,
+        "p50": 4.4266e-05,
+        "p95": 0.00898930215,
+        "max": 6.613955086
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.00022133,
+      "gap_count": 1421
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "ROS convention: linear m/s, angular rad/s; command mapping unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/emergency_flag": {
+    "types": [
+      "std_msgs/msg/Bool"
+    ],
+    "bag_time": {
+      "count": 44902,
+      "span_s": 118.865889677,
+      "mean_rate_hz": 377.7450378911195,
+      "interval_s": {
+        "min": 1.077e-06,
+        "p50": 6.3783e-05,
+        "p95": 0.007874487,
+        "max": 0.233830509
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.00031891499999999996,
+      "gap_count": 21224
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Boolean"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/odom": {
+    "types": [
+      "nav_msgs/msg/Odometry"
+    ],
+    "bag_time": {
+      "count": 23731,
+      "span_s": 119.010410215,
+      "mean_rate_hz": 199.39432153145444,
+      "interval_s": {
+        "min": 1.894e-06,
+        "p50": 0.0048245765,
+        "p95": 0.010030545249999998,
+        "max": 0.218666941
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.0241228825,
+      "gap_count": 66
+    },
+    "header_time": {
+      "count": 23731,
+      "span_s": 119.00765123,
+      "mean_rate_hz": 199.39894414131612,
+      "interval_s": {
+        "min": -0.002105053,
+        "p50": 4.4079500000000004e-05,
+        "p95": 0.0117644694,
+        "max": 0.113747484
+      },
+      "duplicate_intervals": 11849,
+      "backward_intervals": 7,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.04987569,
+      "gap_count": 17
+    },
+    "header_minus_bag_s": {
+      "min": 63.546773781,
+      "p50": 63.769108744,
+      "p95": 63.773074293,
+      "max": 63.774532098
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [
+      ""
+    ],
+    "units": [
+      "ROS convention: position m, twist m/s and rad/s; child frame empty"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/rosout": {
+    "types": [
+      "rosgraph_msgs/msg/Log"
+    ],
+    "bag_time": {
+      "count": 27,
+      "span_s": 67.223637938,
+      "mean_rate_hz": 0.38676871406423524,
+      "interval_s": {
+        "min": 4.7759e-05,
+        "p50": 0.029520469,
+        "p95": 1.369659911,
+        "max": 63.987899969
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.147602345,
+      "gap_count": 3
+    },
+    "header_time": {
+      "count": 27,
+      "span_s": 68.613265286,
+      "mean_rate_hz": 0.3789354710291728,
+      "interval_s": {
+        "min": 0.056738004,
+        "p50": 0.0828912745,
+        "p95": 1.38712185375,
+        "max": 63.987894593
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.4144563725,
+      "gap_count": 3
+    },
+    "header_minus_bag_s": {
+      "min": -1.389806116,
+      "p50": -0.070428748,
+      "p95": -0.00010229980000000002,
+      "max": -8.5181e-05
+    },
+    "frames": [
+      ""
+    ],
+    "child_frames": [],
+    "units": [
+      "Text log; no physical units"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/rosout_agg": {
+    "types": [
+      "rosgraph_msgs/msg/Log"
+    ],
+    "bag_time": {
+      "count": 783,
+      "span_s": 115.802449415,
+      "mean_rate_hz": 6.752879614813284,
+      "interval_s": {
+        "min": 1.0402e-05,
+        "p50": 0.1047605355,
+        "p95": 0.39561510255,
+        "max": 0.976438217
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.5238026775,
+      "gap_count": 9
+    },
+    "header_time": {
+      "count": 783,
+      "span_s": 116.706594944,
+      "mean_rate_hz": 6.700563925930934,
+      "interval_s": {
+        "min": 0.001527548,
+        "p50": 0.1071890595,
+        "p95": 0.39761439600000004,
+        "max": 0.974668264
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.5359452975,
+      "gap_count": 8
+    },
+    "header_minus_bag_s": {
+      "min": 62.868863845,
+      "p50": 63.772402082,
+      "p95": 63.7742968692,
+      "max": 63.774986772
+    },
+    "frames": [
+      ""
+    ],
+    "child_frames": [],
+    "units": [
+      "Text log; no physical units"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/scan": {
+    "types": [
+      "sensor_msgs/msg/LaserScan"
+    ],
+    "bag_time": {
+      "count": 4810,
+      "span_s": 120.374796873,
+      "mean_rate_hz": 39.950223177312424,
+      "interval_s": {
+        "min": 3.913e-06,
+        "p50": 0.024987184,
+        "p95": 0.02906268159999999,
+        "max": 0.22732096
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.12493591999999999,
+      "gap_count": 8
+    },
+    "header_time": {
+      "count": 4810,
+      "span_s": 120.409497686,
+      "mean_rate_hz": 39.93870992254079,
+      "interval_s": {
+        "min": 0.018775493,
+        "p50": 0.025044252,
+        "p95": 0.025539515599999996,
+        "max": 0.031207507
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.12522126,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": 63.270091123,
+      "p50": 63.772388936,
+      "p95": 63.774174184900005,
+      "max": 63.775649947
+    },
+    "frames": [
+      "laser"
+    ],
+    "child_frames": [],
+    "units": [
+      "Embedded ROS convention: ranges m, angles rad, timing s; intensity sensor-specific"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/sensors/core": {
+    "types": [
+      "vesc_msgs/msg/VescStateStamped"
+    ],
+    "bag_time": {
+      "count": 6032,
+      "span_s": 120.379728893,
+      "mean_rate_hz": 50.09979716236675,
+      "interval_s": {
+        "min": 2.042e-06,
+        "p50": 0.01993191,
+        "p95": 0.023874421,
+        "max": 0.238452335
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.09965955,
+      "gap_count": 12
+    },
+    "header_time": {
+      "count": 6032,
+      "span_s": 120.61976945,
+      "mean_rate_hz": 50.00009556891091,
+      "interval_s": {
+        "min": 0.014459403,
+        "p50": 0.019999331,
+        "p95": 0.0222391525,
+        "max": 0.025552379
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.09999665499999999,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": 63.445731478,
+      "p50": 63.773250089499996,
+      "p95": 63.774983434650004,
+      "max": 63.775798446
+    },
+    "frames": [
+      ""
+    ],
+    "child_frames": [],
+    "units": [
+      "Embedded definition: electrical rpm, V, A, deg C, Ah, Wh, tachometer counts; see vesc_message_definition.txt"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/sensors/servo_position_command": {
+    "types": [
+      "std_msgs/msg/Float64"
+    ],
+    "bag_time": {
+      "count": 9856,
+      "span_s": 115.536534897,
+      "mean_rate_hz": 85.2976940046338,
+      "interval_s": {
+        "min": 1.712e-06,
+        "p50": 0.01086921,
+        "p95": 0.018562364299999995,
+        "max": 1.829245222
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.05434605000000001,
+      "gap_count": 46
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Unitless message; topic-specific conversion/calibration not supplied"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/tf": {
+    "types": [
+      "tf2_msgs/msg/TFMessage"
+    ],
+    "bag_time": {
+      "count": 13472,
+      "span_s": 133.530183942,
+      "mean_rate_hz": 100.8835575771486,
+      "interval_s": {
+        "min": 2.222e-06,
+        "p50": 0.00984373,
+        "p95": 0.013715716499999999,
+        "max": 0.226905344
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.04921865,
+      "gap_count": 44
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [
+      "world"
+    ],
+    "child_frames": [
+      "Car_2_Tracking",
+      "cf4"
+    ],
+    "units": [
+      "ROS convention: translation m, unit quaternion xyzw"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/urg_node/parameter_descriptions": {
+    "types": [
+      "dynamic_reconfigure/msg/ConfigDescription"
+    ],
+    "bag_time": {
+      "count": 1,
+      "span_s": 0.0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Parameter descriptions; units depend on parameter"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/urg_node/parameter_updates": {
+    "types": [
+      "dynamic_reconfigure/msg/Config"
+    ],
+    "bag_time": {
+      "count": 1,
+      "span_s": 0.0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_time": {
+      "count": 0,
+      "span_s": 0,
+      "mean_rate_hz": null,
+      "interval_s": null,
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": null,
+    "frames": [],
+    "child_frames": [],
+    "units": [
+      "Recorded laser settings: angles rad, time_offset s, cluster/skip counts"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/viz/car": {
+    "types": [
+      "visualization_msgs/msg/Marker"
+    ],
+    "bag_time": {
+      "count": 9854,
+      "span_s": 113.696498671,
+      "mean_rate_hz": 86.66054025560908,
+      "interval_s": {
+        "min": 2.678e-06,
+        "p50": 0.010850154,
+        "p95": 0.0187109572,
+        "max": 0.186662966
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.054250770000000004,
+      "gap_count": 46
+    },
+    "header_time": {
+      "count": 9854,
+      "span_s": 0.0,
+      "mean_rate_hz": null,
+      "interval_s": {
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "duplicate_intervals": 9853,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": -1686592909.6447496,
+      "p50": -1686592854.0722141,
+      "p95": -1686592801.6519413,
+      "max": -1686592795.9482508
+    },
+    "frames": [
+      "map"
+    ],
+    "child_frames": [],
+    "units": [
+      "ROS convention: geometry m, quaternion xyzw; visualization, not calibration"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/viz/lookahead": {
+    "types": [
+      "visualization_msgs/msg/Marker"
+    ],
+    "bag_time": {
+      "count": 9853,
+      "span_s": 113.696028639,
+      "mean_rate_hz": 86.6521031379329,
+      "interval_s": {
+        "min": 3.101e-06,
+        "p50": 0.010864585,
+        "p95": 0.01834222369999999,
+        "max": 0.196497716
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.054322924999999994,
+      "gap_count": 45
+    },
+    "header_time": {
+      "count": 9853,
+      "span_s": 0.0,
+      "mean_rate_hz": null,
+      "interval_s": {
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "duplicate_intervals": 9852,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": -1686592909.6448464,
+      "p50": -1686592854.0699914,
+      "p95": -1686592801.6559746,
+      "max": -1686592795.9488177
+    },
+    "frames": [
+      "map"
+    ],
+    "child_frames": [],
+    "units": [
+      "ROS convention: geometry m, quaternion xyzw; visualization, not calibration"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/viz/waypoints": {
+    "types": [
+      "visualization_msgs/msg/Marker"
+    ],
+    "bag_time": {
+      "count": 9854,
+      "span_s": 113.69587356,
+      "mean_rate_hz": 86.66101672371019,
+      "interval_s": {
+        "min": 3.01e-06,
+        "p50": 0.010189541,
+        "p95": 0.025790011199999987,
+        "max": 0.214722387
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.050947704999999996,
+      "gap_count": 48
+    },
+    "header_time": {
+      "count": 9854,
+      "span_s": 0.0,
+      "mean_rate_hz": null,
+      "interval_s": {
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "duplicate_intervals": 9853,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": null,
+      "gap_count": 0
+    },
+    "header_minus_bag_s": {
+      "min": -1686592909.6446974,
+      "p50": -1686592854.0758579,
+      "p95": -1686592801.6566377,
+      "max": -1686592795.9488237
+    },
+    "frames": [
+      "map"
+    ],
+    "child_frames": [],
+    "units": [
+      "ROS convention: geometry m, quaternion xyzw; visualization, not calibration"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/Car_2_Tracking/accel": {
+    "types": [
+      "geometry_msgs/msg/TwistStamped"
+    ],
+    "bag_time": {
+      "count": 13393,
+      "span_s": 133.519797134,
+      "mean_rate_hz": 100.29973297937111,
+      "interval_s": {
+        "min": 2.044e-06,
+        "p50": 0.009845757,
+        "p95": 0.013868499349999999,
+        "max": 0.230194538
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.049228785,
+      "gap_count": 42
+    },
+    "header_time": {
+      "count": 13393,
+      "span_s": 134.287460137,
+      "mean_rate_hz": 99.72636303000658,
+      "interval_s": {
+        "min": 4.0192e-05,
+        "p50": 0.0099839215,
+        "p95": 0.0125258844,
+        "max": 0.113744924
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.0499196075,
+      "gap_count": 19
+    },
+    "header_minus_bag_s": {
+      "min": 63.00687913,
+      "p50": 63.772741201,
+      "p95": 63.7743463948,
+      "max": 63.775244781
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "Twist convention m/s and rad/s; accel-named topics overload Twist, units/differentiation unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/Car_2_Tracking/pose": {
+    "types": [
+      "geometry_msgs/msg/PoseStamped"
+    ],
+    "bag_time": {
+      "count": 13426,
+      "span_s": 133.530226811,
+      "mean_rate_hz": 100.53903389980665,
+      "interval_s": {
+        "min": 2.191e-06,
+        "p50": 0.009861891,
+        "p95": 0.013763735799999996,
+        "max": 0.235159582
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.049309454999999995,
+      "gap_count": 43
+    },
+    "header_time": {
+      "count": 13426,
+      "span_s": 134.524096376,
+      "mean_rate_hz": 99.79624737620695,
+      "interval_s": {
+        "min": 3.8432e-05,
+        "p50": 0.009984113,
+        "p95": 0.012453237199999998,
+        "max": 0.113747484
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.049920565,
+      "gap_count": 19
+    },
+    "header_minus_bag_s": {
+      "min": 62.780972095,
+      "p50": 63.773446144000005,
+      "p95": 63.77498466125,
+      "max": 63.77576742
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "ROS convention: position m, unit quaternion xyzw"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/Car_2_Tracking/twist": {
+    "types": [
+      "geometry_msgs/msg/TwistStamped"
+    ],
+    "bag_time": {
+      "count": 13402,
+      "span_s": 133.520187674,
+      "mean_rate_hz": 100.36684514494236,
+      "interval_s": {
+        "min": 2.265e-06,
+        "p50": 0.009846268,
+        "p95": 0.013782879,
+        "max": 0.23304085
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.04923134,
+      "gap_count": 42
+    },
+    "header_time": {
+      "count": 13402,
+      "span_s": 134.38847593,
+      "mean_rate_hz": 99.71837173732283,
+      "interval_s": {
+        "min": 4.0832e-05,
+        "p50": 0.009984337,
+        "p95": 0.012513646,
+        "max": 0.113700092
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.04992168499999999,
+      "gap_count": 19
+    },
+    "header_minus_bag_s": {
+      "min": 62.906228216,
+      "p50": 63.7728308325,
+      "p95": 63.77439071,
+      "max": 63.775357363
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "Twist convention m/s and rad/s; accel-named topics overload Twist, units/differentiation unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/cf4/accel": {
+    "types": [
+      "geometry_msgs/msg/TwistStamped"
+    ],
+    "bag_time": {
+      "count": 17,
+      "span_s": 35.170231954,
+      "mean_rate_hz": 0.45493018132285246,
+      "interval_s": {
+        "min": 0.007989019,
+        "p50": 0.010896356,
+        "p95": 16.6964281075,
+        "max": 18.850701748
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.054481779999999994,
+      "gap_count": 3
+    },
+    "header_time": {
+      "count": 17,
+      "span_s": 35.171522607,
+      "mean_rate_hz": 0.45491348722035724,
+      "interval_s": {
+        "min": 0.008304692,
+        "p50": 0.010628225,
+        "p95": 16.697913719749998,
+        "max": 18.850254182
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.053141125,
+      "gap_count": 3
+    },
+    "header_minus_bag_s": {
+      "min": 63.77014998,
+      "p50": 63.772406486,
+      "p95": 63.7734084776,
+      "max": 63.773538796
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "Twist convention m/s and rad/s; accel-named topics overload Twist, units/differentiation unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/cf4/pose": {
+    "types": [
+      "geometry_msgs/msg/PoseStamped"
+    ],
+    "bag_time": {
+      "count": 17,
+      "span_s": 35.170319607,
+      "mean_rate_hz": 0.4549290475260707,
+      "interval_s": {
+        "min": 0.007782135,
+        "p50": 0.010733847,
+        "p95": 16.696511624750002,
+        "max": 18.850728017
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.053669234999999996,
+      "gap_count": 3
+    },
+    "header_time": {
+      "count": 17,
+      "span_s": 35.171540751,
+      "mean_rate_hz": 0.4549132525433958,
+      "interval_s": {
+        "min": 0.008198037,
+        "p50": 0.010627569,
+        "p95": 16.69792838375,
+        "max": 18.850251974
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.053137845,
+      "gap_count": 3
+    },
+    "header_minus_bag_s": {
+      "min": 63.77019651,
+      "p50": 63.772381904,
+      "p95": 63.774264532400004,
+      "max": 63.774497518
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "ROS convention: position m, unit quaternion xyzw"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  },
+  "/vrpn_client_node/cf4/twist": {
+    "types": [
+      "geometry_msgs/msg/TwistStamped"
+    ],
+    "bag_time": {
+      "count": 17,
+      "span_s": 35.170304669,
+      "mean_rate_hz": 0.45492924074959196,
+      "interval_s": {
+        "min": 0.007984639,
+        "p50": 0.0108851545,
+        "p95": 16.696490118499998,
+        "max": 18.85072322
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.054425772500000004,
+      "gap_count": 3
+    },
+    "header_time": {
+      "count": 17,
+      "span_s": 35.171523279,
+      "mean_rate_hz": 0.4549134785286136,
+      "interval_s": {
+        "min": 0.008251253,
+        "p50": 0.010628497,
+        "p95": 16.69791529575,
+        "max": 18.850253766
+      },
+      "duplicate_intervals": 0,
+      "backward_intervals": 0,
+      "gap_rule": "interval > 5 * median positive interval; descriptive, not an acceptance limit",
+      "gap_threshold_s": 0.053142485,
+      "gap_count": 3
+    },
+    "header_minus_bag_s": {
+      "min": 63.770217389,
+      "p50": 63.772410325,
+      "p95": 63.773745253,
+      "max": 63.774467601
+    },
+    "frames": [
+      "world"
+    ],
+    "child_frames": [],
+    "units": [
+      "Twist convention m/s and rad/s; accel-named topics overload Twist, units/differentiation unverified"
+    ],
+    "calibration": "No calibration certificate provided in source README; laser settings reported separately"
+  }
+}
