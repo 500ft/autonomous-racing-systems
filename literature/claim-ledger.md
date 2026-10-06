@@ -9,6 +9,18 @@ threshold or a protocol; see [README](README.md) for why.
 
 ---
 
+## Current archive qualification
+
+The [executed qualification](../reports/ope_qualification.md) supports claims
+about pinned archive structure, loader aliases and exact policy-name matches.
+The [result](../runs/ope_qualification/result.json) is their numerical source.
+No controller ranking or model-disagreement benefit has been established.
+FQE and ratio-based estimators have separate prerequisites, documented with
+primary sources in the qualification report.
+
+The mechanical and simulator entries below are retained historical claims.
+Their former study proposals do not define the active question.
+
 ## Mechanical lane
 
 ### M1. Historical tube FEA predicts a mode; motor-vibration clearance is unestablished

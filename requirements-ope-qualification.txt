@@ -1,0 +1,4 @@
+# Isolated structural inspection, Python 3.11. No upstream policy code is imported.
+numpy==2.4.6
+numcodecs==0.16.5
+matplotlib==3.10.8

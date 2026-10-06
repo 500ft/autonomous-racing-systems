@@ -1,5 +1,9 @@
 # Driving split qualification
 
+Historical prerequisite result. The [roadmap](../ROADMAP.md) now follows the
+[OPE archive qualification](ope_qualification.md). This change preserves the
+failed split decision and unopened bag roles recorded below.
+
 No final-test set was admitted. The published metadata leaves acquisition-session
 and segment membership unresolved. The requested whole-run validation stopped at
 this prerequisite, before another bag was acquired or parsed. The census,

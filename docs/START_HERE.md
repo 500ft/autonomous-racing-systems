@@ -1,53 +1,31 @@
-# Start here — Autonomous Racing Systems
+# Start here: Autonomous Racing Systems
 
 The [README](../README.md) is the overview and the [roadmap](../ROADMAP.md) is
 the plan. This guide is for reading the work quickly or rerunning part of it.
 
 ## Reading paths
 
-| If you have | Read |
+| Purpose | Read |
 | --- | --- |
-| Two minutes | [README results](../README.md#results), then the [integrated report](../reports/final_report.md) |
-| Half an hour | The [mechanical design analysis](design/16_mechanical_design_analysis.md), then the [test protocol](specs/mast-physical-validation/design.md) |
-| A review to do | The [review index](REVIEW_READY.md), then one figure traced through [data and figures](data-and-figures.md) to its inputs |
-| A change to make | [CONTRIBUTING.md](../CONTRIBUTING.md), then the environment below that the change touches |
+| Current question and result | [README](../README.md), [qualification report](../reports/ope_qualification.md) |
+| Review the executed checks | [Structural result](../runs/ope_qualification/result.json), [reproduction commands](../reports/ope_qualification.md#reproduce) |
+| Understand what remains unresolved | [Roadmap](../ROADMAP.md), [open questions](OPEN_QUESTIONS.md) |
+| Reuse earlier work | [History index](history/README.md), [data and figures](data-and-figures.md) |
 
-## The two halves of the project
-
-**Public driving data.** The [development comparison](../reports/real_command_response.md)
-fits and scores one licensed public run. The [split qualification](../reports/driving_split_qualification.md)
-stopped before additional bag access because session and segment membership
-are undocumented. Unopened runs remain unassigned. See the roadmap for K2,
-D2 and the unapproved fleet proposal.
-
-**Simulation software.** The identification study fits the same model the
-simulator uses, so its held-out error checks simulator/fitter consistency.
-See the [identification study](../reports/dynamic_parameter_identification.md),
-[controller comparison](../reports/controller_comparison.md) and
-[EKF study](../reports/ekf_study.md).
-
-**LiDAR mast.** The original result is a [hand calculation](../runs/mast_hand_calc/summary.txt).
-The redesign has a [hand sweep](../runs/mast_hand_calc/design_sweep.txt),
-[historical FEA](../runs/mast_fea/fea_summary.txt) and an
-[unconverged attachment comparison](../runs/mast_modal_attachment_20260925/study.json).
-The [shaft-order crossing assessment](design/16_mechanical_design_analysis.md#61-retrospective-assessment--is-the-200-hz-guard-the-right-criterion-audit-f1)
-withdraws the motor-clearance rationale. No measured assembly response exists.
-The [static protocol](specs/mast-physical-validation/design.md) is optional and
-cannot establish modal performance. Mounting need and scope come first.
-
-[Data and figures](data-and-figures.md) and the
-[figure manifest](figure-manifest.json) link every plot to its generator and
-inputs.
+The ranking-refusal question is at structural qualification. Archive permissions,
+episode meaning and target-policy execution remain unqualified. Earlier
+command-response, simulator and mast studies are retained at their original paths.
+Their historical next steps do not authorize a new campaign.
 
 ## Reproduce by environment
 
 Run commands from the repository root. Keep the environments separate;
 their dependency versions differ on purpose.
 
-### Portable checks — Python 3.10
+### Historical portable checks: Python 3.10
 
-Set up as in the [README](../README.md#quick-start), then run the checks
-from the [CI workflow](../.github/workflows/ci.yml):
+Use a separate Python 3.10 environment with `requirements-item11-regression.txt`
+and `requirements-report.txt`, then run the [CI checks](../.github/workflows/ci.yml):
 
 ```bash
 PYTHONPATH=gym python experiments/test_rosbag_to_telemetry.py
@@ -60,7 +38,13 @@ PYTHONPATH=gym python experiments/test_final_report.py
 
 Each should exit 0. They need no ROS install, vehicle or test rig.
 
-### Public data
+### Current archive qualification: Python 3.11
+
+Use [requirements-ope-qualification.txt](../requirements-ope-qualification.txt)
+and the [executed qualification commands](../reports/ope_qualification.md#reproduce).
+The archives stay in an external cache. Do not run policies or read outcomes.
+
+### Historical public driving data
 
 Use the isolated environment and reproduction command in the
 [development report](../reports/real_command_response.md#reproduce).

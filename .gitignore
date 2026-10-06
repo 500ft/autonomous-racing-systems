@@ -93,3 +93,10 @@ runs/mast_fea/converge/
 # Executed metadata-only split qualification; no bag payloads.
 !runs/driving_split_qualification/
 !runs/driving_split_qualification/*.json
+# Structural qualification findings only; no third-party archives or policy code.
+!runs/ope_qualification/
+!runs/ope_qualification/inputs.json
+!runs/ope_qualification/result.json
+!runs/ope_qualification/execution.json
+!runs/ope_qualification/structure.md
+!runs/ope_qualification/structure.png

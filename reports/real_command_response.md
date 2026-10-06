@@ -1,5 +1,9 @@
 # Public driving-data development result
 
+Retained development study. The active question is now [ranking-refusal archive
+qualification](ope_qualification.md). Its adoption does not reopen the unassigned
+bags or resolve this study's session-provenance blocker.
+
 The delay-plus-affine fit reduces forward-velocity residuals against the
 no-delay affine baseline on one development run. The fitted values, baseline
 errors and sample exclusions live in

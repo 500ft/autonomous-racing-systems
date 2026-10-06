@@ -1,0 +1,47 @@
+UNSENT DRAFT. Owner has not authorized external contact.
+
+Subject: F110 archive reuse terms, episode mapping and policy/loader provenance
+
+Dear Fabian Kresse,
+
+We are qualifying your F110 archives for a possible study of when simulated
+controller rankings should be withheld. We have inspected archive structure
+and source mappings, but have not computed returns, fitted policies or ranked
+controllers. Could you clarify these prerequisites?
+
+1. What terms permit research use and citation of the data, policy code and
+   weights, and publication of derived results? May any inputs be redistributed?
+   We inspected f110_datasets at 9a46fd64248a9551088484db87add252019ae2ec and
+   f1tenth_orl_dataset at 66d03630cc651cb80b87f1d86000e7f2ec8d3589 and did not
+   find an explicit reuse grant. Please identify the applicable terms/version.
+
+2. How do raw timestep-reset segments map to episodes, acquisition sessions,
+   vehicles, start locations and the filtered thesis corpus? Real-v1 recordings
+   can continue after a true done flag. Does it mean collision, termination,
+   an absorbing state or another event? How should post-done rows, truncation,
+   repeated resets and incomplete segments enter a finite-horizon outcome?
+   Are real/simulation segments paired, and which pairs share a physical run?
+
+3. Which exact executed implementations and configurations correspond to each
+   model_name? Some real-v1 and sim-v1 names differ in their trailing fields.
+   We found exact v2 configuration filename matches at stochastic_ftg_agents
+   44ed59d5abb551eff0ee322fa82d4b22cf5c372a; are those the configurations used
+   to acquire the released archive? Please identify dependencies, weights,
+   preprocessing, observation history/reset, action scaling/clipping and noise.
+   A received handoff mentioned partialPPOpolicy support, but we could not locate
+   that symbol in the inspected helpers. What is its exact source and revision?
+
+4. In the pinned registrations, f110-real-stoch-v1, f110-real-stoch-v2 and
+   f110-sim-stoch-v2 all select f110-sim-v1.zip. Is that intended? Which explicit
+   archive and filtering rules should each name use? Some filter indices exceed
+   the selected simulation archive's row count.
+
+5. What does each coordinate of log_prob represent? Is it a joint likelihood
+   for the executed action after clipping/scaling or a raw policy sample?
+   Are zero simulation values and constant dummy-actor values placeholders?
+   Which policies support valid likelihood evaluation at logged actions?
+   FQE eligibility and likelihood-ratio eligibility will be assessed separately.
+
+Thank you.
+
+[Owner to review recipient, wording and signature before sending.]

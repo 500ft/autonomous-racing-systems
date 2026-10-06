@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "project": "RoboRacer Modeling, Controls, and Mechanical Design",
+  "project": "Autonomous Racing Systems",
   "prerequisites": {
     "install": "python -m pip install -e . --no-deps && python -m pip install -r requirements-report.txt",
     "env": {
@@ -11,6 +11,20 @@
     "numeric_gate": "reports/figures/dynamic_replay_*.png are NOT byte-comparable: the renderer moves glyphs and layout between font builds. Compare runs/dynamic_model_replay/metrics.csv instead, via experiments/test_replay_metrics.py (tolerance 1e-9 relative; observed cross-run spread 1e-15)."
   },
   "figures": [
+    {
+      "id": "ope-archive-structure",
+      "evidence_type": "raw archive structural counts",
+      "generator": "experiments/plot_ope_structure.py",
+      "command": "python experiments/plot_ope_structure.py --result runs/ope_qualification/result.json --output runs/ope_qualification/structure.png",
+      "inputs": [
+        "runs/ope_qualification/result.json"
+      ],
+      "outputs": [
+        "runs/ope_qualification/structure.png"
+      ],
+      "environment": "requirements-ope-qualification.txt, Python 3.11; overrides historical prerequisites",
+      "caption": "Unfiltered recording segments and policy-name strings. Segments are not verified independent runs. No performance outcomes."
+    },
     {
       "id": "integrator-comparison",
       "evidence_type": "simulator output",
@@ -209,5 +223,6 @@
         "evidence/item11/figures/enriched_ros_residuals.png"
       ]
     }
-  ]
+  ],
+  "scope_note": "Entries from the simulation and mast studies are historical. The current structural qualification uses its own Python 3.11 requirements; no ranking figure exists."
 }
