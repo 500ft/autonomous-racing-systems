@@ -11,26 +11,19 @@ threshold or a protocol; see [README](README.md) for why.
 
 ## Mechanical lane
 
-### M1. The mast's first bending mode is 285.5 Hz and clears the 200 Hz guard
+### M1. Historical tube FEA predicts a mode; motor-vibration clearance is unestablished
 
-- **Support:** `runs/mast_fea/fea_summary.txt` (SIMULATION OUTPUT, converged mesh). Method backing from
-  Blevins and Rao ([§3](03-structural-dynamics-and-modal-testing.md)).
-- **Counter-evidence or gaps:** No measurement exists. The tap test is a **draft**, RR-S12 is blocked, and
-  ISO 7626-5:2019 is the standard the frozen procedure would have to be written against.
-  **Corrected 2026-09-24:** an earlier version of this claim argued the true frequency was bracketed
-  between the Rayleigh upper bound and a Dunkerley lower bound. That argument is withdrawn here for the
-  same reason it was withdrawn in [§3](03-structural-dynamics-and-modal-testing.md): a bound brackets the
-  FE value only if both describe the same problem, and the [modal audit](../docs/design/MODAL_MODEL_AUDIT.md)
-  shows they do not — the FE deck carries a one-node translational mass attached off-axis. The 285.5 Hz
-  figure stands on its own model, not on an analytical bound around it.
-- **Scope of the number (sharpened 2026-09-25):** 285.5 Hz is the output of the **historical
-  off-axis single-node attachment model**, and that model's result exceeds 200 Hz. Withdrawing the
-  bracketing argument does not change that output — but it does not establish the margin either, and
-  **the corrected attachment model has not produced a result yet**. Until it does, the guard is cleared
-  by the historical model only. Do not read the comfortable historical margin as a property of the
-  corrected model.
-- **Confidence: moderate** for the nominal tube as modelled by the historical deck; **none** as a
-  statement about hardware, and **none** about what the corrected attachment model will give.
+- **Support:** [historical FEA output](../runs/mast_fea/fea_summary.txt) and its
+  [mesh refinement](../runs/mast_fea/mesh_convergence.txt), for the off-axis
+  single-node mass attachment.
+- **Correction:** the [shaft-order assessment](../docs/design/16_mechanical_design_analysis.md#61-retrospective-assessment--is-the-200-hz-guard-the-right-criterion-audit-f1)
+  finds a crossing inside the operating range. The historical frequency guard
+  is under review; crossing alone does not establish harmful vibration.
+- **Alternate model:** the [centred, coupled-mass result](../runs/mast_modal_attachment_20260925/study.json)
+  exists but is unconverged and unadopted. Its result cannot inherit the
+  historical model's refinement evidence.
+- **Limit:** no measured assembly response, excitation amplitude or transmission
+  path is available. D2 precedes any physical campaign.
 
 ### M2. The 13.5 % hand-vs-FEA gap was mostly a tip-mass ATTACHMENT artifact, not physics
 
@@ -55,8 +48,7 @@ wrong in two places and is withdrawn.
   position unchanged) and the **off-axis position** for only **+1.27 %**. The legacy case reproduces
   the committed 285.5 Hz. Against the 330.1 Hz hand calculation the corrected centred model sits at
   **-2.79 %**, where the legacy model sat at −13.5 %. So most of the original gap was an artifact of
-  attaching the mass to one wall node, not physics, and the residual is the size that shear and
-  3D-versus-beam kinematics would be expected to produce. Comparing legacy against centred alone
+  attaching the mass to one wall node, not physics, and the cause of the remaining difference is unresolved. Comparing legacy against centred alone
   changes two things and is not the eccentricity effect.
 - **Still open:** the residual -2.79 % is not itself attributed, and **no number is adopted** — a new
   coupling invalidates reuse of the existing mesh-convergence evidence. Mechanisms that can still act
@@ -109,12 +101,14 @@ wrong in two places and is withdrawn.
 - **Confidence: moderate-to-high** that the sleeve is justified by mechanics. **The claim must be argued from
   mechanics and validated by test, never presented as a code requirement.**
 
-### M7. Blind assembly fails the sightline bound and a levelling step is required
+### M7. The historical sightline verdict depends on an incomplete height stack
 
 - **Support:** `runs/mast_tolerance_stack/summary.txt`: worst case 1.284° against a 0.458° bound, 0.354° after
   levelling. Method backing from Fischer (2011); Chase & Parkinson (1991) justify worst case as the right gate
   for a blind assembly.
-- **Counter-evidence or gaps:** **There are no drawings.** ASME Y14.5 or ISO 1101 govern the datum reference
+- **Counter-evidence or gaps:** the [current stack interpretation](../docs/design/16_mechanical_design_analysis.md#7-tolerance-stack--lidar-angular-error-required)
+  records the omitted bracket and optical offset. Its old deck-height limit is
+  not released. D2 and as-built datums remain unresolved. ASME Y14.5 or ISO 1101 govern the datum reference
   frame the budget's contributors must be toleranced against, and ISO 2768 defaults silently enter the stack
   if a drawing block ever cites them. One contributor, the 40 mm bolt pattern, is `ASSUMED`.
 - **Confidence: moderate** on the arithmetic; **low** until drawings define the datums.
@@ -183,15 +177,15 @@ wrong in two places and is withdrawn.
   Periu et al. (2013) treat mount design as the fix for a lidar on a vibrating vehicle
   ([§3](03-structural-dynamics-and-modal-testing.md)).
 - **Counter-evidence or gaps:** Both are full-scale vehicles. **No literature was found on sensor-mast
-  vibration for 1/10-scale platforms.** The 200 Hz guard is currently justified structurally, not by a
-  measured detection-quality requirement.
+  vibration for 1/10-scale platforms.** The historical frequency guard is under review following M1; no
+  measured detection-quality requirement supports it.
 - **Confidence: low-to-moderate.** Plausible and now cited by analogy, not established for this platform.
 
 ---
 
 ## Vehicle lane
 
-### V1. Cornering stiffnesses were identified and validated on held-out data
+### V1. Same-model simulator identification checks fitting consistency
 
 - **Support:** the repo's identification study; method backing from Rajamani (2012) and the CommonRoad vehicle
   models document, which is the literal source of the simulator's equations
@@ -225,20 +219,32 @@ wrong in two places and is withdrawn.
   the structure-exploiting solver literature, **that is a prototype timing, not a deployment guarantee.**
 - **Confidence: high** on the principle, **moderate** on this implementation's runtime claim.
 
-### V4. A mismatched-plant sweep will reveal which controller conclusions survive
+### V4. A mismatched-plant sweep is a proposed robustness test
 
 - **Support:** Dean et al. (2020) show certainty-equivalent LQR degrades and can destabilise under
   identification error. Yu et al. (2014) bound nominal MPC's inherent robustness. Kong et al. (2015) find the
   **size** of model error, not model complexity, predicts degradation.
 - **Counter-evidence or gaps:** Sweep magnitudes are currently arbitrary. **Tufa & Ka (2016) give a published
   method for determining mismatch thresholds** and should set them instead.
-- **Confidence: high** that the experiment is the right next step; **low** on the current magnitude choices.
+- **Status:** a proposed experiment with unresolved magnitude choices; it is not
+  the current roadmap step.
 
 ---
 
+### V5. Public-car evidence is development-only command response
+
+- **Support:** [result and limitations](../reports/real_command_response.md).
+  Coefficients and delay were selected and scored on the same development run.
+- **Blocker:** [split qualification](../reports/driving_split_qualification.md)
+  did not admit a separate final set. VESC telemetry and echoed servo commands
+  do not establish calibrated road speed or measured wheel angle.
+- **Scope:** this result establishes neither tire stiffness nor transfer to the
+  owner's vehicle. K2 remains unanswered; K1/K3 have not adopted a fleet study.
+
 ## Claims the literature does *not* let this project make
 
-- That any modal, compliance or tire parameter has been **measured**. Nothing physical has been tested.
+- That any modal, compliance or tire parameter of the owner's car has been measured.
+  Public driving observations are separate from testing that hardware.
 - That the mast assembly has a safety factor. No joint analysis exists.
 - That the clamp design is code-compliant. No code governs it.
 - That pure pursuit is better than MPC in general. See V2.
@@ -252,7 +258,8 @@ The **mechanical lane** rests on grade A–B literature: established handbook fo
 and primary sources with long experimental backing. Two weaknesses are now explicit rather than implied.
 Every claim is still simulation or hand calculation, because the experimental half is unbuilt. And the
 one place where mechanisms were attributed to a specific numerical result, M2, turned out to be wrong:
-the attribution is withdrawn and the cause of the 330.1 → 285.5 Hz gap is unresolved. M1 lost its
+the original attribution is withdrawn; the attachment study explains much of
+the gap while its residual and convergence remain unresolved. M1 lost its
 bracketing argument for the same reason. Good literature did not prevent either error, because neither
 was a literature question — both were questions about what the model actually contains.
 

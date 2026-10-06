@@ -14,20 +14,26 @@ the plan. This guide is for reading the work quickly or rerunning part of it.
 
 ## The two halves of the project
 
-**Vehicle software.** Everything runs on F1TENTH Gym telemetry and simulator
-captures. The identification study fits the same model the simulator uses, so
-its near-zero held-out error checks the fitting code, not a real car. See the
-[identification study](../reports/dynamic_parameter_identification.md),
+**Public driving data.** The [development comparison](../reports/real_command_response.md)
+fits and scores one licensed public run. The [split qualification](../reports/driving_split_qualification.md)
+stopped before additional bag access because session and segment membership
+are undocumented. Unopened runs remain unassigned. See the roadmap for K2,
+D2 and the unapproved fleet proposal.
+
+**Simulation software.** The identification study fits the same model the
+simulator uses, so its held-out error checks simulator/fitter consistency.
+See the [identification study](../reports/dynamic_parameter_identification.md),
 [controller comparison](../reports/controller_comparison.md) and
 [EKF study](../reports/ekf_study.md).
 
-**LiDAR mast.** The design goes from a beam hand calculation to FEA to
-parametric CAD. The 174.7 Hz figure belongs to the rejected first design; the
-redesign gives 330.1 Hz by hand and 285.5 Hz in FEA. None of these is a
-measurement. The [fixture preparation](../cad/roboracer/fixture-preparation.md)
-covers the test interface and uncertainty; the
-[test protocol](specs/mast-physical-validation/design.md) covers static
-stiffness only.
+**LiDAR mast.** The original result is a [hand calculation](../runs/mast_hand_calc/summary.txt).
+The redesign has a [hand sweep](../runs/mast_hand_calc/design_sweep.txt),
+[historical FEA](../runs/mast_fea/fea_summary.txt) and an
+[unconverged attachment comparison](../runs/mast_modal_attachment_20260925/study.json).
+The [shaft-order crossing assessment](design/16_mechanical_design_analysis.md#61-retrospective-assessment--is-the-200-hz-guard-the-right-criterion-audit-f1)
+withdraws the motor-clearance rationale. No measured assembly response exists.
+The [static protocol](specs/mast-physical-validation/design.md) is optional and
+cannot establish modal performance. Mounting need and scope come first.
 
 [Data and figures](data-and-figures.md) and the
 [figure manifest](figure-manifest.json) link every plot to its generator and
@@ -35,7 +41,7 @@ inputs.
 
 ## Reproduce by environment
 
-Run commands from the repository root. Keep the four environments separate;
+Run commands from the repository root. Keep the environments separate;
 their dependency versions differ on purpose.
 
 ### Portable checks — Python 3.10
@@ -53,6 +59,13 @@ PYTHONPATH=gym python experiments/test_final_report.py
 ```
 
 Each should exit 0. They need no ROS install, vehicle or test rig.
+
+### Public data
+
+Use the isolated environment and reproduction command in the
+[development report](../reports/real_command_response.md#reproduce).
+The [metadata census](../reports/driving_split_qualification.md#reproduce-the-metadata-census)
+uses only its committed metadata snapshot.
 
 ### CAD — pinned CadQuery environment
 

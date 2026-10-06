@@ -1,20 +1,22 @@
 # RoboRacer Modeling, Controls, and LiDAR Mast Design Review
 
-**Item 12 review-ready report - 2026-07-24**
+**Historical item 12 report - 2026-07-24; interpretation reconciled with current evidence**
 
-**Decision state:** the simulation/controls evidence and LiDAR-mast analysis are
-complete. The mast analysis caught a modal failure, drove a geometry revision,
-and validated the revised design with converged finite-element results. CAD,
-fabrication, as-built inspection, and physical compliance are downstream gates.
+**Decision state:** this report preserves the simulation and idealized mast
+study. The historical frequency threshold does not establish drivetrain
+clearance. Mounting need and physical scope remain subject to D2 in the
+[roadmap](../ROADMAP.md).
 
-**Physical evidence state:** **Experiment registered - compliance campaign
-scheduled for July 25-August 2, 2026; measurement pending.** The protocol and
-verdict thresholds are frozen. No physical result is claimed in this report.
+**Physical evidence state:** experiment registered; measurement pending.
+The original protocol's "campaign scheduled" label is historical and does not
+establish a current booking. Static compliance is optional pending D2.
 
-**Scope guardrail:** controller, estimator, and system-identification results
-come from simulation. Mast strength, deflection, and frequency results are hand
-calculations and FEA, not measurements. The planned compliance experiment
-observes displacement per force and **does not validate stress**.
+**Evidence scope:** the original controller, estimator and identification
+results use simulator telemetry. Mast results are hand calculations and FEA.
+A later [public-car development comparison](real_command_response.md) fitted and
+scored the same run. [Split qualification](driving_split_qualification.md) stopped
+before additional bag access; no whole-run final score exists. K2 has no recorded
+disposition, and K1/K3 have not approved or established access for a fleet study.
 
 **Primary reproduction:** [`./run_all.sh`](../run_all.sh) for the simulation
 pipeline; Section 12 gives the mechanical and report commands.
@@ -30,41 +32,47 @@ The project has two connected evidence chains:
 ```text
 Gym experiment
 -> timestamped CSV telemetry
--> numerical/model validation
--> held-out identification
+-> numerical/model comparison
+-> same-model held-out identification
 -> controller, estimator, and robustness decisions
 
 Committed simulation envelope + locked sensor mass
 -> hand calculation
--> 174.7 Hz modal failure against a 200 Hz guard
+-> 174.7 Hz hand result below the historical 200 Hz threshold
 -> shorter/larger mast redesign
 -> 330.1 Hz hand prediction
--> 285.5 Hz converged FEA result
--> physical compliance gate (registered; measurement pending)
+-> 285.5 Hz historical FEA result with mesh-refinement evidence
+-> attachment-model audit and unresolved physical scope
 ```
 
 The baseline 120 mm-long, 16 mm-OD, 1.5 mm-wall 6061-T6 tube passed the
 strength check but failed its predeclared frequency guard: **174.7 Hz < 200
 Hz**. A sweep selected a 100 mm-long, 20 mm-OD tube with the same material and
-wall. The revised hand model predicted **330.1 Hz** and the higher-fidelity FEA
-predicted **285.5 Hz**, which clears the guard by 1.43x. The final mesh change
+wall. The revised hand model predicted **330.1 Hz** and the historical FEA
+predicted **285.5 Hz**. The criterion is now under review. The final mesh change
 was **-0.15% gauge stress, +0.30% tip deflection, and -1.42% first
 frequency**, all inside the 5% convergence criterion.
 
-Static FEA also agreed with the hand model inside the frozen +/-15% credibility
+The historical FEA comparison agreed with the hand model inside the frozen +/-15%
 band: **17.4 MPa versus 17.1 MPa** at the mid-span gauge (+1.3%),
 **0.176 mm versus 0.166 mm** tip deflection (+5.9%), and **285.5 Hz versus
 330.1 Hz** first frequency (-13.5%). These are model-to-model checks. The
-registered physical campaign will judge measured compliance separately under
-the same +/-15% rule.
+registered static protocol defines a separate +/-15% compliance comparison
+if the owner chooses that study.
 
-### Why the failure matters
+### What the audit changed
 
-The mast story is not "FEA confirms a chosen shape." The analysis rejected the
-first design despite ample yield margin, identified stiffness as the binding
-constraint, and spent two direct design levers - length and diameter - to fix
-it. That decision cost only 1.4 g of mast mass while improving the crash-case
-yield safety factor from 4.05 to 8.05.
+The [attachment comparison](../runs/mast_modal_attachment_20260925/study.json)
+explains much of the hand/FEA gap. The historical FE deck attaches a
+translational point mass to one wall node. Rigid coupling to the centred tip
+section gives an unconverged alternate prediction. Both original models fix
+the root, so root flexibility cannot explain their difference. The remaining
+model discrepancy has no established cause.
+
+The [drivetrain assessment](../docs/design/16_mechanical_design_analysis.md#61-retrospective-assessment--is-the-200-hz-guard-the-right-criterion-audit-f1)
+puts shaft-order crossing of the historical FE mode near 8.3 m/s. The guard's
+motor-clearance rationale is withdrawn; excitation and assembly response remain
+unmeasured.
 
 ## 1. Scope, Motivation, and Evidence Labels
 
@@ -96,14 +104,15 @@ load, and tolerance budgets.
 
 This report closes the item-12 design review. It does not close:
 
-- parametric mast/deck CAD or per-component CG coordinates;
+- a released mounting design or per-component as-built CG coordinates;
 - the fabrication traveler and as-built dimensional inspection;
 - the calibrated compliance campaign;
 - physical vehicle system identification; or
 - on-car vibration, perception, fatigue, or crash qualification.
 
-Those are observable downstream gates rather than gaps hidden inside the
-report.
+Tube, sleeve and clamp CAD were subsequently accepted in
+[PR #55](https://github.com/500ft/autonomous-racing-systems/pull/55). That result
+does not settle the LiDAR mounting need or release a vehicle installation.
 
 <!-- pagebreak -->
 
@@ -119,12 +128,12 @@ each one. The full architecture is in
 | R-08 | 100 Hz compute with p95 <= 25% of 10 ms | MPC p95 = 1.32644 ms (`runs/mpc_controller/results.csv`) | SIMULATION OUTPUT |
 | R-11 | Ready-to-race mass <= 4.5 kg | Bottom-up locked-part estimate is 4.42 kg with 0.08 kg margin; assumed rows remain flagged (`docs/design/16_mechanical_design_analysis.md`) | CATALOG + ASSUMED |
 | R-12 | 100 Hz control loop, zero-order held | Shared controller runs use 100 Hz commands and RK4 integration | SIMULATION OUTPUT |
-| M-01 | First mast mode >= 200 Hz | Baseline 174.7 Hz FAIL; revised FEA 285.5 Hz PASS | HAND CALC + FEA |
+| M-01 | Historical first-mode threshold under review | Original 174.7 Hz by hand; revised 285.5 Hz FEA. Motor clearance unestablished | HAND CALC + FEA |
 | M-02 | Crash yield safety factor >= 1.5 | Revised hand result 34.3 MPa and SF 8.05 | HAND CALC |
 | M-03 | Hand/FEA headline agreement within +/-15% | Frequency -13.5%, deflection +5.9%, gauge stress +1.3% | HAND CALC + FEA |
 | M-04 | Final mesh change < 5% on reportable metrics | -0.15%, +0.30%, -1.42%; PASS | FEA |
-| M-05 | Scan plane clears 0.30 m wall at 10 m | Blind 1.284 deg FAIL; leveled 0.354 deg PASS; deck <= 0.138 m | HAND CALC + ASSUMED |
-| M-06 | As-built compliance agrees with as-built FEA within +/-15% after quality gates | Experiment registered; campaign scheduled; measurement pending | PHYSICAL PENDING |
+| M-05 | Historical sightline calculation | Recorded 1.284 deg / 0.354 deg and 0.138 m limit omit the sensor optical offset; mounting remains unresolved | HAND CALC + ASSUMED |
+| M-06 | As-built compliance agrees with as-built FEA within +/-15% after quality gates | Experiment registered; optional pending D2; measurement pending | PHYSICAL PENDING |
 
 ### Architecture implications
 
@@ -177,7 +186,7 @@ the nonlinear single-track model.](figures/model_vs_gym_trajectory_error.png)
 
 <!-- pagebreak -->
 
-## 4. Identification and Held-Out Validation
+## 4. Same-Model Identification and Held-Out Replay
 
 The nonlinear single-track coefficients `C_Sf` and `C_Sr` are fit with bounded
 nonlinear least squares on normalized one-step yaw-rate and slip-angle
@@ -358,12 +367,12 @@ The baseline hand calculation is committed at
 **128.76 N**, producing 68.10 MPa root bending stress, 0.5931 mm tip
 deflection, and yield safety factor 4.05. Strength passes.
 
-### The binding failure
+### Historical selection criterion
 
 The same baseline produces **174.7 Hz** in the Rayleigh tip-mass model. The
-criterion requires the first mode to clear the 100 Hz control rate and a
-low-hundreds-Hz drivetrain band with a **200 Hz guard**. The baseline therefore
-fails even though its strength margin is comfortable.
+historical **200 Hz guard** rejected it despite the calculated strength
+margin. That selection is preserved as study history; it does not establish a
+current mast requirement or motor-vibration clearance.
 
 ### Redesign
 
@@ -376,7 +385,7 @@ diameter, wall, and material. The selected configuration is:
 | Length | 120 mm | 100 mm |
 | OD | 16 mm | 20 mm |
 | Wall | 1.5 mm | 1.5 mm |
-| Hand `f1` | 174.7 Hz FAIL | 330.1 Hz PASS |
+| Hand `f1` | 174.7 Hz | 330.1 Hz |
 | Crash stress | 68.1 MPa | 34.3 MPa |
 | Crash yield SF | 4.05 | 8.05 |
 | Mast mass | 22.1 g | 23.5 g |
@@ -388,7 +397,7 @@ strength.
 
 <!-- pagebreak -->
 
-## 9. Static FEA, Modal Validation, and Convergence
+## 9. Static FEA, Modal Comparison, and Convergence
 
 The revised idealized tube is meshed with 28,985 quadratic C3D10 tetrahedra
 (58,232 nodes, target size 1.2 mm) and solved in CalculiX. The root is fixed.
@@ -411,11 +420,11 @@ static metrics.
 
 ### Modal decision
 
-The first two FEA modes are the near-degenerate bending pair at **285.5 Hz**
-and 301.3 Hz; the third is 1009.3 Hz. The higher-fidelity first mode remains
-above the 200 Hz guard by 1.43x and above the 100 Hz control rate by 2.86x.
-The roughly 14% reduction from the Rayleigh estimate is consistent with the
-closed-form model's rigid-root and Euler-Bernoulli assumptions.
+The historical FEA first mode is **285.5 Hz**. Its one-node attachment differs
+from the centred tip-mass hand idealization. The coupled, centred alternate is
+**320.9 Hz**, but remains unconverged and unadopted. Both results retain their
+own provenance in [the attachment study](../runs/mast_modal_attachment_20260925/study.json).
+No measured assembly mode or vibration-clearance result exists.
 
 ### Mesh convergence
 
@@ -426,7 +435,8 @@ closed-form model's rigid-root and Euler-Bernoulli assumptions.
 | 1.2 mm / 28,985 elements | 17.48 MPa | 0.1757 mm | 285.5 Hz |
 | Final change | **-0.15%** | **0.30%** | **-1.42%** |
 
-All final changes are below 1.5%, an order of magnitude inside the 5% gate.
+All final changes are below 1.5% and meet the historical 5% refinement gate.
+This evidence applies to the historical attachment model.
 Sources: `runs/mast_fea/fea_summary.txt` and
 `runs/mast_fea/mesh_convergence.txt`.
 
@@ -438,32 +448,28 @@ Sources: `runs/mast_fea/fea_summary.txt` and
 
 The UST-10LX scans a horizontal plane, so the governing stack is pitch/roll
 tilt rather than software-calibratable yaw. At a 0.120 m assumed deck height,
-the optical center is 0.220 m above the floor. A 0.30 m wall at 10 m creates a
-0.458 deg up-tilt bound.
+the historical calculation equated optical height to deck height plus tube
+length. It omitted the bracket and sensor-base-to-optical offset. Its reported
+wall bound is conditional on that incomplete stack.
 
 The deterministic run at `runs/mast_tolerance_stack/summary.txt` reports:
 
-| Condition | Tilt | Verdict |
+| Condition | Tilt | Historical verdict under the incomplete height assumption |
 | --- | ---: | --- |
 | Blind worst-case stack | **1.284 deg** | FAIL |
 | Blind RSS stack | 0.652 deg | FAIL |
 | After scan-plane leveling | **0.354 deg** | PASS, 1.29x margin |
 
-The failure creates two requirements:
-
-1. level the scan plane once at installation by shimming the mast base and
-   equalizing wall return heights at two distances; and
-2. keep the mast-root deck plane **<= 0.138 m** above the floor for the
-   calibrated residual to clear the 0.30 m wall bound.
-
-The tolerance inputs remain assumed until CAD and inspection replace them.
-The conclusion is still useful: blind assembly is unacceptable, and the design
-now has an install procedure plus a hard deck-height limit.
+The recorded 0.138 m deck limit is therefore not a released CAD requirement.
+D2 must resolve required scan planes, obstructions, pitch/roll and the actual
+sensor/bracket geometry before fabrication. The original tolerance outputs are
+preserved; their arithmetic alone cannot choose a mount height.
 
 ### Physical Compliance Gate
 
-**Experiment registered - calibrated compliance campaign scheduled for July
-25-August 2, 2026; measurement pending.**
+**Experiment registered; measurement pending.** The proposed campaign dates
+in the original protocol are historical. Continuing this optional static study
+requires the owner's scope decision and qualified measurement inputs.
 
 The frozen protocol tests the 100 mm-long, 20 mm-OD, 1.5 mm-wall 6061-T6 mast
 in both orthogonal axes:
@@ -494,7 +500,8 @@ Source:
 
 ### Known limitations
 
-- The controls and identification results are simulation-only and use one map.
+- The original controls and tire-identification results use one simulator map;
+  the separate public command-response result is development-only.
 - Oracle recovery is not physical parameter validation.
 - MPC timing is implementation-specific; its maximum solve time exceeds one
   control period.
@@ -505,26 +512,15 @@ Source:
 - The 4.42 kg mass is a bottom-up estimate, not a scale measurement.
 - No on-car excitation spectrum exists, so separation from operational
   vibration remains unvalidated.
-- No physical mast or vehicle result is claimed.
+- No owner-car or measured mast-assembly result is claimed.
 
-### Downstream gates
+### Current gates
 
-1. **CAD:** model the L=100 mm / OD=20 mm / t=1.5 mm mast and deck interface;
-   enforce deck <= 0.138 m and the required front transponder bay.
-2. **Fabrication:** issue a drawing/traveler, record stock certificate or seller
-   specification, clamp/fastener condition, process, and lead time.
-3. **Inspection:** record as-built length, OD, wall, clamp engagement, load
-   height, and both test axes.
-4. **As-built model:** regenerate hand and FEA compliance with those
-   dimensions.
-5. **Campaign:** execute the frozen matrix and publish the raw data,
-   calibration, uncertainty, plot, and verdict.
-6. **Hardware controls:** repeat excitation and held-out identification on the
-   physical platform; do not transfer simulator coefficients.
-
-The report is complete because each unresolved engineering activity has a
-named input, owner-facing action, and acceptance gate. It is not completed by
-silently converting pending evidence into a result.
+[ROADMAP.md](../ROADMAP.md) is the only active plan. The public-data track waits
+for source-backed session/segment provenance, and K2 decides its disposition.
+The fleet proposal remains outside the active scope until K1/K3 are satisfied.
+D2 decides mounting need and mast scope before fabrication or a physical
+campaign. Static compliance cannot resolve the modal requirement.
 
 <!-- pagebreak -->
 
@@ -538,7 +534,7 @@ silently converting pending evidence into a result.
 | Revised geometry, 330.1 Hz prediction, SF 8.05 | `runs/mast_hand_calc/design_sweep.txt` |
 | 285.5 Hz / 0.176 mm / 17.4 MPa FEA comparison | `runs/mast_fea/fea_summary.txt` |
 | -0.15% / 0.30% / -1.42% final mesh changes | `runs/mast_fea/mesh_convergence.txt` |
-| 1.284 deg fail / 0.354 deg pass / 0.138 m deck limit | `runs/mast_tolerance_stack/summary.txt` |
+| Historical 1.284 deg / 0.354 deg / 0.138 m outputs under incomplete optical-height assumption | `runs/mast_tolerance_stack/summary.txt` |
 | 4.42 kg vs 4.5 kg mass budget | `docs/design/16_mechanical_design_analysis.md` |
 | Frozen physical +/-15% verdict | `docs/specs/mast-physical-validation/design.md` |
 
@@ -568,8 +564,6 @@ excluded from version control.
 
 ### Closing statement
 
-The design review now stands on a reproducible failure-and-redesign chain:
-traceable simulation envelope, closed-form calculation, a failed modal
-criterion, a targeted geometry change, model-to-model agreement inside the
-frozen band, converged FEA metrics, and a preregistered physical gate that
-remains visibly pending until accepted data exists.
+The preserved results support simulator consistency and an idealized mast
+comparison. The later public-data result remains a development fit. The source
+provenance and owner decisions in the roadmap govern any further work.

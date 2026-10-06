@@ -92,7 +92,7 @@ and regenerable).
    the first 2026-06-25 run used the 0.20 kg placeholder → 147.2 N). Requests
    `*EL FILE S` / `*NODE FILE U`. → max von Mises (gauge + global) and tip deflection.
 4. **Modal deck (`mast_modal.inp`):** root ENCASTRE + a CalculiX `*ELEMENT,
-   TYPE=MASS` carrying the LiDAR tip mass (m_tip) at the tip-center node;
+   TYPE=MASS` carrying the LiDAR tip mass (m_tip) at the nearest tube-wall node;
    `*FREQUENCY` step extracting 6 modes → first natural frequency.
 5. **Compare:** parse `.dat` (eigenfreqs, tip displacement) and `.frd` (nodal
    stress → von Mises). Acceptance: FEA within **±15 %** of the hand calc on
@@ -108,7 +108,11 @@ mesh and gauge band): f1 **285.5 Hz** (hand 330.1, −13.5 %), tip deflection
 first modes 285.5 / 301.3 / 1009.3 / 3660.4 / 4238.3 / 8008.1 Hz; global peak
 41.9 MPa at the root corner (singularity, not an acceptance metric). Mesh
 convergence in `runs/mast_fea/mesh_convergence.txt`. The table below is the
-earlier run and is kept as history only.
+earlier run and is kept as history only. The
+[attachment audit](MODAL_MODEL_AUDIT.md) corrects the old root-flexibility
+attribution. The [drivetrain assessment](16_mechanical_design_analysis.md#61-retrospective-assessment--is-the-200-hz-guard-the-right-criterion-audit-f1)
+withdraws the frequency guard's motor-clearance rationale. The centred coupled
+comparison remains unconverged; no measured assembly response exists.
 
 ## First validated run (2026-06-25, 0.20 kg placeholder tip) — SUPERSEDED
 
@@ -127,9 +131,8 @@ split is mesh asymmetry). The global **peak** von Mises (47.8 MPa) sits at the
 fixed-root re-entrant corner — a stress-concentration/mesh singularity, **not** a
 valid `M·c/I` comparison; that is why the gauge ring and tip deflection are used.
 
-**Interpretation.** The Rayleigh tip-mass hand calc slightly **over**-predicts
-stiffness (it assumes a perfectly rigid root and pure Euler–Bernoulli bending,
-neglecting shear and root flexibility), so the 3-D FE frequency lands ~14 %
-lower — the expected direction and magnitude. Crucially, the **FE f1 = 267 Hz
-still clears the ≥ 200 Hz guard band (1.34×)**, so the frequency-fix
-recommendation holds under the higher-fidelity model.
+**Interpretation correction.** Both the hand model and historical FE deck fix
+the root. Root flexibility cannot explain the gap. The later attachment audit
+supersedes the earlier mechanism attribution, and the historical frequency
+threshold does not establish motor-vibration clearance. The superseded run's
+numerical output above remains unchanged.
