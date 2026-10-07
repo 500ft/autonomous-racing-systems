@@ -2,6 +2,10 @@
 
 **Historical item 12 report - 2026-07-24; interpretation reconciled with current evidence**
 
+**Current question:** the [archive qualification](ope_qualification.md) and
+[roadmap](../ROADMAP.md) supersede this report as the active software narrative.
+The figures and numerical results below remain historical evidence.
+
 **Decision state:** this report preserves the simulation and idealized mast
 study. The historical frequency threshold does not establish drivetrain
 clearance. Mounting need and physical scope remain subject to D2 in the

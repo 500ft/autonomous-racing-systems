@@ -48,3 +48,14 @@ jobs:
       run: |
         python tools/check_presentation.py . "Autonomous Racing Systems" autonomous-racing-systems
         python tools/test_presentation.py
+
+  ope-structural-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
+      with:
+        python-version: "3.11"
+    - run: python -m pip install -r requirements-ope-qualification.txt
+    - name: Structural reader unit tests (no third-party archive download)
+      run: python experiments/test_ope_qualification.py

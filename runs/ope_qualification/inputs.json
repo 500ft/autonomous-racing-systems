@@ -1,0 +1,76 @@
+{
+  "scope": "Structural qualification only. No rewards, observations, actions, returns or policy execution. Prior structural audit already exposed these arrays.",
+  "allowed_arrays": [
+    "timestep",
+    "model_name",
+    "done",
+    "truncated",
+    "log_prob"
+  ],
+  "archives": {
+    "dataset_real_v0.zip": {
+      "sha256": "e4a26fe6a4715aa01bb9de77b6156441aa2e2ea9655b0e58782fbf81a1600a78",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f110_datasets/9a46fd64248a9551088484db87add252019ae2ec/dataset_real_v0.zip",
+      "prefix": "",
+      "start_timestep": 0
+    },
+    "dataset_sim_v0.zip": {
+      "sha256": "43fe9cdddd29e28928b7229bd48b8c160d7c288b9a7a0b425c47a4a67661cba3",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f110_datasets/9a46fd64248a9551088484db87add252019ae2ec/dataset_sim_v0.zip",
+      "prefix": "",
+      "start_timestep": 1
+    },
+    "f110-real-stoch-v2.zip": {
+      "sha256": "d344a4da3f0b138116fbce658d917a816c9b58f66e0be0a240edd7264eadd1b6",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f110_datasets/9a46fd64248a9551088484db87add252019ae2ec/f110-real-stoch-v2.zip",
+      "prefix": "f110-real-stoch-v2/",
+      "start_timestep": 0
+    },
+    "f110-real-v1.zip": {
+      "sha256": "63ae39d7c9c56de2a33df2f7e22b826837f6cdba90b6bcf49b37f618db373dcc",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f110_datasets/9a46fd64248a9551088484db87add252019ae2ec/f110-real-v1.zip",
+      "prefix": "dataset_real1501.zarr/",
+      "start_timestep": 0
+    },
+    "f110-sim-v1.zip": {
+      "sha256": "fa53e7c8944b7aca560bdcd69e52e0b3365c05b2c4b13d700cbda0eb4e524e50",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f110_datasets/9a46fd64248a9551088484db87add252019ae2ec/f110-sim-v1.zip",
+      "prefix": "",
+      "start_timestep": 0
+    }
+  },
+  "sources": {
+    "__init__.py": {
+      "sha256": "4bc5f2985ddc7c7882a26d45de1c84bacf548798a5b28df39d5167c2723ca79b",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f1tenth_orl_dataset/66d03630cc651cb80b87f1d86000e7f2ec8d3589/f110_orl_dataset/__init__.py"
+    },
+    "dataset_env.py": {
+      "sha256": "b450dfc44c3453c521433c75c4e4e6cfafd90a77c2ab049035087cf08dfe175d",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f1tenth_orl_dataset/66d03630cc651cb80b87f1d86000e7f2ec8d3589/f110_orl_dataset/dataset_env.py"
+    },
+    "dataset_agents.py": {
+      "sha256": "692e6c30e8566c60008afd637a7bada1aa0ec906713f9a7da51460785a3ccae9",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f1tenth_orl_dataset/66d03630cc651cb80b87f1d86000e7f2ec8d3589/f110_orl_dataset/dataset_agents.py"
+    },
+    "source_README.md": {
+      "sha256": "837f429cec37dc3acf0e6a7f6c639ba65a11a5dd0338fe27b1fbde8a18b61291",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/f1tenth_orl_dataset/66d03630cc651cb80b87f1d86000e7f2ec8d3589/README.md"
+    },
+    "benchmark_agent.py": {
+      "sha256": "3f5c1d9c9447e02b02410b2042abaf8bab1c459b157b70e54b020f155439362e",
+      "url": "https://raw.githubusercontent.com/HyberionBrew/stochastic_ftg_agents/44ed59d5abb551eff0ee322fa82d4b22cf5c372a/f110_agents/agent.py"
+    },
+    "f110_datasets_tree.json": {
+      "url": "https://api.github.com/repos/HyberionBrew/f110_datasets/git/trees/9a46fd64248a9551088484db87add252019ae2ec?recursive=1",
+      "canonical_json_sha256": "884f68a7c1fbdd2d026bec1dc33fdce799fa0dba0703dea4e04d35808fa379f5"
+    },
+    "f1tenth_orl_dataset_tree.json": {
+      "url": "https://api.github.com/repos/HyberionBrew/f1tenth_orl_dataset/git/trees/66d03630cc651cb80b87f1d86000e7f2ec8d3589?recursive=1",
+      "canonical_json_sha256": "092d6ded7a8983417e1398f781bc1ef0462394797ad3b6880c3a27b6cb8879d2"
+    },
+    "benchmark_policy_tree.json": {
+      "url": "https://api.github.com/repos/HyberionBrew/stochastic_ftg_agents/git/trees/44ed59d5abb551eff0ee322fa82d4b22cf5c372a?recursive=1",
+      "canonical_json_sha256": "4c79815105dc7d4e198d5715542dc70a28b62068330ff0a91b97a4e53782ebe6"
+    }
+  }
+}
