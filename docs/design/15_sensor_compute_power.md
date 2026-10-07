@@ -49,9 +49,13 @@ The LiDAR tip mass for the item-16 mast load case is now **firmed** from the sel
 | Tip-carried cable + connector | 0.015 kg | ASSUMED allowance (Ethernet pigtail + power lead run to the deck) |
 | **Firmed mast tip mass `m_LiDAR_tip`** | **0.175 kg** | LiDAR + bracket + cable |
 
-> This **0.175 kg** replaces the old **0.20 kg ASSUMED placeholder** in `experiments/mast_hand_calc.py` and `experiments/mast_fea.py`. Because it is **lighter**, it **raises** the mast's first natural frequency and **lowers** bending stress — a strict improvement on both the modal guard and the strength margin (verified: hand-calc recommended-geometry `f1` 309.3 → **330.1 Hz**; FE `f1` 267.4 → **285.5 Hz**; crash SF 7.04 → **8.05**). See item 16 §3.1–§3.2, §4, §6.
+> This **0.175 kg** replaces the old **0.20 kg ASSUMED placeholder** in `experiments/mast_hand_calc.py` and `experiments/mast_fea.py`. Because it is **lighter**, it **raises** the mast's first natural frequency and **lowers** bending stress — an increase in the computed frequency and strength margin; the modal guard does not establish motor clearance (verified: hand-calc recommended-geometry `f1` 309.3 → **330.1 Hz**; FE `f1` 267.4 → **285.5 Hz**; crash SF 7.04 → **8.05**). See item 16 §3.1–§3.2, §4, §6.
 >
-> **Optical-center height above deck** (the mast moment arm / sightline) is the recommended mast length: **`h_arm ≈ L = 0.100 m`** (item 16 §3.2 frequency-fix geometry). The mast was sized to keep this clearance over the compute stack while clearing the 200 Hz modal guard.
+> **Optical-center height remains unresolved.** The historical study equated
+> the mast length with optical height above the deck. Sensor-base-to-optical
+> offset and bracket geometry must be included before a sightline decision.
+> The [mechanical assessment](16_mechanical_design_analysis.md#7-tolerance-stack--lidar-angular-error-required)
+> qualifies the old stack; [D2](../../ROADMAP.md) still governs mounting need and scope.
 
 ## 2. Compute Sizing — NVIDIA Jetson Orin NX 16 GB (LOCKED)
 

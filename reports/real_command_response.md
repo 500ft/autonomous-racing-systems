@@ -5,7 +5,10 @@ no-delay affine baseline on one development run. The fitted values, baseline
 errors and sample exclusions live in
 [result.json](../runs/real_command_response/result.json). This establishes a
 runnable command-response comparison. Generalization to another run remains
-untested.
+untested. The subsequent [split qualification](driving_split_qualification.md)
+stopped before opening another bag: acquisition-session and segment membership
+remain undocumented. The [roadmap](../ROADMAP.md) retains that blocker and the
+unanswered K2 disposition; neither closure nor resumed fitting is implied.
 
 ![Command, measured motion and delay profile](../runs/real_command_response/comparison.png)
 

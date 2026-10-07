@@ -25,9 +25,25 @@ flowchart LR
 | Software timing | Solver runtime measured on the machine that generated the committed result; not a hardware real-time guarantee |
 | Hand calculation | Closed-form mast and tolerance calculations from stated geometry and loads |
 | FEA | CalculiX results using the geometry, mesh, material, and boundary conditions in `docs/design/FEA_SETUP.md` |
-| Physical test | No accepted physical vehicle or mast result is currently present |
+| Public driving data | One licensed public-car development run; fitted residuals, with uncalibrated frame/timing assumptions |
+| Owner hardware | No measured vehicle or mast-assembly response from the owner |
 
-## Full reproduction
+## Public-data output
+
+[The development plot](../runs/real_command_response/comparison.png) is generated
+by [real_command_response.py](../experiments/real_command_response.py) from the
+pinned bag in [source.json](../runs/real_command_response/source.json).
+[comparison.csv](../runs/real_command_response/comparison.csv) retains its
+motion-only inputs; [result.json](../runs/real_command_response/result.json)
+and [the report](../reports/real_command_response.md) specify the fit, exclusions,
+licence, environment and reproduction command. This plot is outside the older
+simulation figure manifest.
+
+The [split result](../runs/driving_split_qualification/result.json) is a metadata
+eligibility finding. No additional bag was opened and no held-out run was scored.
+The [roadmap](../ROADMAP.md) records the source-provenance blocker.
+
+## Full simulation reproduction
 
 From the pinned `f1tenth-gym` environment:
 
@@ -104,6 +120,12 @@ These artifacts validate conversion and analysis interfaces; they do not
 represent a physical RoboRacer experiment.
 
 ## Mechanical outputs
+
+The historical frequency guard and tolerance-stack verdicts remain in their
+original run files. Their interpretation is corrected in the
+[mechanical assessment](design/16_mechanical_design_analysis.md): neither the
+guard nor static compliance establishes vibration clearance, and the old
+optical-height assumption does not release a mounting design.
 
 The final report also uses text outputs rather than plot images:
 

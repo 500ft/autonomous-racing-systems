@@ -1,10 +1,18 @@
 # 16 — Mechanical Design and Analysis (CAD / FEA Centerpiece)
 
-**Status: model-based design study; no fabricated or measured mast.** The completed LiDAR-mast calculations/FEA use the firmed item-15 tip mass (Hokuyo UST-10LX datasheet body 130 g → installed tip mass 0.175 kg) and idealized tube geometry. Reported hand/FEA agreement is model-to-model verification, not physical validation. Parametric mast/deck CAD and as-built dimensions remain pending. The July 17 [physical protocol](../specs/mast-physical-validation/design.md) is a conditional next stage, gated on Owner-confirmed fabrication, inspection, calibrated instrumentation and as-built FEA; this sprint supplies analysis integrity, not hardware. It supersedes the old unconditional “design-only: no fabrication” scope without claiming fabrication is authorized or complete. See the [sprint roadmap](https://github.com/500ft/autonomous-racing-systems/blob/f374eb8c8543a018b48685f76f8bf550391c0713/docs/SPRINT_ROADMAP.md) and [readiness checklist](../specs/mast-physical-validation/campaign-readiness.md).
+**Status: historical model-based study; no measured mast assembly.** Tube,
+sleeve and clamp CAD were accepted in [PR #55](https://github.com/500ft/autonomous-racing-systems/pull/55).
+D2 still decides mounting need and physical scope; see [ROADMAP.md](../../ROADMAP.md).
+The frequency guard does not establish motor-vibration clearance (section 6.1).
+The optical-height assumption in section 7 is incomplete. Neither calculation
+releases a mounting height or fabrication task.
 
 **Model baseline retained:** the 0.175 kg tip mass replaces the old 0.20 kg placeholder, raising modeled frequency margin and strength SF. Items 13–15 informed the July 7 mass budget (≈4.42 kg against ≤4.5 kg) and component selections; manufacturing tolerances and per-component CG locations still require CAD/inspection. This status correction does not regenerate those model results.
 
-**Dependency order — do NOT do FEA first.** This file is **last**: **13 → 14 → 15 → 16**. The FEA must run on the **real geometry** locked in item 14 (wheelbase 0.3302 m, deck layout) and the **real masses** chosen in item 15 (LiDAR mass + optical-center height, compute, battery). An FEA built before those exist would be analyzing a fictional part. Do not start the mesh until items 13-15 are filled.
+**Input scope.** Items 13-15 provide the historical model and catalog assumptions.
+The analyzed specimen is preserved. Future mounting geometry and physical inputs
+remain subject to D2 and inspection; the design tables do not establish an
+as-built vehicle.
 
 **Load-case philosophy — replace the placeholder 4g.** The old item-10 spec used an arbitrary **4g** load. **Do not use 4g.** The governing *maneuvering* case is **derived from this project's own telemetry**:
 
@@ -12,9 +20,9 @@
 F_lateral, governing = m_LiDAR_tip × a_lat,peak × SF
 ```
 
-where `a_lat,peak` is the **measured peak lateral acceleration** from the ride-quality race metrics added in commit `9e603d0` — `max_abs_lat_accel_mps2` from `summarize_run` / `race_and_report` in `gym/roboracer/closed_loop.py` — `m_LiDAR_tip` is the LiDAR tip mass from item 15, and `SF` is a stated safety factor. A **separate crash / drop case** is analyzed independently (it is not a steady maneuvering load and should not be blended into the maneuvering case).
+where `a_lat,peak` is the **simulated peak lateral acceleration** from the ride-quality race metrics added in commit `9e603d0` — `max_abs_lat_accel_mps2` from `summarize_run` / `race_and_report` in `gym/roboracer/closed_loop.py` — `m_LiDAR_tip` is the LiDAR tip mass from item 15, and `SF` is a stated safety factor. A **separate crash / drop case** is analyzed independently (it is not a steady maneuvering load and should not be blended into the maneuvering case).
 
-> **Peak lateral acceleration — measured from a clean completed lap.** `a_lat,peak = 19.4 m/s²` (≈ 2.0 g), the `max_abs_lat_accel_mps2` reported by `summarize_run` for a **clean completed lap** (`completed_lap == True`, `collision == False`) of the **tuned pure-pursuit baseline** (lookahead 1.2 m, velocity gain 1.2 — the single `selected_baseline == True` row in `runs/pure_pursuit_sweep/results.csv`). Conditions: **RK4 integrator, `dt = 0.002 s`, controller at 100 Hz**, `examples/example_map`; lap time 38.04 s, mean speed 8.33 m/s. Companion figures from the same lap: `mean_abs_lat_accel_mps2 = 5.78`, `max_abs_long_accel_mps2 = 9.51`, `rms_lat_jerk_mps3 = 22.1`. Reproduce with `experiments/ride_quality_baseline.py`; the run is committed to `runs/ride_quality_baseline/` (`summary.json` + per-step `telemetry.csv`). The discarded `runs/first_lap/telemetry.csv` figures (max |a_y| ≈ 78 m/s², max |a_x| ≈ 801 m/s²) are **raw scripted-lap / collision spikes** and were deliberately **not** used.
+> **Peak lateral acceleration from a clean completed simulator lap.** `a_lat,peak = 19.4 m/s²` (≈ 2.0 g), the `max_abs_lat_accel_mps2` reported by `summarize_run` for a **clean completed lap** (`completed_lap == True`, `collision == False`) of the **tuned pure-pursuit baseline** (lookahead 1.2 m, velocity gain 1.2 — the single `selected_baseline == True` row in `runs/pure_pursuit_sweep/results.csv`). Conditions: **RK4 integrator, `dt = 0.002 s`, controller at 100 Hz**, `examples/example_map`; lap time 38.04 s, mean speed 8.33 m/s. Companion figures from the same lap: `mean_abs_lat_accel_mps2 = 5.78`, `max_abs_long_accel_mps2 = 9.51`, `rms_lat_jerk_mps3 = 22.1`. Reproduce with `experiments/ride_quality_baseline.py`; the run is committed to `runs/ride_quality_baseline/` (`summary.json` + per-step `telemetry.csv`). The discarded `runs/first_lap/telemetry.csv` figures (max |a_y| ≈ 78 m/s², max |a_x| ≈ 801 m/s²) are **raw scripted-lap / collision spikes** and were deliberately **not** used.
 
 ---
 
@@ -122,13 +130,17 @@ The **crash case governs strength** (σ ≈ 68 MPa vs 4 MPa); both clear yield w
 | `m_eff = m_tip + 0.23·m_mast` (m_mast = 22.1 g) | 180.1 g |
 | `f1 = (1/2π)·√(k_eff/m_eff)` | **174.7 Hz** |
 
-**Acceptance criterion:** `f1` must clear the **100 Hz control update rate** and a plausible low-hundreds-Hz motor/drivetrain excitation band by a factor of 2, i.e. **f1 ≥ 200 Hz**. **Result: 174.7 Hz → FAIL.** The lighter firmed tip mass raised the baseline f1 from 163.8 (0.20 kg placeholder) to 174.7 Hz, but it **still lands inside the 2× guard band** (clears 100 Hz at 1.7×), so the slender-tube baseline remains unacceptable. **Action: stiffen — shorter `L`, larger OD/wall, or a carbon tube — and re-check before accepting the mast.** This is exactly the kind of binding constraint the modal analysis (Section 6) is meant to catch.
+**Historical selection criterion:** the hand baseline fell below the original
+frequency threshold in [summary.txt](../../runs/mast_hand_calc/summary.txt).
+The claimed motor-band clearance was subsequently withdrawn by section 6.1.
+This records the geometry-selection history, not a current fabrication requirement.
 
-> **This `3.1` hand calc is the analytical ground truth the Section 4 static FEA (and Section 6 modal) must reproduce within ~10–15% (away from stress concentrations) before the detailed-geometry FEA is trusted.**
+> The hand calculation is an analytical comparison under its stated idealizations.
+> The modal attachment audit qualifies comparison with the historical FE deck.
 
 ### 3.2 Design revision — frequency fix (REQUIRED: the baseline FAILS modal)
 
-The §3.1 baseline **passes strength but fails the modal guard band** (`f1 = 174.7 Hz < 200 Hz`, on the firmed 0.175 kg tip mass). A design sweep over mast geometry and material was run to find a configuration that clears `f1 ≥ 200 Hz` with comfortable margin while keeping the crash-case yield safety factor acceptable. Reproduce with `python experiments/mast_hand_calc.py`; raw output in `runs/mast_hand_calc/design_sweep.txt`.
+Under the historical criterion, the §3.1 baseline **passed strength but failed the modal guard band** (`f1 = 174.7 Hz < 200 Hz`, on the firmed 0.175 kg tip mass). A design sweep over mast geometry and material was run to find a configuration that clears `f1 ≥ 200 Hz` with comfortable margin while keeping the crash-case yield safety factor acceptable. Reproduce with `python experiments/mast_hand_calc.py`; raw output in `runs/mast_hand_calc/design_sweep.txt`.
 
 **Sweep space:** length `L ∈ {0.12 … 0.08} m`, outer diameter `OD ∈ {16 … 25} mm`, wall `t ∈ {1.0, 1.5, 2.0} mm`, material ∈ {6061-T6 aluminum, CFRP}. For every candidate the sweep recomputes `f1 = (1/2π)·√(3EI/(L³·m_eff))` with `m_eff = m_tip + 0.23·m_mast`, and the **governing crash-case** stress/SF.
 
@@ -156,7 +168,10 @@ Together they lift `k` by `3.58×` and `f1` from 174.7 → 330.1 Hz. The same ge
 
 **Hand sanity-check of the recommended `f1`:** `I = π/64·(20⁴−17⁴) = 3754 mm⁴`; `k = 3·68.9e9·3.754e-9/0.1³ = 7.76×10⁵ N/m`; `m_eff = 0.175 + 0.23·0.0235 = 0.1804 kg`; `f1 = (1/2π)·√(7.76e5/0.1804) = 330.1 Hz`. ✔ matches the sweep.
 
-> **FEA status — RE-RUN on the firmed 0.175 kg tip mass and VALIDATED.** The gmsh + CalculiX toolchain (gmsh 4.15.2 mesher in the conda `base` env; CalculiX 2.23 `ccx` solver in a conda `fea` env) was re-run on the **recommended** geometry with the firmed mass via `experiments/mast_fea.py`. **FEA agrees with the hand calc within ±15 %** on all three headline metrics, and the higher-fidelity **FE first frequency (285.5 Hz, up from 267.4 Hz at the old 0.20 kg placeholder) still clears the ≥ 200 Hz guard** (1.43×). Stand-up commands and the full workflow are in **`docs/design/FEA_SETUP.md`**; results in `runs/mast_fea/fea_summary.txt`. See §4 and §6.
+> **Historical FEA result retained.** The [committed comparison](../../runs/mast_fea/fea_summary.txt)
+> lies within the selected hand/FEA comparison band. This is model-to-model
+> agreement. The attachment-model audit and motor-order assessment below
+> qualify the modal interpretation; physical validation remains absent.
 
 ## 4. Static FEA vs Hand Calc (REQUIRED)
 
@@ -167,7 +182,7 @@ Together they lift `k` by `3.58×` and `f1` from 174.7 → 330.1 Hz. The same ge
 | Tip deflection (crash) | 0.166 mm | 0.176 mm | +5.9% | **YES** |
 | Mid-span gauge stress (crash) | 17.1 MPa | 17.4 MPa | +1.3% | **YES** |
 
-> The fixed-root **peak** von Mises (41.9 MPa) is a re-entrant-corner stress concentration / mesh singularity, **not** a valid `M·c/I` comparison (root beam-theory `M·c/I` = 34.3 MPa) — which is exactly why the §5 mesh-convergence metric and the comparison above use a defined gauge region and the global deflection, not the peak nodal stress. Tip deflection (+5.9%) and gauge stress (+1.3%) both fall well inside the ±15% band, so the static hand calc is validated.
+> The fixed-root **peak** von Mises (41.9 MPa) is a re-entrant-corner stress concentration / mesh singularity, **not** a valid `M·c/I` comparison (root beam-theory `M·c/I` = 34.3 MPa) — which is exactly why the §5 mesh-convergence metric and the comparison above use a defined gauge region and the global deflection, not the peak nodal stress. Tip deflection (+5.9%) and gauge stress (+1.3%) both fall well inside the ±15% band, so the static model-to-model comparison meets that band.
 
 ## 5. Mesh Convergence (REQUIRED, <5%)
 
@@ -181,17 +196,18 @@ Together they lift `k` by `3.58×` and `f1` from 174.7 → 330.1 Hz. The same ge
 
 All three metrics move by <1.5% at the final refinement — an order of magnitude inside the 5% acceptance band, so the 1.2 mm production mesh used in §4/§6 is converged for the quantities being reported. (The global *peak* von Mises at the fixed-root corner is deliberately **not** tracked here: it sits on a re-entrant-corner singularity and diverges with refinement, which is exactly why the acceptance metric is defined on the gauge region.)
 
-## 6. Modal Analysis (REQUIRED, with acceptance criterion)
+## 6. Modal Analysis
 
-> **DONE for the recommended geometry (§3.2), re-run on the firmed 0.175 kg tip mass.** Acceptance criterion: `f1` must clear the **100 Hz control update rate** AND a plausible low-hundreds-Hz motor/drivetrain excitation band by **≥ 2× ⇒ f1 ≥ 200 Hz**. A CalculiX `*FREQUENCY` modal solve was run on the recommended mast with the **0.175 kg** LiDAR (Hokuyo UST-10LX, item 15) as a lumped `*MASS` element at the tip and a fixed root (`experiments/mast_fea.py`). **The baseline (174.7 Hz) FAILED this guard; the recommended geometry PASSES by both the hand calc (330.1 Hz) and the FEA (285.5 Hz).**
+The [historical modal output](../../runs/mast_fea/fea_summary.txt) uses a
+fixed root and one translational mass attached to a tube-wall node. The
+[attachment study](../../runs/mast_modal_attachment_20260925/study.json) separates
+coupling from eccentric position and explains much of the hand/FEA gap.
+Its centred coupled result is unconverged and unadopted. Both original models
+fix the root, so root flexibility cannot explain their difference. The
+remaining discrepancy has no established physical attribution.
 
-| Mode | Natural frequency (FEA) | Excitation source to clear | Margin | Pass? |
-| --- | ---: | --- | --- | --- |
-| 1st (bending) | **285.5 Hz** (hand calc 330.1 Hz, Δ −13.5%) | 100 Hz control rate; low-hundreds-Hz motor band | **1.43× the 200 Hz guard; 2.86× the 100 Hz rate** | **YES** |
-| 2nd (bending, orthogonal) | 301.3 Hz | — | — | — |
-| 3rd | 1009.3 Hz | — | — | — |
-
-> Modes 1–2 are the two ~degenerate orthogonal bending modes of the axisymmetric tube (the small 285→301 Hz split is mesh asymmetry). The FE `f1` lands ~14% below the Rayleigh hand calc because the closed-form model assumes a perfectly rigid root and pure Euler–Bernoulli bending (neglecting shear and root flexibility) and so slightly over-predicts stiffness — the expected direction and magnitude. **Even at the higher-fidelity 285.5 Hz the design clears the ≥ 200 Hz guard (1.43×)** — the lighter firmed LiDAR improved the FE margin from 1.34× (0.20 kg) to 1.43× — so the frequency fix is robust. Baseline-vs-recommended comparison and reasoning: §3.2.
+The old frequency threshold was met numerically. It does not establish
+motor-vibration clearance, as the assessment below shows.
 
 ### 6.1 Retrospective assessment — is the 200 Hz guard the right criterion? (audit F1)
 
@@ -200,8 +216,8 @@ All three metrics move by <1.5% at the final refinement — an order of magnitud
 > criterion.** Reproduce: `python3 experiments/drivetrain_excitation.py`.
 
 **Engineering question.** The guard is stated as: clear the 100 Hz control rate *and* "a plausible
-low-hundreds-Hz motor/drivetrain excitation band" by 2×, hence `f1 ≥ 200 Hz`. The control-rate half is a
-requirement and is satisfied. What frequency does this drivetrain actually produce?
+low-hundreds-Hz motor/drivetrain excitation band" by 2×, hence `f1 ≥ 200 Hz`. The frequency ratio to the control rate is an arithmetic comparison; it does
+not establish a structural excitation requirement. What frequency does this drivetrain actually produce?
 
 **Inputs** — every one already derived elsewhere in this repository; none introduced here.
 
@@ -266,9 +282,12 @@ present design pass is not one of them.
 
 ## 7. Tolerance Stack → LiDAR Angular Error (REQUIRED)
 
-> **DONE — with a derived install requirement AND a derived deck-height requirement (updated 2026-07-07 for the chassis lock).** `experiments/mast_tolerance_stack.py` (raw: `runs/mast_tolerance_stack/summary.txt`). The UST-10LX scans a horizontal plane, so yaw misalignment is nulled by the software mount calibration; the physical stack that matters is the **tilt** of the scan plane. The requirement is derived from the sightline, both directions, at the 10 m guaranteed range (optical center **0.220 m** above floor = 0.100 m mast [LOCKED] + **0.120 m deck [ASSUMED, chassis-informed]**; wall 0.30 m [ASSUMED, conservative vs the common 0.33 m duct]): **governing bound = up-tilt wall clearance, θ ≤ 0.458°** (down-tilt floor-graze bound 1.260°).
->
-> **Why the deck height changed:** the original run assumed 0.070 m deck-above-floor. The item-14 platform lock made that checkable — the Slash 4x4's skid-plate clearance alone is 0.072 m [vendor spec] and the deck rides on standoffs above the chassis rails — so 0.070 m was **physically infeasible** and the stack was re-run at a chassis-informed 0.120 m estimate. The earlier ">2× margin" claim did not survive this correction (see below).
+> **Historical tolerance calculation with incomplete optical-height input.**
+> The [saved output](../../runs/mast_tolerance_stack/summary.txt) assumes optical
+> height equals deck height plus mast length. Bracket geometry and the sensor's
+> base-to-optical offset are missing. The table and sensitivity below retain
+> their original assumptions and verdicts; they are not released design limits.
+> No scan-plane levelling or moving-car pitch/roll measurement has been made.
 
 | Contributor | Tolerance | Angular contribution | Note |
 | --- | --- | ---: | --- |
@@ -286,11 +305,11 @@ Beam-height error: ±5.7 cm (RSS, blind) / ±3.1 cm (calibrated worst) at 5 m; �
 
 **Margin is deck-height-dependent (sensitivity in the run output):** the up-tilt bound tightens as the deck rises — 2.10× margin at 0.070 m (old, infeasible), 1.29× at the 0.120 m baseline, 1.00× at 0.138 m, FAIL by 0.150 m. Hence:
 
-**Derived requirement 1 (install):** blind assembly fails worst-case *and* RSS, so the build gains a one-time **scan-plane leveling step** — shim the mast base, verify by scanning a wall at two distances and equalizing return heights. That nulls every contributor external to the LiDAR.
-
-**Derived requirement 2 (CAD, new 2026-07-07):** the deck (mast-root) plane must sit **≤ 0.138 m above the floor** for the calibrated residual to clear the 0.30 m-wall bound (a 2× margin would need ≤ 0.076 m — infeasible below the 0.072 m skid plate, so 2× is not claimed). At the common 0.33 m wall the limit relaxes to 0.168 m. **This is a hard input to the item-16 deck CAD**, alongside the R-14 transponder bay. If the CAD cannot hold 0.138 m, the recorded fallbacks are: justify the wall height at 0.33 m for the target venue, or shorten the standoffs — the mast length L is *not* an available lever (locked by the ≥ 200 Hz modal guard, §3.2).
-
-This is the same pattern as the §3.2 frequency fix: the analysis exists to catch the failure and convert it into a cheap requirement before anything is built.
+**Current interpretation:** installation levelling may address static tilt,
+but the original deck-height bound depends on an incomplete optical stack.
+D2 must establish the required scan planes, obstructions and pitch/roll envelope
+and then select a mount using actual bracket and sensor geometry. The historical
+tube length is an analysis specimen, not a demonstrated vehicle requirement.
 
 ## 8. Design Page(s)
 
@@ -305,8 +324,8 @@ This is the same pattern as the §3.2 frequency fix: the analysis exists to catc
 - [x] **Design revision — frequency fix** (§3.2): baseline `f1=174.7 Hz` (firmed 0.175 kg tip) FAILED the ≥200 Hz guard; recommended **L=100 mm / OD=20 mm / t=1.5 mm 6061-T6** → `f1=330.1 Hz`, crash SF 8.05 (both PASS)
 - [x] Static FEA vs hand calc within ±15% (§4): tip deflection +5.9%, gauge stress +1.3% (gmsh + CalculiX, recommended geometry, firmed mass)
 - [x] Mesh convergence <5% on the gauge region (`experiments/mast_fea.py --converge`: <1.5% on gauge stress / tip deflection / f1 at final refinement — PASS; `runs/mast_fea/mesh_convergence.txt`)
-- [x] Modal analysis with first-frequency clearance of motor band AND 100 Hz control rate (§6): FE `f1=285.5 Hz` ≥ 200 Hz guard (1.43×)
-- [x] Tolerance stack → LiDAR angular error (§7): blind assembly FAILS → derived leveling step + **deck-height ≤ 0.138 m CAD requirement** (re-run 2026-07-07 at the chassis-informed deck height)
-- [ ] **Parametric CAD** (mast + deck interface; must satisfy the §7 deck-height limit and the R-14 transponder bay) → fills the §2 CG columns and replaces §7's ASSUMED tolerances
+- [x] Historical modal solve recorded (§6); motor-clearance claim withdrawn (§6.1)
+- [x] Historical tolerance calculation recorded (§7); incomplete optical-height input prevents release of its deck-height bound
+- [ ] Vehicle mounting release, as-built CG and tolerances remain gated by D2; existing tube/sleeve/clamp CAD is recorded above
 - [ ] Polished design page per part
 - [x] **FEA toolchain stood up and tested** (gmsh 4.15.2 + CalculiX 2.23 `ccx`); commands in `docs/design/FEA_SETUP.md`, pipeline `experiments/mast_fea.py`
