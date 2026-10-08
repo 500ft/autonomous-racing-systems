@@ -123,8 +123,10 @@ The repository's MIT license and the earlier driving bag's separate CC BY terms
 do not supply these missing grants. Third-party ZIPs, weights and source code
 are not redistributed in this PR.
 
-The [unsent author request](../docs/ope_author_request.txt) asks for permissions,
-recording/episode/policy mapping and loader intent. Empirical OPE and a numerical
+The [contact record](../docs/ope_author_request.txt) records the owner's
+confirmation that the email to Fabian Kresse was sent. The retained request
+covers permissions, recording/episode/policy mapping, loader intent and
+probability semantics. No reply has been supplied. Empirical OPE and a numerical
 finite-horizon reference stay stopped until those prerequisites qualify.
 [Open questions](../docs/OPEN_QUESTIONS.md) retains owner decisions; the
 [roadmap](../ROADMAP.md) records the current blocker.

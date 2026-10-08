@@ -56,11 +56,12 @@ outside this repository while reuse terms remain unknown.
 
 ## What's next
 
-Obtain explicit reuse terms and authoritative episode/policy mapping. An
-[author request](docs/ope_author_request.txt) is drafted and unsent. The owner
-has adopted the [dependency roadmap](ROADMAP.md) and repository cleanup;
-[open questions](docs/OPEN_QUESTIONS.md) retain external-contact and physical
-decisions. Dataset access and owner-approved platform access are parallel
+Await Fabian Kresse's reply on reuse terms and authoritative episode/policy
+mapping. The [contact record](docs/ope_author_request.txt) records the
+owner-confirmed email send; no reply or permission has been supplied.
+The owner has adopted the [dependency roadmap](ROADMAP.md) and repository
+cleanup; [open questions](docs/OPEN_QUESTIONS.md) retain the unanswered data
+and physical decisions. Dataset access and owner-approved platform access are parallel
 possible routes. A refusal from one source does not close every route. No empirical OPE or
 finite-horizon return calculation has been run.
 

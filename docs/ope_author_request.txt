@@ -1,4 +1,16 @@
-UNSENT DRAFT. Owner has not authorized external contact.
+CONTACT STATUS: The owner confirms that the racing dataset email to Fabian
+Kresse has been sent.
+
+Confirmation provenance: the owner message in this CLI session states "the
+other email has been sent" and explicitly identifies the racing dataset email
+to Fabian Kresse in its repository-specific instruction.
+Send timestamp: not supplied.
+Reply: no reply or answers supplied in this confirmation.
+Sending does not establish data/code/weights reuse permission or satisfy the
+episode, policy-execution or estimator eligibility prerequisites.
+
+Retained request draft follows. The confirmation supplies no sent-message copy,
+so this text is not verified as the exact wording sent. Do not send a duplicate.
 
 Subject: F110 archive reuse terms, episode mapping and policy/loader provenance
 

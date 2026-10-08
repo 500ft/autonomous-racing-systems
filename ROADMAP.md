@@ -62,7 +62,9 @@ Status: current, blocked on external information and owner choices.
 Prerequisite: the structural census and a clearly identified candidate source.
 
 - Obtain terms covering the data, policy code, weights and intended outputs.
-  The [author request](docs/ope_author_request.txt) remains unsent.
+  The owner confirms that the email to Fabian Kresse has been sent; the
+  [contact record](docs/ope_author_request.txt) records that confirmation.
+  Await the author's reply. Sending establishes no reuse permission.
 - Resolve raw segment versus episode meaning, continuing terminal flags,
   truncation, exclusions, vehicle/session groups and real/simulation pairing.
 - Map policy IDs to executable implementations. Qualify observations, action

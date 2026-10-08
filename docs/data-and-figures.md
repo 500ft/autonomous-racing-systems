@@ -54,8 +54,9 @@ tables retain their existing files and generators. Frozen report/release evidenc
 is unchanged. Their original evidence classes and corrected mechanical limits
 remain in the sections below. The metadata-only driving-split result remains a
 text report: no qualified independent group exists to plot. No successor study
-or reserved driving bag was opened by this redesign. The roadmap and pending
-owner decisions are unchanged.
+or reserved driving bag was opened by this redesign. The visual changes leave
+scientific milestones and pending owner decisions unchanged; contact status
+is maintained in the [contact record](ope_author_request.txt) and roadmap.
 
 ## Historical figure sources
 

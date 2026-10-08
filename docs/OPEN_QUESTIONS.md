@@ -18,12 +18,12 @@ what was removed and why useful historical work remains.
 
 | Question | Status | Evidence or action needed |
 | --- | --- | --- |
-| Data and code reuse rights | Unknown | Explicit grant for each archive, policy code and weights; see the [unsent request](ope_author_request.txt) |
+| Data and code reuse rights | Unknown | Explicit grant for each archive, policy code and weights; see the [contact record](ope_author_request.txt) |
 | Recording segment versus episode | Unresolved | Meaning of continuing `done` flags, collision/reset handling, truncation, raw-to-filtered mapping and independent acquisition groups |
 | Policy correspondence and execution | Partly qualified | Exact filename matches are recorded in [result.json](../runs/ope_qualification/result.json); target implementations, preprocessing, action transforms and history/reset behavior remain unqualified |
 | Loader aliases | Reproduced; intended mapping unknown | Author confirmation before any analysis using an environment name |
 | FQE and probability-ratio methods | Ineligible for empirical execution now | Separate [estimator gates](../reports/ope_qualification.md#estimator-gates); no missing probabilities supplied |
-| External author contact | Not authorized | Draft is unsent; owner may provide answers or authorize sending |
+| External author contact | Email to Fabian Kresse sent, owner-confirmed | [Confirmation provenance and retained request](ope_author_request.txt); await the author's answers. No send timestamp or reply supplied |
 | Reviewer, physical study, publication and campaign | Not approved | Named reviewer, qualified protocol and separate owner authorization are still required |
 
 ## Superseded active questions, with decisions retained
