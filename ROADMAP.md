@@ -39,6 +39,7 @@ flowchart TD
     D --> R[Qualify development reference and model set]
     R --> A[Calibrate performance-difference abstention]
     P[Owner establishes platform or lab access] --> I[Qualify real-platform identification and outcomes]
+    P --> D
     D --> I
     A --> F[Freeze controllers, method and independent test protocol]
     I --> F
