@@ -12,10 +12,13 @@ blocked by unresolved reuse terms, episode meaning and policy executability.
 [Results](#results) · [Roadmap](ROADMAP.md) · [Quick start](#quick-start) ·
 [Qualification report](reports/ope_qualification.md) · [History](docs/history/README.md)
 
-![Recording-segment and policy-name counts from the five pinned F110 archives](runs/ope_qualification/structure.png)
+![Structural census of five pinned archives: recording segments, policy-name strings and terminal-flag alignment; real-v1 has flags before segment ends](runs/ope_qualification/structure.png)
 
 *Unfiltered structural counts from [result.json](runs/ope_qualification/result.json).
-Segments are not verified independent experiments. No return or ranking is plotted.*
+Panel C separates flagged rows at recording ends from flags within recordings.
+Segments do not establish independent episodes; names do not establish execution eligibility.
+[Accessible tables and archive identities](runs/ope_qualification/structure.md) ·
+[SVG](runs/ope_qualification/structure.svg).*
 
 ## Results
 

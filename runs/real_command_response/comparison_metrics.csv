@@ -1,0 +1,5 @@
+comparison,rmse_m_s,lag_s
+Mean-only baseline,0.6969753609996157,
+Identity command,0.6883745893491625,0
+No-delay affine,0.5555087819354949,0.0
+Delay + affine,0.3857157506913553,0.22

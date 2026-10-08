@@ -14,7 +14,28 @@ stopped before opening another bag: acquisition-session and segment membership
 remain undocumented. The [roadmap](../ROADMAP.md) retains that blocker and the
 unanswered K2 disposition; neither closure nor resumed fitting is implied.
 
-![Command, measured motion and delay profile](../runs/real_command_response/comparison.png)
+![Same-run development comparison: tracking-frame motion and fitted response, retained commands on a separate axis, and the existing delay search with its selected minimum](../runs/real_command_response/comparison.png)
+
+*All retained samples are drawn, with breaks at the original display-gap rule.
+Line styles and markers distinguish the traces; the RMSE axis includes zero.
+No confidence band is available.
+[SVG](../runs/real_command_response/comparison.svg) ·
+[Accessible baseline table](../runs/real_command_response/comparison_metrics.md) ·
+[Full-precision metric CSV](../runs/real_command_response/comparison_metrics.csv).*
+
+## Redraw without data acquisition or fitting
+
+```bash
+python experiments/plot_real_command_response.py \
+  --run-dir runs/real_command_response \
+  --output runs/real_command_response/comparison.png
+```
+
+Use Python 3.11 with `requirements-ope-qualification.txt`. This presentation-only
+command reads the committed motion CSV, result and delay profile. It writes PNG,
+SVG and metric tables. The original analysis script and numerical derivatives
+remain unchanged; its original plot is superseded by this redraw. The bag-based
+analysis instructions below are historical reproduction, not part of this redraw.
 
 ## Source and inspection
 

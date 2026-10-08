@@ -100,3 +100,6 @@ runs/mast_fea/converge/
 !runs/ope_qualification/execution.json
 !runs/ope_qualification/structure.md
 !runs/ope_qualification/structure.png
+!runs/ope_qualification/structure.svg
+!runs/ope_qualification/structure.csv
+!runs/ope_qualification/loader_aliases.csv

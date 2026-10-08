@@ -20,10 +20,43 @@
         "runs/ope_qualification/result.json"
       ],
       "outputs": [
-        "runs/ope_qualification/structure.png"
+        "runs/ope_qualification/structure.png",
+        "runs/ope_qualification/structure.svg",
+        "runs/ope_qualification/structure.md",
+        "runs/ope_qualification/structure.csv",
+        "runs/ope_qualification/loader_aliases.csv"
       ],
       "environment": "requirements-ope-qualification.txt, Python 3.11; overrides historical prerequisites",
-      "caption": "Unfiltered recording segments and policy-name strings. Segments are not verified independent runs. No performance outcomes."
+      "caption": "Unfiltered structural counts: recording segments, policy-name strings and terminal-flag alignment. Episode semantics and execution remain unresolved.",
+      "input_sha256": {
+        "runs/ope_qualification/result.json": "eafc1c220d3774a10aaba85ed0ce96e42fead88811aeacf419c7c53339693f2b"
+      },
+      "notes": "Presentation-only rendering from the frozen result. Qualification script and result provenance are unchanged."
+    },
+    {
+      "id": "public-command-response",
+      "evidence_type": "same-run public-car development fit; uncalibrated frame and timing",
+      "generator": "experiments/plot_real_command_response.py",
+      "command": "python experiments/plot_real_command_response.py --run-dir runs/real_command_response --output runs/real_command_response/comparison.png",
+      "inputs": [
+        "runs/real_command_response/comparison.csv",
+        "runs/real_command_response/result.json",
+        "runs/real_command_response/delay_profile.json"
+      ],
+      "outputs": [
+        "runs/real_command_response/comparison.png",
+        "runs/real_command_response/comparison.svg",
+        "runs/real_command_response/comparison_metrics.md",
+        "runs/real_command_response/comparison_metrics.csv"
+      ],
+      "environment": "requirements-ope-qualification.txt, Python 3.11; overrides historical prerequisites",
+      "caption": "Motion, commands and existing delay search on the same correlated development samples. No held-out evaluation or uncertainty band.",
+      "notes": "No bag access or refitting. Full CSV retained, with the original display-gap rule; metric table is a generated view of result.json.",
+      "input_sha256": {
+        "runs/real_command_response/comparison.csv": "fe010c7d6fdf5f80b99fb9a8e222a38e5fd2640ccf4c0b4303d1926fe3497ef9",
+        "runs/real_command_response/result.json": "d2e2c44dea912ae7fb43d6e743b436135ee7d91be6a1ece9230b847836d03e79",
+        "runs/real_command_response/delay_profile.json": "b9ba40bced9cb721ca2f9198870b451e0f9d7d9700f8cb4fa65e5535f3070555"
+      }
     },
     {
       "id": "integrator-comparison",
@@ -224,5 +257,29 @@
       ]
     }
   ],
-  "scope_note": "Entries from the simulation and mast studies are historical. The current structural qualification uses its own Python 3.11 requirements; no ranking figure exists."
+  "scope_note": "Entries from the simulation and mast studies are historical. The current structural qualification uses its own Python 3.11 requirements; no ranking figure exists.",
+  "visual_reference": {
+    "repository": "500ft/sensor-enclosure-thermal-design",
+    "commit": "bad572fc0902437445a5446bb5bc43098cc6211f",
+    "files": [
+      {
+        "file": "thermal_bias.png",
+        "repository_path": "analysis/figures/thermal_bias.png",
+        "git_blob_sha": "e7f5cb35ebb35672716d592133829a060986446a",
+        "sha256": "ed87b93b7a57ed7560d6ae6ba00237184ae6404426df2c579414968a61b221cb"
+      },
+      {
+        "file": "thermal_transient_prediction.png",
+        "repository_path": "analysis/figures/thermal_transient_prediction.png",
+        "git_blob_sha": "3ce13bd5e189f88fb309d2559ba80f7b50978283",
+        "sha256": "323197c4dbcedec04f7fb8fae1f2d2a48e5093ad6c67b2de72105ce4f104a42a"
+      },
+      {
+        "file": "thermal_bias.py",
+        "repository_path": "analysis/thermal_bias.py",
+        "git_blob_sha": "7a8700f79467508267ddebbbf814b60256dd7cf2",
+        "sha256": "5be86d509c7012f0a2942d76dd75bc088fe234ac423748752ff0f1405dcbacb3"
+      }
+    ]
+  }
 }
