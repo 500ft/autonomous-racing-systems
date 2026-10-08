@@ -27,16 +27,16 @@
   from measured inputs. Instrument purchases do not establish calibration or
   physical campaign readiness.
 
-## Planning context recorded 2026-09-21
+## Current planning context
 
-- Equipment-specific force logging/calibration preparation remains the weekly
-  priority; displacement/root-motion and fixture evidence remain gaps.
-- Native tube-stock, support-sleeve and clamp work was found on
-  `cad/solidworks-mast-assembly`; equipment intake on `week/day1-20260919`.
-  Inspect these branches before duplicating work or assuming it is on main.
-- Assembly mates, fully driven feature positions, drawings and independent FEA
-  checks are the next CAD/FEA questions. They do not displace the core acquisition
-  work or automatically close existing physical gates.
+- ROADMAP.md is the only active dependency plan. The owner authorized its
+  adoption and removal of retired implementation and work orders.
+- Archive structural qualification is complete; rights, episode meaning and
+  policy execution remain unresolved. Do not open outcome data or start a
+  ranking campaign under cleanup authorization.
+- Historical CAD/sprint ledgers are retained under docs/history/ as records.
+  They no longer activate tasks or drive CI. Preserve useful geometry,
+  simulation, calibration and result-reproduction checks.
 
 ## Scope discipline — owner rule, 2026-09-29
 

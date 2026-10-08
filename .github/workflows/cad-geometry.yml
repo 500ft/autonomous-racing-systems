@@ -16,8 +16,6 @@ jobs:
         shell: bash -el {0}
     steps:
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0  # ledger_validator historical needs the base commit
       - uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: cad-geometry

@@ -1,7 +1,8 @@
 # Autonomous Racing Systems
 
-Can disagreement among dynamics models consistent with development data tell
-when a simulated controller ranking should be withheld? The current result is
+Can dispersion in the predicted performance difference between controllers,
+across physically justified models consistent with development data, identify
+rankings that should be withheld? The current result is
 a reproducible qualification of public F110 archives. Policy ranking remains
 blocked by unresolved reuse terms, episode meaning and policy executability.
 
@@ -54,8 +55,10 @@ outside this repository while reuse terms remain unknown.
 
 Obtain explicit reuse terms and authoritative episode/policy mapping. An
 [author request](docs/ope_author_request.txt) is drafted and unsent. The owner
-has authorized qualification only; [open questions](docs/OPEN_QUESTIONS.md)
-retain the external-contact and physical decisions. No empirical OPE or
+has adopted the [dependency roadmap](ROADMAP.md) and repository cleanup;
+[open questions](docs/OPEN_QUESTIONS.md) retain external-contact and physical
+decisions. Dataset access and owner-approved platform access are parallel
+possible routes. A refusal from one source does not close every route. No empirical OPE or
 finite-horizon return calculation has been run.
 
 ## Retained work

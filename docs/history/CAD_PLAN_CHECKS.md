@@ -1,5 +1,9 @@
 # CAD amendment verification — 2026-09-06
 
+Historical metadata-check report. Its retired checker and work-order inputs
+are available in the [pre-cleanup tree](README.md#retired-entrypoints-and-plans).
+Commands below describe that tree and are not current CI gates.
+
 Source base: `cdc60d2bcd9eaed1fae553cbdea633c8b185e48a` (original integrity PR head). Current candidate identity is the CAD PR head. Python 3.11.8. Planning/metadata checks only; no geometry tests or CAD environment are claimed implemented.
 
 ## Reproduction
@@ -11,7 +15,7 @@ python cad/ledger_validator.py live          # every rule above; exit 1 on any f
 python cad/ledger_validator.py historical    # SPRINT_TASKS.csv byte comparison vs the base commit, report only
 ```
 
-The validator that was embedded here as a script was consolidated into [`cad/ledger_validator.py`](../cad/ledger_validator.py) on 2026-09-13 (RR-CAD-10c) with every rule kept; `cad/tests/test_ledger_validator.py` runs it in the `cad-geometry` workflow. The byte comparison needs the base commit present, so the workflow checks out full history; in a shallow clone the report says `null` instead of failing.
+The validator that was embedded here as a script was consolidated into [`cad/ledger_validator.py`](https://github.com/500ft/autonomous-racing-systems/blob/4ef596ad1e824fd6d0873ac94346a8064ed51205/cad/ledger_validator.py) on 2026-09-13 (RR-CAD-10c) with every rule kept; `cad/tests/test_ledger_validator.py` runs it in the `cad-geometry` workflow. The byte comparison needs the base commit present, so the workflow checks out full history; in a shallow clone the report says `null` instead of failing.
 
 Also run `git diff --check cdc60d2bcd9eaed1fae553cbdea633c8b185e48a`; use `git diff --cached --check` after staging new files.
 

@@ -1,4 +1,7 @@
 # Items 7-9 Estimation and Robustness - Implementation Plan
+
+Historical implementation record. The [roadmap](../../../ROADMAP.md) is the
+only active dependency plan; the instructions below are retained provenance.
 Design: inline draft below
 Status: implemented
 Date: 2026-06-19

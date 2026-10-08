@@ -12,7 +12,9 @@ the plan. This guide is for reading the work quickly or rerunning part of it.
 | Understand what remains unresolved | [Roadmap](../ROADMAP.md), [open questions](OPEN_QUESTIONS.md) |
 | Reuse earlier work | [History index](history/README.md), [data and figures](data-and-figures.md) |
 
-The ranking-refusal question is at structural qualification. Archive permissions,
+The ranking-refusal question concerns paired performance differences and
+calibrated abstention. The [roadmap](../ROADMAP.md) gives prerequisites and
+completion evidence for each milestone. Structural qualification is complete. Archive permissions,
 episode meaning and target-policy execution remain unqualified. Earlier
 command-response, simulator and mast studies are retained at their original paths.
 Their historical next steps do not authorize a new campaign.
@@ -115,7 +117,7 @@ simulator or hardware context on purpose.
 
 Read the [upstream source register](upstream_roboracer_sources.md), the
 [license](../LICENSE) and [CONTRIBUTING.md](../CONTRIBUTING.md). Give the
-source commit in any review or citation. Task status is in the
-[CAD task ledger](CAD_TASKS.csv); the September 11
+source commit in any review or citation. Historical task status is retained in the
+[CAD task record](history/CAD_TASKS.csv); current work follows the roadmap. The September 11
 [completion correction](COMPLETION_RECONCILIATION.md) explains which early
 deliverables were preparation rather than finished work.

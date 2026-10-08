@@ -1,5 +1,9 @@
 # Traceability index — mechanical lane
 
+Historical mechanical record. Current work follows the [roadmap](../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 One row per consequential decision: what it is, where its reasoning lives, what supports it, and what
 would confirm it. **This index links; it does not duplicate.** Equations and numbers stay beside the
 decisions they support.

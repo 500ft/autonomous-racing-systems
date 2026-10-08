@@ -1,5 +1,9 @@
 # RoboRacer — CAD item list
 
+Historical mechanical record. Current work follows the [roadmap](../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 Prepared 2026-09-06 (America/New_York). **A list of planned parts and assemblies—not completed CAD, hardware or approval to fabricate/test.**
 
 Prioritize the mast, root clamp and static measurement fixture. Confirm their actual interfaces and metrology first; full deck packaging is not a prerequisite.

@@ -1,10 +1,14 @@
 # Mast campaign readiness — prepared, not completed
 
+Historical mechanical record. Current work follows the [roadmap](../../../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](../../history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 Prospective CAD review amendment (2026-09-06): apply the [fixture-readiness contract](../../CAD_MEASUREMENT_CONTRACT.md), including >=10x translational stiffness, matched-resolution root/tip stations, root-rotation observability and a filled reviewed error budget. These are newly specified design conditions, not a retroactive change to the frozen verdict. As-built prediction/reference commits must be pushed before campaign loading.
 
-CAD dependencies are now explicit in [CAD_PLAN.md](../../CAD_PLAN.md) and [CAD_TASKS.csv](../../CAD_TASKS.csv): deck/mast geometry, clamp and fixture design, inspection/FEA handoff and fabrication drawings. Their completion alone does not close RR-S02: fabrication, as-built inspection, converged reference predictions and instrument calibration still require real records.
+CAD dependencies are now explicit in [CAD_PLAN.md](https://github.com/500ft/autonomous-racing-systems/blob/4ef596ad1e824fd6d0873ac94346a8064ed51205/docs/CAD_PLAN.md) and [CAD_TASKS.csv](../../history/CAD_TASKS.csv): deck/mast geometry, clamp and fixture design, inspection/FEA handoff and fabrication drawings. Their completion alone does not close RR-S02: fabrication, as-built inspection, converged reference predictions and instrument calibration still require real records.
 
-Prepared 2026-09-05. No apparatus, measurement, instrument calibration, fabrication booking, reviewer contact, or as-built FEA is asserted by this checklist. Owner must supply actual records; Agent prepares analysis only. Physical readiness is RR-S02 in the [authoritative ledger](../../SPRINT_TASKS.csv).
+Prepared 2026-09-05. No apparatus, measurement, instrument calibration, fabrication booking, reviewer contact, or as-built FEA is asserted by this checklist. Owner must supply actual records; Agent prepares analysis only. Physical readiness is RR-S02 in the [authoritative ledger](../../history/SPRINT_TASKS.csv).
 
 Before a physical campaign, obtain and review:
 

@@ -1,5 +1,9 @@
 # RoboRacer completion reconciliation — 2026-09-11
 
+Historical mechanical record. Current work follows the [roadmap](../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 This corrects the omission of the fixture geometry contract as a distinct deliverable. Task states are in CAD_TASKS.csv and SPRINT_TASKS.csv.
 
 | Recommendation | Implemented here | Still not completed |

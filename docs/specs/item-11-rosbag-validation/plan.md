@@ -1,4 +1,7 @@
 # Item 11 ROS-Bag Validation — Implementation Plan
+
+Historical implementation record. The [roadmap](../../../ROADMAP.md) is the
+only active dependency plan; the instructions below are retained provenance.
 Design: ./design.md
 Status: in-progress
 Date: 2026-06-21

@@ -3,6 +3,11 @@
 This guide connects each result plot to its generator, immediate data inputs,
 and evidence class. Detailed interpretation belongs in the linked reports.
 
+The [roadmap](../ROADMAP.md) defines the active dependency order. Future
+controller-difference and abstention figures require qualified outcomes; the
+current chart reports structure only. The retired concept SVG is recorded in
+[history](history/README.md#retired-entrypoints-and-plans).
+
 ## Current qualification outputs
 
 The [structural table](../runs/ope_qualification/structure.md) is emitted by

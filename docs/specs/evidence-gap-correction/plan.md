@@ -1,5 +1,8 @@
 # Evidence-gap correction — 2026-09-11
 
+Historical implementation record. The [roadmap](../../../ROADMAP.md) is the
+only active dependency plan; the instructions below are retained provenance.
+
 Status: software/draft scope complete; physical acceptance and numerical freeze blocked. Implementation-only scope authorized; physical acceptance is not.
 Base: `51b0e70b858a2839b6ce4a5c4a60987463a29dbf`, clean checkout.
 Branch: `fix/evidence-gaps-20260911`. Authoritative task states remain in

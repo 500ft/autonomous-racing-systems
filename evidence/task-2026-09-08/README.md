@@ -6,7 +6,7 @@ containing PR head. This is source reconciliation, not CAD or physical validatio
 Deliverables: [30-row register](../../cad/roboracer/parameters.csv),
 [input reconciliation](../../cad/roboracer/design-inputs.md), and
 [three consistency tests](../../experiments/test_cad_inputs.py).
-The authoritative status remains [CAD_TASKS.csv](../../docs/CAD_TASKS.csv);
+The authoritative status remains [CAD_TASKS.csv](../../docs/history/CAD_TASKS.csv);
 the historical sprint ledger is byte-preserved.
 
 ## Baseline and reproduction
@@ -43,6 +43,6 @@ All six commands above were rerun on the candidate and exited 0;
 four rejected invalid mutations, dependency/link/sprint preservation PASS).
 
 Also run the embedded Python validator in
-[CAD_PLAN_CHECKS.md](../../docs/CAD_PLAN_CHECKS.md) and `git diff --check`.
+[CAD_PLAN_CHECKS.md](../../docs/history/CAD_PLAN_CHECKS.md) and `git diff --check`.
 CI now runs the new input test. Owner stock/clamp/fixture/metrology approval remains
 open; as-built predictions must be committed and pushed before campaign loads.
