@@ -1,8 +1,9 @@
 # Repository identity and reading conventions
 
-Updated September 10, 2026. The project is now **Autonomous Racing Systems**, at
-[`500ft/autonomous-racing-systems`](https://github.com/500ft/autonomous-racing-systems).
-Its previous repository name was `RoboRacer`; this is a rename of the same
+Updated October 8, 2026. The project is now **Sim-to-Real Controller Ranking**, at
+[`500ft/sim-to-real-controller-ranking`](https://github.com/500ft/sim-to-real-controller-ranking). The name states the
+current research question in the [roadmap](../ROADMAP.md). Its previous
+repository names were `autonomous-racing-systems` and `RoboRacer`; each is a rename of the same
 repository, not a new project or release.
 
 ## What the rename changes
@@ -16,7 +17,7 @@ rename an import or command-line API.
 To update an existing clone without moving its files:
 
 ```sh
-git remote set-url origin https://github.com/500ft/autonomous-racing-systems.git
+git remote set-url origin https://github.com/500ft/sim-to-real-controller-ranking.git
 git remote -v
 ```
 
@@ -46,7 +47,7 @@ Evidence-backed simulation and mechanical figures remain with their reports.
 From the repository root:
 
 ```sh
-python tools/check_presentation.py . "Autonomous Racing Systems" autonomous-racing-systems
+python tools/check_presentation.py . "Sim-to-Real Controller Ranking" sim-to-real-controller-ranking
 python tools/test_presentation.py
 ```
 

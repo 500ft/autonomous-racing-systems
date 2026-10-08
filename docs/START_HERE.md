@@ -1,4 +1,4 @@
-# Start here: Autonomous Racing Systems
+# Start here: Sim-to-Real Controller Ranking
 
 The [README](../README.md) is the overview and the [roadmap](../ROADMAP.md) is
 the plan. This guide is for reading the work quickly or rerunning part of it.

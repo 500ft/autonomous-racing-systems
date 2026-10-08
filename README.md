@@ -1,4 +1,4 @@
-# Autonomous Racing Systems
+# Sim-to-Real Controller Ranking
 
 Can dispersion in the predicted performance difference between controllers,
 across physically justified models consistent with development data, identify
@@ -6,7 +6,7 @@ rankings that should be withheld? The current result is
 a reproducible qualification of public F110 archives. Policy ranking remains
 blocked by unresolved reuse terms, episode meaning and policy executability.
 
-[![CI](https://github.com/500ft/autonomous-racing-systems/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/500ft/autonomous-racing-systems/actions/workflows/ci.yml)
+[![CI](https://github.com/500ft/sim-to-real-controller-ranking/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/500ft/sim-to-real-controller-ranking/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-276C6B)](LICENSE)
 
 [Results](#results) · [Roadmap](ROADMAP.md) · [Quick start](#quick-start) ·
