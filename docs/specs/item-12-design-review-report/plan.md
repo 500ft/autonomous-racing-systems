@@ -1,5 +1,8 @@
 # Item 12 Design-Review Report - Execution Plan
 
+Historical implementation record. The [roadmap](../../../ROADMAP.md) is the
+only active dependency plan; the instructions below are retained provenance.
+
 Status: done
 
 - [x] Inventory post-pull report markers and classify Node 10 scope.

@@ -1,5 +1,9 @@
 # CAD review disposition — 2026-09-06
 
+Historical mechanical record. Current work follows the [roadmap](../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 ## Merge policy: pending owner decision
 
 The reviewer supplied two blocking policy questions. The prior cleanup is verified in Git history for P-V, Drone, RoboRacer and Enclosure. This amendment does not silently reverse it. All five CAD PRs are draft; no merge is authorized until Owner records whether main admits planning ledgers or only reviewer-facing engineering contracts.
@@ -10,7 +14,7 @@ Current conservative disposition: keep task ledgers on the unmerged planning bra
 
 Mast/root-clamp and metrology fixture first; deck packaging is deferred. New fixture-readiness design conditions are prospective, not claimed as part of the July freeze. Existing verdict thresholds stay unchanged.
 
-Code-CAD/CI is now an explicit selected workflow and separately estimated task, not an already implemented test. Cross-ledger prerequisites are recorded in [CAD_DEPENDENCIES.json](CAD_DEPENDENCIES.json); the embedded validator checks references and prevents a task entering todo/in_progress/done with unverified prerequisites. Checks establish metadata consistency, not authentic external approval.
+Code-CAD/CI is now an explicit selected workflow and separately estimated task, not an already implemented test. Cross-ledger prerequisites are recorded in [CAD_DEPENDENCIES.json](https://github.com/500ft/autonomous-racing-systems/blob/4ef596ad1e824fd6d0873ac94346a8064ed51205/docs/CAD_DEPENDENCIES.json); the embedded validator checks references and prevents a task entering todo/in_progress/done with unverified prerequisites. Checks establish metadata consistency, not authentic external approval.
 
 ## Inputs and limits
 

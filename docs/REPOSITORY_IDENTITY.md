@@ -35,16 +35,11 @@ does not replace the authoritative protocol or task ledger.
 
 ## Visual provenance
 
-The README leads with the identification-fit plot,
-[`reports/figures/dynamic_parameter_fit.png`](../reports/figures/dynamic_parameter_fit.png).
-It is a simulation result; its generator and inputs are listed in
-[data and figures](data-and-figures.md). A render of the accepted mast assembly
-would be a better lead image once one exists.
-
-[`media/project-overview.svg`](media/project-overview.svg) is an editable
-diagram of the project's two halves. It contains no measured values. Each stage
-has a text label, so the meaning doesn't depend on colour, and the SVG has a
-title and description for screen readers.
+The README leads with the [structural archive census](../runs/ope_qualification/structure.png).
+Its count axes, generator and inputs are described in [data and figures](data-and-figures.md).
+The former simulation/mast concept diagram is retired; its source is available
+through the [pre-cleanup history](history/README.md#retired-entrypoints-and-plans).
+Evidence-backed simulation and mechanical figures remain with their reports.
 
 ## Keeping navigation reproducible
 
@@ -57,9 +52,9 @@ python tools/test_presentation.py
 
 CI runs these checks alongside the existing project gates. They check the README,
 reading guide, identity note, contribution guide and figure guide: local paths,
-anchors, canonical title/CI badge, image alternative text and SVG accessibility.
+anchors, canonical title/CI badge, and image alternative text.
 Four offline cases confirm valid input passes while missing links, wrong anchors
-and identity/accessibility errors fail. This is a bounded presentation checker,
+and identity errors fail. This is a bounded presentation checker,
 not an exhaustive Markdown parser, external-link crawler or scientific validator.
 
 ## Presentation references
@@ -73,7 +68,7 @@ The organization is informed by these examples, reviewed September 10, 2026:
 - [gym-pybullet-drones](https://github.com/learnsyslab/gym-pybullet-drones):
   reproducible use, environment boundaries and source/citation entry points.
 
-The text and overview diagram are project-specific; no template screenshot,
+The presentation is project-specific; no template screenshot,
 branding, claim of adoption or unrelated technology badge is borrowed.
 These presentation changes do not change this repository's existing licensing,
 grant permission for hardware tests, or establish a publication/validation verdict.

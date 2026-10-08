@@ -1,5 +1,9 @@
 # Engineering audit — mechanical lane
 
+Historical mechanical record. Current work follows the [roadmap](../ROADMAP.md).
+Retired task activation and fabrication instructions are documented in the
+[cleanup record](history/README.md#retired-entrypoints-and-plans); physical scope remains pending.
+
 Prepared 2026-09-25. **Audit only: this document changes no requirement, threshold, CAD geometry or
 selected mechanism.** It records what is supported, what is asserted, and what cannot yet be assessed.
 Corrective actions are proposals.

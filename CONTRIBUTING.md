@@ -1,8 +1,16 @@
 # Contributing
 
-RoboRacer contains a legacy simulator, a portable telemetry/report toolchain,
+Autonomous Racing Systems follows the [dependency roadmap](ROADMAP.md).
+Archive qualification is complete; empirical ranking work remains gated.
+The repository retains a legacy simulator, a portable telemetry/report toolchain,
 ROS 2 integration, and generated research artifacts. Use the environment that
 matches the part you are changing.
+
+## Current qualification environment
+
+Use Python 3.11 with `requirements-ope-qualification.txt` and the commands in
+[the qualification report](reports/ope_qualification.md#reproduce). Historical
+work-order ledgers no longer activate tasks or gate CI.
 
 ## Legacy Gym environment
 

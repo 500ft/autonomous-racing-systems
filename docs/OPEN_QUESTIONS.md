@@ -5,10 +5,16 @@ The [roadmap](../ROADMAP.md) is the only plan.
 
 ## Current software scope
 
-The owner's existing-session instruction on 2026-10-06 adopts model-disagreement
-and ranking-refusal qualification and authorizes implementation plus a result PR.
-It supersedes the former documentation-only and planning-only roles for this
-task. It does not approve a full empirical OPE study.
+The owner adopted the dependency roadmap and authorized removal of obsolete
+active implementation, work orders and presentation assets. The active method
+question concerns dispersion of paired controller-performance differences and
+calibrated abstention, including near ties. This authorization supplies no data
+rights or permission to execute the future research milestones.
+
+Dataset qualification and owner-approved platform access are parallel possible
+routes. Failure of one source requires a route decision, rather than a claim that
+all legitimate routes are closed. The [history index](history/README.md) records
+what was removed and why useful historical work remains.
 
 | Question | Status | Evidence or action needed |
 | --- | --- | --- |
@@ -18,7 +24,7 @@ task. It does not approve a full empirical OPE study.
 | Loader aliases | Reproduced; intended mapping unknown | Author confirmation before any analysis using an environment name |
 | FQE and probability-ratio methods | Ineligible for empirical execution now | Separate [estimator gates](../reports/ope_qualification.md#estimator-gates); no missing probabilities supplied |
 | External author contact | Not authorized | Draft is unsent; owner may provide answers or authorize sending |
-| Publication and campaign | Not approved | This task ends with the qualification PR and receipt |
+| Reviewer, physical study, publication and campaign | Not approved | Named reviewer, qualified protocol and separate owner authorization are still required |
 
 ## Superseded active questions, with decisions retained
 

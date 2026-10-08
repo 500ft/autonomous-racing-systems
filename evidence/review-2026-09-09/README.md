@@ -85,4 +85,4 @@ Hosted checks and workflow-permission evidence are recorded by the parent in the
 cross-repository handoff after push. Until a real successful job is observed,
 RR-CAD-08 stays in progress. No hardware, manufacturing release, safety approval,
 measurement agreement or project validation verdict is authorized by these tests.
-The sole task status is [CAD_TASKS.csv](../../docs/CAD_TASKS.csv).
+The sole task status is [CAD_TASKS.csv](../../docs/history/CAD_TASKS.csv).

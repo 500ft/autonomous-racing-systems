@@ -14,7 +14,7 @@ registered parameters, carrying their evidence states through unchanged.
 Deliverables: [`cad/generate.py`](../../cad/generate.py), [`cad/contract.json`](../../cad/contract.json),
 [`cad/tests/test_geometry.py`](../../cad/tests/test_geometry.py), [`cad/requirements.lock`](../../cad/requirements.lock),
 and the geometry CI as [`ci-proposed/cad-geometry-workflow.patch`](https://github.com/500ft/autonomous-racing-systems/blob/57f04fb620654c9e2475ba340425d632f79b88ff/ci-proposed/cad-geometry-workflow.patch).
-Authoritative status: [CAD_TASKS.csv](../../docs/CAD_TASKS.csv). The earlier sprint ledger is byte-preserved.
+Authoritative status: [CAD_TASKS.csv](../../docs/history/CAD_TASKS.csv). The earlier sprint ledger is byte-preserved.
 
 ## Environment lock
 
