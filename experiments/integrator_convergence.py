@@ -11,7 +11,6 @@ from argparse import Namespace
 from pathlib import Path
 
 import gym
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -23,6 +22,7 @@ if str(GYM_ROOT) not in sys.path:
 
 from f110_gym.envs.base_classes import Integrator
 from roboracer.track import PurePursuitPlanner, nearest_waypoint_metrics, scalar
+import report_figures
 
 EXAMPLES_DIR = REPO_ROOT / "examples"
 
@@ -369,86 +369,6 @@ def save_results(results: pd.DataFrame) -> None:
     results.to_csv(RESULTS_PATH, index=False)
 
 
-def plot_position_error(results: pd.DataFrame) -> None:
-    plot_df = results.sort_values("dt_s")
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    ax.plot(
-        plot_df["dt_s"],
-        plot_df["rms_position_error_vs_ref_progress_m"],
-        marker="o",
-        label="RMS error vs finest reference",
-    )
-    ax.plot(
-        plot_df["dt_s"],
-        plot_df["max_position_error_vs_ref_progress_m"],
-        marker="s",
-        label="Max error vs finest reference",
-    )
-    ax.plot(
-        plot_df["dt_s"],
-        plot_df["rms_position_change_vs_next_finer_dt_progress_m"],
-        marker="^",
-        label="RMS refinement change",
-    )
-    ax.plot(
-        plot_df["dt_s"],
-        plot_df["max_position_change_vs_next_finer_dt_progress_m"],
-        marker="D",
-        label="Max refinement change",
-    )
-    ax.axhline(RMS_REFINEMENT_TOL_M, color="0.35", linestyle="--", linewidth=1.2, label="RMS tolerance")
-    ax.axhline(MAX_REFINEMENT_TOL_M, color="0.15", linestyle=":", linewidth=1.4, label="Max tolerance")
-
-    ax.set_xscale("log")
-    ax.set_xlabel("RK4 timestep dt [s]")
-    ax.set_ylabel("Position error/change [m]")
-    ax.set_title("RK4 Timestep Convergence: Position Error")
-    ax.grid(True, which="both", alpha=0.3)
-    ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0)
-
-    fig.tight_layout()
-    fig.savefig(POSITION_ERROR_FIGURE, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
-def plot_convergence_metrics(results: pd.DataFrame) -> None:
-    plot_df = results.sort_values("dt_s")
-    status = np.where(plot_df["completed_lap"] & ~plot_df["collision"], 1.0, 0.0)
-
-    fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True)
-    axes = axes.ravel()
-
-    axes[0].plot(plot_df["dt_s"], plot_df["final_progress_m"], marker="o")
-    axes[0].set_ylabel("Final progress [m]")
-    axes[0].set_title("Final Progress")
-
-    axes[1].plot(plot_df["dt_s"], plot_df["rms_cte_m"], marker="o", color="#1f77b4")
-    axes[1].set_ylabel("RMS CTE [m]")
-    axes[1].set_title("Tracking Error")
-
-    axes[2].plot(plot_df["dt_s"], plot_df["max_abs_cte_m"], marker="o", color="#ff7f0e")
-    axes[2].set_ylabel("Max |CTE| [m]")
-    axes[2].set_title("Worst Tracking Error")
-
-    axes[3].step(plot_df["dt_s"], status, where="mid", color="#2ca02c")
-    axes[3].scatter(plot_df["dt_s"], status, color=np.where(plot_df["collision"], "#d62728", "#2ca02c"), zorder=3)
-    axes[3].set_yticks([0, 1])
-    axes[3].set_yticklabels(["failed/collided", "completed"])
-    axes[3].set_ylabel("Status")
-    axes[3].set_title("Completion Status")
-
-    for ax in axes:
-        ax.set_xscale("log")
-        ax.set_xlabel("RK4 timestep dt [s]")
-        ax.grid(True, which="both", alpha=0.3)
-
-    fig.suptitle("RK4 Timestep Convergence Metrics", fontsize=15, fontweight="bold")
-    fig.tight_layout(rect=[0, 0, 1, 0.96])
-    fig.savefig(METRICS_FIGURE, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
 def markdown_table(df: pd.DataFrame) -> str:
     display = df.copy()
     for col in display.columns:
@@ -592,8 +512,7 @@ def main() -> None:
     selected_dt = select_timestep(results)
 
     save_results(results)
-    plot_position_error(results)
-    plot_convergence_metrics(results)
+    report_figures.draw_integrator_convergence(RUN_DIR, FIGURE_DIR)
     write_report(results, selected_dt)
 
     print(f"Wrote {RESULTS_PATH}")

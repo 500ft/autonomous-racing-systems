@@ -8,10 +8,6 @@ import json
 import sys
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -23,6 +19,7 @@ if str(GYM_ROOT) not in sys.path:
 from roboracer.dynamics import DEFAULT_DYNAMIC_PARAMS, dynamic_rk4_step, kinematic_yaw_rate, load_vehicle_dynamics_st
 from roboracer.numerics import rmse, validate_uniform_time, wrap_angle
 from roboracer.telemetry import load_rk4_telemetry
+import report_figures
 
 vehicle_dynamics_st = load_vehicle_dynamics_st(REPO_ROOT, module_name="dynamic_models")
 
@@ -183,46 +180,6 @@ def write_metadata(metadata: dict[str, str], output_path: Path = None) -> None:
     (output_path or METADATA_PATH).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def save_yaw_rate_figure(trace: pd.DataFrame, output_path: Path) -> None:
-    time_s = trace["time_s"]
-    fig, ax = plt.subplots(figsize=(10, 6), constrained_layout=True)
-    ax.plot(time_s, trace["gym_yaw_rate_radps"], linewidth=2.0, label="Gym yaw rate", color="#1f77b4")
-    ax.plot(time_s, trace["kinematic_yaw_rate_radps"], linewidth=1.5, linestyle="--", label="Kinematic yaw law", color="#9467bd")
-    ax.plot(time_s, trace["dynamic_yaw_rate_radps"], linewidth=1.7, label="Dynamic replay yaw rate", color="#d62728")
-    ax.axvline(2.0, color="#555555", linestyle=":", linewidth=1.4, label="t = 2.0 s diagnostic")
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Yaw rate [rad/s]")
-    ax.grid(True, alpha=0.3)
-    ax2 = ax.twinx()
-    ax2.plot(time_s, trace["gym_steer_rad"], linewidth=1.0, alpha=0.55, color="#2ca02c", label="Achieved steering")
-    ax2.set_ylabel("Steering [rad]")
-    lines, labels = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax.legend(lines + lines2, labels + labels2, loc="upper right", framealpha=0.95)
-    ax.set_title("Known-Parameter Dynamic Replay Yaw Rate")
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
-def save_state_error_figure(trace: pd.DataFrame, output_path: Path) -> None:
-    fig, axes = plt.subplots(4, 1, figsize=(10, 9), sharex=True, constrained_layout=True)
-    time_s = trace["time_s"]
-    series = [
-        ("error_position_m", "Position error [m]", "#1f77b4"),
-        ("error_yaw_rad", "Yaw error [rad]", "#9467bd"),
-        ("error_yaw_rate_radps", "Yaw-rate error [rad/s]", "#d62728"),
-        ("error_speed_mps", "Speed error [m/s]", "#2ca02c"),
-    ]
-    for ax, (column, ylabel, color) in zip(axes, series):
-        ax.plot(time_s, trace[column], linewidth=1.6, color=color)
-        ax.set_ylabel(ylabel)
-        ax.grid(True, alpha=0.3)
-    axes[-1].set_xlabel("Time [s]")
-    fig.suptitle("Known-Parameter Dynamic Replay State Errors")
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
 def metric_table(metrics: pd.DataFrame, selected: list[str]) -> str:
     labels = {
         "rmse_position_m": "RMSE position",
@@ -369,8 +326,7 @@ def main() -> None:
     trace.to_csv(trace_path, index=False)
     metrics.to_csv(metrics_path, index=False)
     write_metadata(metadata, metadata_path)
-    save_yaw_rate_figure(trace, yaw_rate_figure_path)
-    save_state_error_figure(trace, state_errors_figure_path)
+    report_figures.draw_dynamic_replay(run_dir, figure_dir)
     write_report(metrics, metadata, report_path)
 
     metric_values = metrics_as_dict(metrics)

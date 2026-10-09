@@ -7,10 +7,6 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -25,6 +21,7 @@ from roboracer.closed_loop import run_closed_loop
 from roboracer.controllers import PurePursuitController
 from roboracer.dynamics import DEFAULT_DYNAMIC_PARAMS
 from roboracer.failures import FailureScenario, default_failure_scenarios
+import report_figures
 
 EXAMPLES_DIR = REPO_ROOT / "examples"
 PP_RESULTS_PATH = REPO_ROOT / "runs" / "pure_pursuit_sweep" / "results.csv"
@@ -176,25 +173,6 @@ def markdown_table(frame: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-def create_figures(results: pd.DataFrame) -> None:
-    ordered = results.sort_values("rpn", ascending=False)
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.bar(ordered["scenario"], ordered["rpn"], color="#4c78a8")
-    ax.set_ylabel("RPN")
-    ax.set_title("Failure-Mode Risk Priority Number")
-    ax.tick_params(axis="x", rotation=30)
-    fig.savefig(RPN_FIGURE, dpi=200)
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.bar(ordered["scenario"], ordered["detection_metric"], color="#f58518")
-    ax.set_ylabel("Detection metric")
-    ax.set_title("Failure Detection Signals")
-    ax.tick_params(axis="x", rotation=30)
-    fig.savefig(SIGNALS_FIGURE, dpi=200)
-    plt.close(fig)
-
-
 def write_report(results: pd.DataFrame) -> None:
     table = results.sort_values("rpn", ascending=False)[
         [
@@ -246,7 +224,7 @@ def main() -> None:
     rows.extend(ekf_failure_rows(scenarios))
     results = pd.DataFrame(rows)
     results.to_csv(RESULTS_PATH, index=False)
-    create_figures(results)
+    report_figures.draw_fmea(RUN_DIR, FIGURE_DIR)
     write_report(results)
     print(f"Wrote {RESULTS_PATH}")
     print(f"Wrote {REPORT_PATH}")

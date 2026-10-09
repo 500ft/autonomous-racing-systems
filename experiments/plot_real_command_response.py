@@ -5,65 +5,63 @@ import csv
 import json
 from pathlib import Path
 
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import numpy as np
+
+import figure_style as fs
+from figure_style import COLORS as C
 
 
 def render_figure(samples, profile, result):
-    fig, axes = plt.subplots(3, 1, figsize=(9.5, 9), layout='constrained',
-                             gridspec_kw={'height_ratios': [1.5, .7, 1.2], 'hspace': .14})
+    fig, axes = fs.subplots(3, 1, height_in=6.6, gridspec_kw={'height_ratios': [1.5, .7, 1.2]})
     t = samples['elapsed_s']
     # Preserve the original 0.05 s display-gap rule and every committed CSV row.
     gaps = np.flatnonzero(np.diff(t) > .05)+1
     time = np.insert(t, gaps, np.nan)
+    base = result['no_delay_affine']['rmse_m_s']
+    best = result['delay_affine']
     for field, label, color, linestyle, marker in [
-        ('tracking_forward_m_s', 'Vicon in tracking axes', '#2980b9', '-', 'o'),
-        ('delay_affine_m_s', 'Delay + affine fit', '#c0392b', '--', 's'),
+        ('tracking_forward_m_s', 'Vicon in tracking axes', C['reference'], '-', 'o'),
+        ('delay_affine_m_s', 'Delay + affine fit', C['delay_affine'], '--', 's'),
     ]:
         axes[0].plot(time, np.insert(samples[field], gaps, np.nan), label=label,
                      color=color, linestyle=linestyle, linewidth=1, marker=marker,
                      markevery=300, markersize=3)
     axes[0].set_ylabel('Forward velocity [m/s]')
-    axes[0].set_title('A  Motion and fitted response', loc='left', pad=34)
-    axes[0].legend(loc='lower left', bbox_to_anchor=(0, 1.01), ncol=2,
-                   borderaxespad=0, frameon=False, fontsize=10)
+    axes[0].set_title(f"Delay + affine fit against Vicon motion (RMSE {best['rmse_m_s']:.3f} m/s)")
+    axes[0].legend(loc='upper left')
     axes[1].sharex(axes[0])
     axes[1].plot(time, np.insert(samples['command_forward_m_s'], gaps, np.nan),
-                 color='#7d3c98', linestyle='-.', linewidth=1, marker='^',
+                 color=C['command'], linestyle='-.', linewidth=1, marker='^',
                  markevery=300, markersize=3)
     axes[1].set(ylabel='Command [m/s]', xlabel='Bag elapsed time [s]')
-    axes[1].set_title('B  Retained command samples', loc='left')
+    axes[1].set_title('Commanded forward velocity, retained samples')
     axes[0].tick_params(labelbottom=False)
     for ax in axes[:2]:
-        ax.axhline(0, color='#555555', linewidth=.7)
+        ax.axhline(0, color=C['neutral'], linewidth=.6)
     ax = axes[2]
-    ax.plot([p['lag_s'] for p in profile], [p['rmse_m_s'] for p in profile],
-            color='#c0392b', marker='s', markevery=10, markersize=3, linewidth=1.6)
-    base = result['no_delay_affine']['rmse_m_s']
-    best = result['delay_affine']
-    ax.axhline(base, linestyle='--', color='#555555', linewidth=1,
+    lags = [p['lag_s'] for p in profile]
+    errors = [p['rmse_m_s'] for p in profile]
+    assert min(errors) == best['rmse_m_s'], 'selected delay is not the profile minimum'
+    ax.plot(lags, errors, color=C['delay_affine'], marker='s', markevery=10, markersize=3, linewidth=1.4)
+    ax.axhline(base, linestyle='--', color=C['neutral'], linewidth=.8,
                label=f'No-delay affine: {base:.3f} m/s')
-    ax.plot(best['lag_s'], best['rmse_m_s'], 'o', color='#c0392b', markersize=7,
+    ax.plot(best['lag_s'], best['rmse_m_s'], 'o', color=C['delay_affine'], markersize=6,
             markeredgecolor='white', zorder=3)
     ax.annotate(f"Selected on this run: {best['lag_s']:.2f} s\nRMSE {best['rmse_m_s']:.3f} m/s",
                 xy=(best['lag_s'], best['rmse_m_s']), xytext=(.35, .16),
-                textcoords='axes fraction', arrowprops={'arrowstyle': '-', 'color': '#555555'},
-                fontsize=10)
+                textcoords='axes fraction', arrowprops={'arrowstyle': '-', 'color': C['neutral']},
+                fontsize=fs.SMALL)
     ax.set(xlabel='Apparent delay on recording clock [s]', ylabel='Development RMSE [m/s]',
-           ylim=(0, max(p['rmse_m_s'] for p in profile)*1.12))
-    ax.set_title('C  Existing delay search', loc='left', pad=12)
-    ax.legend(loc='upper left', frameon=False, fontsize=10)
-    for ax in axes:
-        ax.spines[['top', 'right']].set_visible(False)
-        ax.grid(color='#d9d9d9', linewidth=.6)
-        ax.set_axisbelow(True)
-    fig.suptitle('Public driving data | SAME-RUN DEVELOPMENT\n'
-                 'One licensed run; fitted and scored on the same correlated samples', fontsize=13)
-    fig.supxlabel('Gaps preserve excluded intervals. Frame alignment and timing remain uncalibrated.\n'
-                  'Apparent delay includes the measurement/control chain; no held-out evaluation or uncertainty band.',
-                  fontsize=10)
+           ylim=(0, max(errors)*1.12))
+    ax.set_title(f"RMSE is lowest at {best['lag_s']:.2f} s apparent delay on this run")
+    ax.legend(loc='upper left')
+    for letter, ax in zip('ABC', axes):
+        fs.panel_letter(ax, letter)
+    fig.align_ylabels(axes)
+    fs.title(fig, 'Public driving data | SAME-RUN DEVELOPMENT',
+             'One licensed run; fitted and scored on the same correlated samples')
+    fs.footnote(fig, 'Gaps preserve excluded intervals. Frame alignment and timing remain uncalibrated.\n'
+                     'Apparent delay includes the measurement/control chain; no held-out evaluation or uncertainty band.')
     return fig
 
 
@@ -105,12 +103,8 @@ def main():
     result = json.loads((args.run_dir/'result.json').read_text())
     profile = json.loads((args.run_dir/'delay_profile.json').read_text())
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    with plt.rc_context({'font.size': 11, 'axes.titlesize': 12, 'figure.facecolor': 'white',
-                         'svg.fonttype': 'none', 'svg.hashsalt': 'racing-command-response'}):
-        fig = render_figure(samples, profile, result)
-        fig.savefig(args.output, dpi=180)
-        fig.savefig(args.output.with_suffix('.svg'), metadata={'Date': None})
-        plt.close(fig)
+    fs.apply(hashsalt='racing-command-response')
+    fs.save(render_figure(samples, profile, result), args.output, ('png', 'svg'))
     render_table(result, args.output.parent)
 
 
