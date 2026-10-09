@@ -56,12 +56,13 @@ outside this repository while reuse terms remain unknown.
 
 ## What's next
 
-Await Fabian Kresse's reply on reuse terms and authoritative episode/policy
-mapping. The [contact record](docs/ope_author_request.txt) records the
-owner-confirmed email send; no reply or permission has been supplied.
-The owner has adopted the [dependency roadmap](ROADMAP.md) and repository
-cleanup; [open questions](docs/OPEN_QUESTIONS.md) retain the unanswered data
-and physical decisions. Dataset access and owner-approved platform access are parallel
+Fabian Kresse replied on 2026-10-09. The [contact record](docs/ope_author_request.txt)
+summarises the reply; [open questions](docs/OPEN_QUESTIONS.md) records what it
+settled and what stays open (data-zip licence, f110_sim_env, simulator
+log_probs). The structural qualification must be re-run at the author's
+current pins before any analysis. The owner has adopted the
+[dependency roadmap](ROADMAP.md) and repository cleanup; open questions retain
+the unanswered data and physical decisions. Dataset access and owner-approved platform access are parallel
 possible routes. A refusal from one source does not close every route. No empirical OPE or
 finite-horizon return calculation has been run.
 
@@ -98,7 +99,8 @@ must identify the result it changes and the checks actually run.
 
 Repository code uses the [MIT License](LICENSE), preserving upstream simulator
 attribution. This grants no rights to the separately inspected F110 archives or
-policy code. Their reuse terms remain unknown. The earlier public-driving bag
-has its own [CC BY 4.0 source record](runs/real_command_response/source.json).
+policy code. The author added MIT licences to the code repositories on
+2026-10-09; the data zips carry no licence text of their own. The earlier
+public-driving bag has its own [CC BY 4.0 source record](runs/real_command_response/source.json).
 See the [source register](docs/upstream_roboracer_sources.md) and
 [identity note](docs/REPOSITORY_IDENTITY.md) for the retained project history.

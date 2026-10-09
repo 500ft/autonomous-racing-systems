@@ -13,8 +13,11 @@ supports, what it challenges, and what it forbids. The five domain files are the
 | [3. Structural dynamics and modal testing](03-structural-dynamics-and-modal-testing.md) | Cantilever with tip mass, the hand-calc vs FEA gap, impact testing, accelerometer mass loading | 18 |
 | [4. Measurement uncertainty and calibration](04-measurement-uncertainty-and-calibration.md) | GUM, force calibration standards, errors-in-variables regression, ADC resolution, displacement metrology | 23 |
 | [5. V&V and mechanical design](05-verification-validation-and-mechanical-design.md) | ASME V&V, grid convergence, stress singularities, bolted joints, thin-wall crushing, tolerancing, materials | 43 |
+| [Prior work: withholding a ranking](prior-work-ranking-withholding.md) | Ranking and selection under shared model uncertainty, the nearest abstain-rule test, F1TENTH real ranking ground truth. Added 2026-10-09 | 3 |
 
-126 rows in total; three rows in §2 are cross-references to §1 rather than new sources.
+126 rows in total as of 2026-09-22; three rows in §2 are cross-references to §1 rather than new sources.
+The 2026-10-09 note adds three rows for the current ranking question; their BibTeX is in
+[references.bib](references.bib).
 
 ## How entries are graded
 

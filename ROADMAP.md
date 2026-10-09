@@ -65,6 +65,10 @@ Prerequisite: the structural census and a clearly identified candidate source.
   The owner confirms that the email to Fabian Kresse has been sent; the
   [contact record](docs/ope_author_request.txt) records that confirmation.
   Await the author's reply. Sending establishes no reuse permission.
+- Reply received 2026-10-09. The contact record summarises it and
+  [open questions](docs/OPEN_QUESTIONS.md) records what it settled and what
+  stays open. The structural qualification must be re-run at the author's
+  current pins before any analysis; the note in open questions gives them.
 - Resolve raw segment versus episode meaning, continuing terminal flags,
   truncation, exclusions, vehicle/session groups and real/simulation pairing.
 - Map policy IDs to executable implementations. Qualify observations, action
@@ -118,6 +122,24 @@ Complete when: a frozen candidate rule and eligible baselines report ranking
 error versus retained comparisons, near-tie handling and measurement cost on
 calibration groups. If simpler coverage explains the benefit, withdraw the claim
 of added value from model disagreement. All-comparison refusal is not success.
+
+Added 2026-10-09 from the literature review, under the owner instruction of
+that date. Sources: [prior work note](literature/prior-work-ranking-withholding.md).
+
+- Confidence-gate baseline. Use the nominal model alone. Predict each pair's
+  performance difference with a bootstrap interval over rollouts and withhold
+  when the interval covers zero. Compare the dispersion rule against this
+  baseline at matched withhold rate. Pre-registered success criterion: the
+  dispersion rule beats the baseline at matched coverage. If it does not, that
+  is the reported result.
+- Registered prediction. The 15 published agents split into 4 lidar-reactive
+  follow-the-gap agents without localisation and 11 pose-dependent pure-pursuit
+  agents. Simulator-versus-real disagreements are predicted to concentrate in
+  cross-family pairs. If the dispersion rule flags only within-family pairs,
+  it is blind to the main mechanism in the data.
+- Scope limit. All real data come from one car, one configuration and a few
+  days of recording. The claim is limited to ranking flips on the same car.
+  Transfer to an unseen vehicle is not tested.
 
 ### M4. Establish real-platform evidence
 
