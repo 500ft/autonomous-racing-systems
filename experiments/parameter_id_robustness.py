@@ -7,10 +7,6 @@ import json
 import sys
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -28,6 +24,7 @@ from roboracer.identification import (
     metric_dict,
     validate_identification_telemetry,
 )
+import report_figures
 
 TELEMETRY_PATH = REPO_ROOT / "runs" / "sysid_steering_excitation" / "telemetry.csv"
 RUN_DIR = REPO_ROOT / "runs" / "parameter_id_robustness"
@@ -162,31 +159,6 @@ def result_row(name: str, config: dict[str, object], metrics: pd.DataFrame, nomi
     return row
 
 
-def plot_by_kind(results: pd.DataFrame, kind: str, output_path: Path, title: str) -> None:
-    subset = results[results["kind"].isin(["nominal", kind])]
-    fig, ax = plt.subplots(figsize=(9, 5), constrained_layout=True)
-    ax.plot(subset["scenario"], subset["C_Sf_oracle_relative_error"], marker="o", label="C_Sf error")
-    ax.plot(subset["scenario"], subset["C_Sr_oracle_relative_error"], marker="o", label="C_Sr error")
-    ax.set_ylabel("Oracle relative error")
-    ax.set_title(title)
-    ax.tick_params(axis="x", rotation=25)
-    ax.grid(True, alpha=0.25)
-    ax.legend(loc="best")
-    fig.savefig(output_path, dpi=200)
-    plt.close(fig)
-
-
-def plot_condition(results: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.bar(results["scenario"], results["jacobian_condition_number"], color="#4c78a8")
-    ax.set_ylabel("Jacobian condition number")
-    ax.set_title("Parameter-ID Conditioning Under Perturbations")
-    ax.tick_params(axis="x", rotation=30)
-    ax.grid(True, axis="y", alpha=0.25)
-    fig.savefig(CONDITION_FIGURE, dpi=200)
-    plt.close(fig)
-
-
 def markdown_table(frame: pd.DataFrame) -> str:
     display = frame.copy()
     for column in display.columns:
@@ -297,9 +269,7 @@ def main() -> None:
     results.to_csv(RESULTS_PATH, index=False)
     metrics_long.to_csv(METRICS_PATH, index=False)
     METADATA_PATH.write_text(json.dumps({"seed": SEED, "perturbations": configs}, indent=2) + "\n", encoding="utf-8")
-    plot_by_kind(results, "noise", NOISE_FIGURE, "Noise Robustness")
-    plot_by_kind(results, "latency", LATENCY_FIGURE, "Latency Robustness")
-    plot_condition(results)
+    report_figures.draw_parameter_id_robustness(RUN_DIR, FIGURE_DIR)
     write_report(results)
     print(f"Wrote {RESULTS_PATH}")
     print(f"Wrote {REPORT_PATH}")

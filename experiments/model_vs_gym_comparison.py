@@ -6,10 +6,6 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -21,6 +17,7 @@ if str(GYM_ROOT) not in sys.path:
 from roboracer.dynamics import kinematic_bicycle_rk4_step
 from roboracer.numerics import dt_summary, rmse, wrap_angle
 from roboracer.telemetry import load_rk4_telemetry
+import report_figures
 
 TELEMETRY_PATH = REPO_ROOT / "runs" / "first_lap" / "telemetry.csv"
 RUN_DIR = REPO_ROOT / "runs" / "model_vs_gym_comparison"
@@ -186,60 +183,6 @@ def metrics_as_dict(metrics: pd.DataFrame) -> dict[str, float]:
     return {str(row.metric): float(row.value) for row in metrics.itertuples(index=False)}
 
 
-def save_trajectory_figure(trace: pd.DataFrame, output_path: Path) -> None:
-    fig, ax = plt.subplots(figsize=(9, 7), constrained_layout=True)
-    ax.plot(trace["gym_x_m"], trace["gym_y_m"], linewidth=2.2, label="Gym RK4 trajectory", color="#1f77b4")
-    ax.plot(
-        trace["model_x_m"],
-        trace["model_y_m"],
-        linewidth=2.0,
-        linestyle="--",
-        label="Kinematic replay",
-        color="#d62728",
-    )
-    ax.scatter(trace["gym_x_m"].iloc[0], trace["gym_y_m"].iloc[0], marker="o", s=75, color="#2ca02c", label="Start")
-    ax.scatter(trace["gym_x_m"].iloc[-1], trace["gym_y_m"].iloc[-1], marker="s", s=70, color="#1f77b4", label="Gym end")
-    ax.scatter(
-        trace["model_x_m"].iloc[-1],
-        trace["model_y_m"].iloc[-1],
-        marker="x",
-        s=90,
-        linewidths=2.2,
-        color="#d62728",
-        label="Replay end",
-    )
-    ax.set_title("Kinematic Replay vs F1TENTH Gym")
-    ax.set_xlabel("x [m]")
-    ax.set_ylabel("y [m]")
-    ax.axis("equal")
-    ax.grid(True, alpha=0.3)
-    ax.legend(loc="best", framealpha=0.95)
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
-def save_state_error_figure(trace: pd.DataFrame, output_path: Path) -> None:
-    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True, constrained_layout=True)
-    time_s = trace["time_s"]
-
-    axes[0].plot(time_s, trace["error_position_m"], color="#1f77b4", linewidth=1.8)
-    axes[0].set_ylabel("Position error [m]")
-    axes[0].grid(True, alpha=0.3)
-
-    axes[1].plot(time_s, trace["error_yaw_rad"], color="#9467bd", linewidth=1.8)
-    axes[1].set_ylabel("Yaw error [rad]")
-    axes[1].grid(True, alpha=0.3)
-
-    axes[2].plot(time_s, trace["error_speed_mps"], color="#2ca02c", linewidth=1.8)
-    axes[2].set_ylabel("Speed error [m/s]")
-    axes[2].set_xlabel("Time [s]")
-    axes[2].grid(True, alpha=0.3)
-
-    fig.suptitle("Kinematic Replay State Errors")
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
 def metric_table(metrics: pd.DataFrame, selected: list[str]) -> str:
     metric_map = {str(row.metric): row for row in metrics.itertuples(index=False)}
     lines = ["| Metric | Value | Units |", "| --- | ---: | --- |"]
@@ -386,8 +329,7 @@ def main() -> None:
 
     trace.to_csv(TRACE_PATH, index=False)
     metrics.to_csv(METRICS_PATH, index=False)
-    save_trajectory_figure(trace, TRAJECTORY_FIGURE_PATH)
-    save_state_error_figure(trace, STATE_ERRORS_FIGURE_PATH)
+    report_figures.draw_kinematic_replay(RUN_DIR, FIGURE_DIR)
     write_report(metrics, trace, REPORT_PATH)
 
     metric_values = metrics_as_dict(metrics)

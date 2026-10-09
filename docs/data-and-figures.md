@@ -49,14 +49,50 @@ those sources; the CSV-derived residual RMSE agrees within its stored rounding.
 Both figures were inspected at a GitHub reading width for labels, overlap and
 axis ranges. No confidence intervals or error bars were added.
 
-Historical simulator, ROS, controller, hand-calculation and FEA figures and
-tables retain their existing files and generators. Frozen report/release evidence
-is unchanged. Their original evidence classes and corrected mechanical limits
-remain in the sections below. The metadata-only driving-split result remains a
-text report: no qualified independent group exists to plot. No successor study
-or reserved driving bag was opened by this redesign. The visual changes leave
-scientific milestones and pending owner decisions unchanged; contact status
-is maintained in the [contact record](ope_author_request.txt) and roadmap.
+Hand-calculation and FEA outputs remain text. Simulator, ROS-capture and
+controller figures follow the rules in the next section; their evidence classes
+and corrected mechanical limits remain in the sections below. The metadata-only
+driving-split result remains a text report: no qualified independent group
+exists to plot. No successor study or reserved driving bag was opened by this
+redesign. The visual changes leave scientific milestones and pending owner
+decisions unchanged; contact status is maintained in the
+[contact record](ope_author_request.txt) and roadmap.
+
+## Figure rules and redraw
+
+Every generated report figure uses [figure_style.py](../experiments/figure_style.py):
+three font sizes by role, 300 dpi PNG, SVG without timestamps where a figure has
+an SVG, and one colour per entity in every figure. RK4 and the Gym reference
+state are blue, Euler is orange, the kinematic model is pink, the single-track
+dynamic model is green and commands are grey dashed lines. Collision, dropout
+and limit marks use vermillion. Each title states the evidence class on its
+first line and the result on its second; sample size and fixed conditions sit
+under the plot. The owner requested this pass on 2026-10-09
+([decision record](decisions/0002-figure-rules.md)).
+
+[report_figures.py](../experiments/report_figures.py) redraws the simulator and
+ROS-capture figures from committed run files. It runs no simulation, fit or bag
+conversion and writes only PNG files. The experiment scripts call the same
+functions after they write their run files, so a full rerun draws the same figure.
+
+```bash
+PYTHONPATH=gym MPLBACKEND=Agg python experiments/report_figures.py
+PYTHONPATH=gym MPLBACKEND=Agg python experiments/test_report_figures.py
+```
+
+The test redraws all 29 figures into a scratch directory and fails on
+overlapping or clipped text. Redraw from committed files when only a figure
+changes: a full rerun of the replay, fit and robustness studies changes their
+CSV values in the last digits on some machines.
+
+These committed images were not redrawn:
+
+| Image | Reason |
+| --- | --- |
+| `reports/figures/kinematic_yaw_rate_diagnostic.png` | No generator in the repository |
+| `reports/figures/lqr_controller_cte_cases.png` | Per-case traces are not committed; a redraw needs an F1TENTH Gym rerun |
+| `reports/figures/mpc_solver_runtime.png`, `mpc_controller_cte.png` | Solve times and the trace are not committed; a rerun would also re-measure machine-dependent timing |
+| [Design review PDF](../output/pdf/roboracer_design_review_report.pdf) | Built on 2026-07-24 from `reports/final_report.md`, which has changed since; a rebuild would change text as well as figures, so it still embeds the earlier figures |
 
 ## Historical figure sources
 

@@ -37,6 +37,7 @@ PYTHONPATH=gym python experiments/test_bag_evidence.py
 PYTHONPATH=gym python experiments/validate_item11.py
 PYTHONPATH=gym python experiments/test_mast_physical_validation.py
 PYTHONPATH=gym python experiments/test_final_report.py
+PYTHONPATH=gym python experiments/test_report_figures.py
 ```
 
 ## Experiment changes
@@ -48,6 +49,9 @@ PYTHONPATH=gym python experiments/test_final_report.py
 - Do not present simulator coefficient recovery as vehicle identification.
 - Do not replace pending mast or vehicle measurements with FEA output.
 - Keep long MPC and robustness sweeps opt-in in the default pipeline.
+- Draw report figures through `experiments/figure_style.py` and, for simulator
+  figures, `experiments/report_figures.py`, so colours and sizes stay the same
+  across figures.
 
 ## ROS 2 changes
 

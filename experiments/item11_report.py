@@ -6,11 +6,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
+
+import report_figures
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = REPO_ROOT / "evidence" / "item11"
@@ -30,18 +28,8 @@ def main() -> None:
     enriched_fit = metric_map(EVIDENCE / "metrics" / "enriched_fit" / "metrics.csv")
     direct_fit = metric_map(REPO_ROOT / "runs" / "dynamic_parameter_identification" / "metrics.csv")
 
-    figure_dir = EVIDENCE / "figures"
-    figure_dir.mkdir(parents=True, exist_ok=True)
-    fig, axis = plt.subplots(figsize=(11, 5), constrained_layout=True)
-    axis.plot(enriched["time_s"], enriched["command_steer_rad"], label="Command", linewidth=1.0)
-    axis.plot(enriched["time_s"], enriched["steer_rad"], label="Native achieved state", linewidth=1.0)
-    axis.set_xlabel("Simulator time [s]")
-    axis.set_ylabel("Steering angle [rad]")
-    axis.set_title("Enriched ROS Bag: Command and Achieved Steering")
-    axis.grid(alpha=0.25)
-    axis.legend()
-    fig.savefig(figure_dir / "steering_command_vs_achieved.png", dpi=180)
-    plt.close(fig)
+    report_figures.fs.apply()
+    report_figures.item11_steering(enriched, preflight, EVIDENCE / "figures" / "steering_command_vs_achieved.png")
 
     steering = preflight["metrics"]
     realized = upstream_meta["realized_frequency_band_sim_hz"]

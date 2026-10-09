@@ -9,10 +9,6 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.optimize import least_squares
@@ -29,6 +25,7 @@ from roboracer.identification import (
 )
 from roboracer.numerics import nrmse, rmse, vaf_percent, wrap_angle
 from roboracer.telemetry import validate_numeric_telemetry
+import report_figures
 
 TELEMETRY_PATH = REPO_ROOT / "runs" / "sysid_steering_excitation" / "telemetry.csv"
 RUN_DIR = REPO_ROOT / "runs" / "dynamic_parameter_identification"
@@ -367,47 +364,6 @@ def write_parameters(
     PARAMETERS_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def create_figures(fit_trace: pd.DataFrame, validation_trace: pd.DataFrame) -> None:
-    heldout = fit_trace[fit_trace["partition"] == "heldout"]
-    split_time = float(heldout["time_s"].iloc[0])
-
-    fig, axes = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
-    axes[0].plot(fit_trace["time_s"], fit_trace["measured_yaw_rate_radps"], label="Measured", linewidth=1.5)
-    axes[0].plot(fit_trace["time_s"], fit_trace["predicted_yaw_rate_radps"], label="One-step prediction", linewidth=1.0)
-    axes[0].axvline(split_time, color="black", linestyle="--", linewidth=1.0, label="Held-out start")
-    axes[0].set_ylabel("Yaw rate (rad/s)")
-    axes[0].legend(loc="upper right")
-    axes[0].grid(alpha=0.25)
-
-    axes[1].plot(fit_trace["time_s"], fit_trace["measured_slip_angle_rad"], label="Measured", linewidth=1.5)
-    axes[1].plot(fit_trace["time_s"], fit_trace["predicted_slip_angle_rad"], label="One-step prediction", linewidth=1.0)
-    axes[1].axvline(split_time, color="black", linestyle="--", linewidth=1.0)
-    axes[1].set_xlabel("Time (s)")
-    axes[1].set_ylabel("Slip angle (rad)")
-    axes[1].legend(loc="upper right")
-    axes[1].grid(alpha=0.25)
-    fig.suptitle("Dynamic Parameter Identification: Train and Held-Out One-Step Predictions")
-    fig.tight_layout()
-    fig.savefig(FIT_FIGURE_PATH, dpi=180)
-    plt.close(fig)
-
-    fig, axes = plt.subplots(3, 1, figsize=(11, 8), sharex=True)
-    axes[0].plot(validation_trace["time_s"], validation_trace["yaw_rate_error_radps"])
-    axes[0].set_ylabel("Yaw-rate error (rad/s)")
-    axes[1].plot(validation_trace["time_s"], validation_trace["slip_angle_error_rad"])
-    axes[1].set_ylabel("Slip-angle error (rad)")
-    axes[2].plot(validation_trace["time_s"], validation_trace["yaw_error_rad"])
-    axes[2].set_ylabel("Yaw error (rad)")
-    axes[2].set_xlabel("Time (s)")
-    for axis in axes:
-        axis.axhline(0.0, color="black", linewidth=0.8)
-        axis.grid(alpha=0.25)
-    fig.suptitle("Independent Held-Out Rollout Residuals")
-    fig.tight_layout()
-    fig.savefig(RESIDUAL_FIGURE_PATH, dpi=180)
-    plt.close(fig)
-
-
 def write_report(metrics: pd.DataFrame, checks: dict[str, bool]) -> None:
     values = metric_dict(metrics)
     status = "passed" if all(checks.values()) else "failed"
@@ -537,7 +493,8 @@ def main() -> int:
     validation_trace.to_csv(VALIDATION_TRACE_PATH, index=False)
     metrics.to_csv(METRICS_PATH, index=False)
     write_parameters(identified, telemetry)
-    create_figures(fit_trace, validation_trace)
+    evidence = report_figures.fs.SIMULATOR_ROS if "evidence" in TELEMETRY_PATH.parts else report_figures.fs.SIMULATOR
+    report_figures.draw_parameter_fit(RUN_DIR, FIT_FIGURE_PATH, RESIDUAL_FIGURE_PATH, evidence)
     write_report(metrics, checks)
 
     print(f"Identified C_Sf={coefficients[0]:.9f}, C_Sr={coefficients[1]:.9f}")

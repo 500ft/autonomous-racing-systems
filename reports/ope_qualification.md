@@ -38,7 +38,7 @@ and do not identify independent cars, sessions or physical experiments.
 ![Structural counts with separate segment, policy-name and flag-alignment panels; real-v1 has repeated flags within recordings](../runs/ope_qualification/structure.png)
 
 *Panel C counts each `done OR truncated` row once and splits it by position
-relative to the segment end. Blue solid bars are at-end flags; red hatched bars
+relative to the segment end. Blue solid bars are at-end flags; orange hatched bars
 are earlier flags. The linear count axis starts at zero.
 [SVG](../runs/ope_qualification/structure.svg) ·
 [Archive identity and count tables](../runs/ope_qualification/structure.md#archive-identity-and-recordings) ·

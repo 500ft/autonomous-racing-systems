@@ -8,10 +8,6 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -26,6 +22,7 @@ from roboracer.controllers import PurePursuitController
 from roboracer.estimation import ExtendedKalmanFilter, STATE_COLUMNS, dead_reckon_step
 from roboracer.noise import DropoutWindow, NoiseSpec, apply_dropout_windows, apply_sensor_noise
 from roboracer.numerics import rmse, wrap_angle
+import report_figures
 
 EXAMPLES_DIR = REPO_ROOT / "examples"
 PP_RESULTS_PATH = REPO_ROOT / "runs" / "pure_pursuit_sweep" / "results.csv"
@@ -239,51 +236,6 @@ def summarize(trace: pd.DataFrame) -> pd.DataFrame:
     return summary
 
 
-def plot_position_errors(trace: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    for (scenario, estimator), group in trace.groupby(["scenario", "estimator"]):
-        if scenario in {"low_noise", "dropout_1s"}:
-            ax.plot(group["time_s"], group["position_error_m"], label=f"{scenario} {estimator}", linewidth=1.1)
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Position error [m]")
-    ax.set_title("EKF vs Dead Reckoning Position Error")
-    ax.grid(True, alpha=0.25)
-    ax.legend(loc="best")
-    fig.savefig(POSITION_FIGURE, dpi=200)
-    plt.close(fig)
-
-
-def plot_summary(summary: pd.DataFrame) -> None:
-    pivot = summary.pivot(index="scenario", columns="estimator", values="position_rmse_m")
-    fig, ax = plt.subplots(figsize=(9, 5), constrained_layout=True)
-    x = np.arange(len(pivot.index))
-    width = 0.35
-    ax.bar(x - width / 2, pivot["dead_reckoning"], width, label="Dead reckoning")
-    ax.bar(x + width / 2, pivot["ekf"], width, label="EKF")
-    ax.set_xticks(x, pivot.index, rotation=20, ha="right")
-    ax.set_ylabel("Position RMSE [m]")
-    ax.set_title("Estimator RMSE Summary")
-    ax.grid(True, axis="y", alpha=0.25)
-    ax.legend(loc="best")
-    fig.savefig(SUMMARY_FIGURE, dpi=200)
-    plt.close(fig)
-
-
-def plot_dropout_zoom(trace: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(9, 5), constrained_layout=True)
-    group = trace[(trace["scenario"] == "dropout_3s") & (trace["time_s"].between(10.5, 16.0))]
-    for estimator, estimator_group in group.groupby("estimator"):
-        ax.plot(estimator_group["time_s"], estimator_group["position_error_m"], label=estimator, linewidth=1.4)
-    ax.axvspan(12.0, 15.0, color="#d62728", alpha=0.12, label="dropout")
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Position error [m]")
-    ax.set_title("3 s Dropout Window")
-    ax.grid(True, alpha=0.25)
-    ax.legend(loc="best")
-    fig.savefig(DROPOUT_FIGURE, dpi=200)
-    plt.close(fig)
-
-
 def markdown_table(frame: pd.DataFrame) -> str:
     display = frame.copy()
     for column in display.columns:
@@ -374,9 +326,7 @@ def main() -> None:
         + "\n",
         encoding="utf-8",
     )
-    plot_position_errors(results)
-    plot_summary(summary)
-    plot_dropout_zoom(results)
+    report_figures.draw_ekf(RUN_DIR, FIGURE_DIR)
     write_report(summary)
     print(f"Wrote {TRACE_PATH}")
     print(f"Wrote {SUMMARY_PATH}")

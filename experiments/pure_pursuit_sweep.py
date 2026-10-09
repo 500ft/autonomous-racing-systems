@@ -8,10 +8,6 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -23,6 +19,7 @@ if str(GYM_ROOT) not in sys.path:
 
 from roboracer.closed_loop import run_closed_loop
 from roboracer.controllers import PurePursuitController
+import report_figures
 
 EXAMPLES_DIR = REPO_ROOT / "examples"
 RUN_DIR = REPO_ROOT / "runs" / "pure_pursuit_sweep"
@@ -88,49 +85,6 @@ def select_baseline(results: pd.DataFrame) -> pd.Series:
     if candidates.empty:
         raise RuntimeError("No completed non-collision pure-pursuit run found; lower the speed sweep before continuing.")
     return candidates.sort_values("weighted_score").iloc[0]
-
-
-def plot_heatmap(results: pd.DataFrame, value_column: str, output_path: Path, title: str, cbar_label: str) -> None:
-    pivot = results.pivot(index="vgain", columns="lookahead_m", values=value_column).sort_index(ascending=False)
-    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
-    image = ax.imshow(pivot.to_numpy(dtype=float), aspect="auto", cmap="viridis")
-    ax.set_xticks(np.arange(len(pivot.columns)), [f"{value:.2g}" for value in pivot.columns])
-    ax.set_yticks(np.arange(len(pivot.index)), [f"{value:.3g}" for value in pivot.index])
-    ax.set_xlabel("Lookahead [m]")
-    ax.set_ylabel("Velocity gain")
-    ax.set_title(title)
-    cbar = fig.colorbar(image, ax=ax)
-    cbar.set_label(cbar_label)
-    fig.savefig(output_path, dpi=220)
-    plt.close(fig)
-
-
-def plot_regions(results: pd.DataFrame, output_path: Path) -> None:
-    color_map = {
-        "stable": "#2ca02c",
-        "oscillatory": "#ff7f0e",
-        "corner_cutting": "#9467bd",
-        "collision": "#d62728",
-        "incomplete": "#7f7f7f",
-    }
-    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
-    for label, group in results.groupby("classification"):
-        ax.scatter(
-            group["lookahead_m"],
-            group["vgain"],
-            s=120,
-            label=label,
-            color=color_map.get(label, "black"),
-            edgecolor="white",
-            linewidth=0.8,
-        )
-    ax.set_xlabel("Lookahead [m]")
-    ax.set_ylabel("Velocity gain")
-    ax.set_title("Pure Pursuit Sweep Regions")
-    ax.grid(True, alpha=0.25)
-    ax.legend(loc="best")
-    fig.savefig(output_path, dpi=220)
-    plt.close(fig)
 
 
 def markdown_table(frame: pd.DataFrame, columns: list[str]) -> str:
@@ -255,11 +209,7 @@ def main() -> None:
         + "\n",
         encoding="utf-8",
     )
-    plot_heatmap(results, "rms_cte_m", CTE_HEATMAP_PATH, "Pure Pursuit RMS CTE", "RMS CTE [m]")
-    completed_lap_time = results.copy()
-    completed_lap_time.loc[completed_lap_time["completed_lap"] != True, "lap_time_s"] = np.nan  # noqa: E712
-    plot_heatmap(completed_lap_time, "lap_time_s", LAP_TIME_HEATMAP_PATH, "Pure Pursuit Lap Time", "Lap time [s]")
-    plot_regions(results, REGIONS_PATH)
+    report_figures.draw_pure_pursuit(RUN_DIR, FIGURE_DIR)
     write_report(results, baseline)
 
     print(f"Selected baseline: lookahead={baseline['lookahead_m']:.3f}, vgain={baseline['vgain']:.3f}")

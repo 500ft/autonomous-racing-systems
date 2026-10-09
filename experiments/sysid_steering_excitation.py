@@ -14,10 +14,6 @@ from argparse import Namespace
 from pathlib import Path
 
 import gym
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
@@ -30,6 +26,7 @@ if str(GYM_ROOT) not in sys.path:
 
 from f110_gym.envs.base_classes import Integrator
 from roboracer.track import scalar
+import report_figures
 
 EXAMPLES_DIR = REPO_ROOT / "examples"
 RUN_DIR = REPO_ROOT / "runs" / "sysid_steering_excitation"
@@ -344,53 +341,6 @@ def write_metadata(selection: dict[str, str | float | bool]) -> None:
     METADATA_PATH.write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def save_figures(rows: list[dict[str, str | float | int]]) -> None:
-    df = pd.DataFrame(rows)
-    for column in FIELDNAMES:
-        if column not in {"run_id", "profile_status"}:
-            df[column] = pd.to_numeric(df[column], errors="coerce")
-
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.plot(df["time_s"], df["command_steer_rad"], label="Commanded steering", linestyle="--", color="#9467bd")
-    ax.plot(df["time_s"], df["steer_rad"], label="Achieved steering", color="#1f77b4")
-    ax.axhline(SATURATION_THRESHOLD, color="#d62728", linestyle=":", linewidth=1.2, label="95% steering limit")
-    ax.axhline(-SATURATION_THRESHOLD, color="#d62728", linestyle=":", linewidth=1.2)
-    ax.set_title("SysID Steering Chirp Input")
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Steering [rad]")
-    ax.grid(True, alpha=0.3)
-    ax.legend(loc="best")
-    fig.savefig(STEERING_FIGURE_PATH, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.plot(df["time_s"], df["yaw_rate_radps"], label="Yaw rate", color="#d62728")
-    ax2 = ax.twinx()
-    ax2.plot(df["time_s"], df["slip_angle_rad"], label="Slip angle", color="#2ca02c", alpha=0.75)
-    ax.set_title("SysID Yaw Response")
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Yaw rate [rad/s]")
-    ax2.set_ylabel("Slip angle [rad]")
-    ax.grid(True, alpha=0.3)
-    lines, labels = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax.legend(lines + lines2, labels + labels2, loc="best")
-    fig.savefig(YAW_FIGURE_PATH, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
-    ax.plot(df["time_s"], df["speed_mps"], label="Achieved speed", color="#1f77b4")
-    ax.plot(df["time_s"], df["command_speed_mps"], label="Commanded speed", linestyle="--", color="#555555")
-    ax.fill_between(df["time_s"], TARGET_SPEED_MPS * 0.85, TARGET_SPEED_MPS * 1.15, color="#2ca02c", alpha=0.12, label="+/-15% band")
-    ax.set_title("SysID Speed Hold")
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Speed [m/s]")
-    ax.grid(True, alpha=0.3)
-    ax.legend(loc="best")
-    fig.savefig(SPEED_FIGURE_PATH, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
-
 def metric_value(metrics: list[dict[str, str | float]], name: str) -> float:
     for row in metrics:
         if row["metric"] == name:
@@ -470,7 +420,7 @@ def main() -> None:
     write_csv(rows)
     write_quality(metrics)
     write_metadata(selection)
-    save_figures(rows)
+    report_figures.draw_sysid_excitation(RUN_DIR, FIGURE_DIR)
     write_report(metrics, selection)
 
     print(f"Wrote telemetry to {TELEMETRY_PATH}")
