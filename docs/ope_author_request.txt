@@ -57,3 +57,58 @@ controllers. Could you clarify these prerequisites?
 Thank you.
 
 [Owner to review recipient, wording and signature before sending.]
+
+----------------------------------------------------------------------
+Reply received 2026-10-09 (summary, not a quotation)
+
+Code and pins
+- Top-level repo HyberionBrew/f110_ope_benchmark; clone with --recursive.
+- Pins at benchmark HEAD 4278922: f1tenth_gym 886dde0 (branch v1.0.0),
+  f1tenth_orl_dataset 536d762, stochastic_ftg_agents c42146c (branch
+  ope-benchmark), f110_ope_methods 64adc09.
+- .gitmodules also lists f110_sim_env, which has no tree entry and no public
+  repo. Still open.
+
+Licences (question 1)
+- MIT added 2026-10-09 on the benchmark, f1tenth_orl_dataset, f110_ope_methods
+  and the agents' ope-benchmark branch. Legacy f110_datasets archived under
+  CC-BY-4.0.
+- The v2 data zips on Google Drive carry no licence text of their own. Still
+  open: licence of the zips and redistribution of derived subsets.
+- The author asks that the thesis be cited.
+
+Loader registration (question 4)
+- Confirmed: all v2 names resolved to f110-sim-v1.zip at commit 66d0363.
+  Fixed at 536d762. Only f110-real-stoch-v2 and f110-sim-stoch-v2 remain; v0
+  and v1 are legacy.
+
+Policies (questions 3 and 5)
+- 15 evaluation agents: 4 stochastic follow-the-gap and 11 parametrised pure
+  pursuit. No neural policies.
+- Loadable by name from agent_configs/ (69 configs) via Agent().load(name=...).
+- Actions are deltas with truncated-normal noise. log_probs are per dimension
+  [speed, steering]; the joint is the sum.
+- A batched pure-pursuit lookahead bug was fixed at c42146c. It affected OPE
+  estimates only, not the datasets, their log_probs or the ground truth.
+- Ground truth per agent for four rewards is in Groundtruth/gt_reward_*.json.
+
+Episodes (question 2)
+- done = on-car crash detection plus manual intervention.
+- compute_termination = done plus an offline lidar/pose crash check, with rows
+  after the first crash filtered.
+- Horizon 250 steps, set_terminals=True; copy the gym.make call from
+  experiments/run_iw.py.
+
+Pairing and independence (question 2)
+- One car, one configuration, a few days. No session IDs.
+- f110-sim-stoch-v2 was produced from the recorded real start poses. No
+  explicit pairing IDs.
+
+Still open after the reply
+- Whether log_probs in the new sim archive are populated (the old archive had
+  zeros).
+- f110_sim_env.
+- Data-zip licence and redistribution of derived subsets.
+
+The structural qualification in reports/ope_qualification.md was run at the
+old pins and has not been re-run; see docs/OPEN_QUESTIONS.md.
