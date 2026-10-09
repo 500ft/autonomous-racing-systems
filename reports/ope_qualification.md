@@ -35,6 +35,16 @@ and do not identify independent cars, sessions or physical experiments.
 
 ## Recording boundaries and loader aliases
 
+![Structural counts with separate segment, policy-name and flag-alignment panels; real-v1 has repeated flags within recordings](../runs/ope_qualification/structure.png)
+
+*Panel C counts each `done OR truncated` row once and splits it by position
+relative to the segment end. Blue solid bars are at-end flags; red hatched bars
+are earlier flags. The linear count axis starts at zero.
+[SVG](../runs/ope_qualification/structure.svg) ·
+[Archive identity and count tables](../runs/ope_qualification/structure.md#archive-identity-and-recordings) ·
+[Loader registration table](../runs/ope_qualification/structure.md#loader-registrations).
+Version-paired rows do not establish paired experiments.*
+
 Real v1 has repeated end flags before its recording boundaries. The other
 inspected archives align those flags with structural ends. This verifies a
 structural discrepancy, while the physical meaning of continuing `done` flags
@@ -113,13 +123,33 @@ The repository's MIT license and the earlier driving bag's separate CC BY terms
 do not supply these missing grants. Third-party ZIPs, weights and source code
 are not redistributed in this PR.
 
-The [unsent author request](../docs/ope_author_request.txt) asks for permissions,
-recording/episode/policy mapping and loader intent. Empirical OPE and a numerical
+The [contact record](../docs/ope_author_request.txt) records the owner's
+confirmation that the email to Fabian Kresse was sent. The retained request
+covers permissions, recording/episode/policy mapping, loader intent and
+probability semantics. No reply has been supplied. Empirical OPE and a numerical
 finite-horizon reference stay stopped until those prerequisites qualify.
 [Open questions](../docs/OPEN_QUESTIONS.md) retains owner decisions; the
 [roadmap](../ROADMAP.md) records the current blocker.
 
 ## Reproduce
+
+### Redraw from the committed result
+
+These commands need no archive cache and run no qualification or outcome analysis.
+Use Python 3.11 with `requirements-ope-qualification.txt` installed:
+
+```bash
+python experiments/plot_ope_structure.py \
+  --result runs/ope_qualification/result.json \
+  --output runs/ope_qualification/structure.png
+```
+
+This writes PNG and SVG figures, `structure.md`, `structure.csv` and
+`loader_aliases.csv`. The result remains the single numerical source. The
+[figure guide](../docs/data-and-figures.md#visual-redesign-and-preservation)
+records visual choices and preservation checks.
+
+### Original structural qualification
 
 Use Python 3.11 and the separate [requirements](../requirements-ope-qualification.txt).
 Put the files named in `inputs.json` in an external cache using their pinned
@@ -145,6 +175,7 @@ gaps, hash rejection, exact names, AST parsing and partial/missing chunks.
 Without the cache, only unit tests run and the integration test is marked skipped.
 
 The [execution record](../runs/ope_qualification/execution.json) states the
-actual environment and separate comparison with the prior audit. The chart's
-count axes and caption were visually checked. No outcome or actor execution is
-needed to rerun this qualification.
+actual environment and separate comparison with the prior audit. The
+qualification reader retains its original simple table output; the rendering
+command above replaces that view with the expanded tables. No outcome or actor
+execution is needed to rerun this qualification.

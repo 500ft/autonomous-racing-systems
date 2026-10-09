@@ -12,10 +12,13 @@ blocked by unresolved reuse terms, episode meaning and policy executability.
 [Results](#results) · [Roadmap](ROADMAP.md) · [Quick start](#quick-start) ·
 [Qualification report](reports/ope_qualification.md) · [History](docs/history/README.md)
 
-![Recording-segment and policy-name counts from the five pinned F110 archives](runs/ope_qualification/structure.png)
+![Structural census of five pinned archives: recording segments, policy-name strings and terminal-flag alignment; real-v1 has flags before segment ends](runs/ope_qualification/structure.png)
 
 *Unfiltered structural counts from [result.json](runs/ope_qualification/result.json).
-Segments are not verified independent experiments. No return or ranking is plotted.*
+Panel C separates flagged rows at recording ends from flags within recordings.
+Segments do not establish independent episodes; names do not establish execution eligibility.
+[Accessible tables and archive identities](runs/ope_qualification/structure.md) ·
+[SVG](runs/ope_qualification/structure.svg).*
 
 ## Results
 
@@ -53,11 +56,12 @@ outside this repository while reuse terms remain unknown.
 
 ## What's next
 
-Obtain explicit reuse terms and authoritative episode/policy mapping. An
-[author request](docs/ope_author_request.txt) is drafted and unsent. The owner
-has adopted the [dependency roadmap](ROADMAP.md) and repository cleanup;
-[open questions](docs/OPEN_QUESTIONS.md) retain external-contact and physical
-decisions. Dataset access and owner-approved platform access are parallel
+Await Fabian Kresse's reply on reuse terms and authoritative episode/policy
+mapping. The [contact record](docs/ope_author_request.txt) records the
+owner-confirmed email send; no reply or permission has been supplied.
+The owner has adopted the [dependency roadmap](ROADMAP.md) and repository
+cleanup; [open questions](docs/OPEN_QUESTIONS.md) retain the unanswered data
+and physical decisions. Dataset access and owner-approved platform access are parallel
 possible routes. A refusal from one source does not close every route. No empirical OPE or
 finite-horizon return calculation has been run.
 

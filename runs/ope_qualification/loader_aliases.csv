@@ -1,0 +1,8 @@
+registration,archive,listed_eval_names,missing_eval_names,listed_bad_indices,bad_indices_outside_rows
+f110-real-v0,dataset_real_v0.zip,0,0,0,0
+f110-sim-v0,dataset_sim_v0.zip,0,0,0,0
+f110-real-v1,f110-real-v1.zip,0,0,12,0
+f110-sim-v1,f110-sim-v1.zip,0,0,0,0
+f110-real-stoch-v1,f110-sim-v1.zip,0,0,13,10
+f110-real-stoch-v2,f110-sim-v1.zip,15,15,9,9
+f110-sim-stoch-v2,f110-sim-v1.zip,15,15,0,0
