@@ -1,6 +1,6 @@
 # Contributing
 
-Autonomous Racing Systems follows the [dependency roadmap](ROADMAP.md).
+Sim-to-Real Controller Ranking follows the [dependency roadmap](ROADMAP.md).
 Archive qualification is complete; empirical ranking work remains gated.
 The repository retains a legacy simulator, a portable telemetry/report toolchain,
 ROS 2 integration, and generated research artifacts. Use the environment that

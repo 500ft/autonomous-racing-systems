@@ -46,7 +46,7 @@ jobs:
         python -m py_compile firmware/measurement_node/code.py
     - name: Check README links, identity and negative controls
       run: |
-        python tools/check_presentation.py . "Autonomous Racing Systems" autonomous-racing-systems
+        python tools/check_presentation.py . "Sim-to-Real Controller Ranking" sim-to-real-controller-ranking
         python tools/test_presentation.py
 
   ope-structural-tests:
